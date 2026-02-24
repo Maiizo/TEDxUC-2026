@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id                 String         @id @default(uuid())
+  name               String
+  type               String         // Enum: 'Pre Event Day 1', 'Pre Event Day 2', 'Main Event'
+  date               DateTime
+  quota              Int
+  registeredCount    Int            @default(0)
+  price              Float
+  description        String?
+  requireFoodAllergy Boolean        @default(false)
+  isActive           Boolean        @default(true)
+  
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  // Relasi (Satu Event bisa memiliki banyak Registrasi)
+  registrations      Registration[]
+}
+
+model Registration {
+  id                 String       @id @default(uuid())
+  fullName           String
+  email              String
+  phoneNumber        String
+  gender             String       // Enum: 'Laki-laki', 'Perempuan'
+  age                Int
+  foodAllergy        String       @default("-")
+  
+  // Relasi ke Event
+  eventId            String
+  event              Event        @relation(fields: [eventId], references: [id])
+  
+  registrationDate   DateTime     @default(now())
+  status             String       @default("pending") // Enum: 'pending', 'paid', 'cancelled', 'expired'
+  registrationNumber String       @unique
+  qrCode             String?
+  pdfTicket          String?
+  attendanceStatus   String       @default("not_attended") // Enum: 'not_attended', 'attended'
+  
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  // Relasi (Satu Registrasi bisa memiliki beberapa percobaan Payment)
+  payments           Payment[]
+}
+
+model Payment {
+  id                    String       @id @default(uuid())
+  
+  // Relasi ke Registration
+  registrationId        String
+  registration          Registration @relation(fields: [registrationId], references: [id])
+  
+  amount                Float
+  paymentMethod         String       // Enum: 'bca_va', 'qris' , 'free'
+  status                String       @default("pending") // Enum: 'pending', 'success', 'failed', 'expired'
+  transactionId         String?      @unique
+  paymentDate
