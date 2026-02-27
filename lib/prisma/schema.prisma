@@ -64,4 +64,17 @@ model Payment {
   paymentMethod         String       // Enum: 'bca_va', 'qris' , 'free'
   status                String       @default("pending") // Enum: 'pending', 'success', 'failed', 'expired'
   transactionId         String?      @unique
-  paymentDate
+  paymentDate           DateTime?
+  
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+}
+
+model Admin {
+  id                    String       @id @default(uuid())
+  email                 String       @unique
+  password              String
+  
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+}
