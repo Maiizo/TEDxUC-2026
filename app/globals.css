@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@tailwind utilities;
 
 :root {
   --background: #000000;
@@ -8,8 +9,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-allrounder);
+  --font-mono: var(--font-allrounder);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,8 +20,85 @@
   }
 }
 
+
+
 body {
+  @apply bg-[#050505] text-white;
+  font-family: var(--font-allrounder), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+@layer base {
+  :root {
+    --void-black: #050505;
+    --maleficent-green: #546e40;
+    --dark-green: #3d5030;
+    --acid-green: #6d8a58;
+    --deep-black: #0a0a0a;
+    --maleficent-purple: #5d1d69;
+    --dark-purple: #4a1754;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.05em;
+  }
+
+  h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+
+/* Glowing effects */
+@keyframes pulse-green {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(84, 110, 64, 0.5), 0 0 40px rgba(84, 110, 64, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(84, 110, 64, 0.8), 0 0 60px rgba(84, 110, 64, 0.5);
+  }
+}
+
+.glow-green {
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+/* Thorn decorations */
+.thorn-border {
+  position: relative;
+}
+
+.thorn-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #546e40, #5d1d69);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.3;
 }
