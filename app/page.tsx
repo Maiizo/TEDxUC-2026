@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /* ══════════════════════════════════════════
    DATA
@@ -68,39 +68,6 @@ function useParallax() {
   }, []);
 
   return ref;
-}
-
-function useMouseGlow() {
-  const ref = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    const glow = glowRef.current;
-    if (!el || !glow) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      glow.style.left = `${x}px`;
-      glow.style.top = `${y}px`;
-      glow.style.opacity = "1";
-    };
-
-    const handleMouseLeave = () => {
-      glow.style.opacity = "0";
-    };
-
-    el.addEventListener("mousemove", handleMouseMove);
-    el.addEventListener("mouseleave", handleMouseLeave);
-    return () => {
-      el.removeEventListener("mousemove", handleMouseMove);
-      el.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
-
-  return { ref, glowRef };
 }
 
 /* ══════════════════════════════════════════
@@ -275,99 +242,60 @@ function AnimatedHeroText() {
    ══════════════════════════════════════════ */
 
 function TedxInfoSection() {
-  const titleRef = useScrollReveal();
-  const p1Ref = useScrollReveal(100);
-  const p2Ref = useScrollReveal(200);
-  const { ref: cardRef, glowRef } = useMouseGlow();
+  const iconRef = useScrollReveal();
+  const titleRef = useScrollReveal(100);
+  const p1Ref = useScrollReveal(200);
+  const p2Ref = useScrollReveal(300);
 
   return (
     <section className="relative py-20 md:py-32 px-6 md:px-12 lg:px-20">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-start">
-          {/* Left decorative column */}
-          <div className="hidden md:flex flex-col items-center gap-4 pt-4 min-w-8">
-            <div className="w-px h-10 bg-linear-to-b from-transparent to-(--maleficent-green)/40" />
-            <Diamond className="text-(--maleficent-green)/40 w-2 h-2 animate-pulse" />
-            <div className="w-px h-16 bg-(--maleficent-green)/20" />
-            <Diamond className="text-(--maleficent-purple)/40 w-2 h-2 animate-pulse [animation-delay:1s]" />
-            <div className="w-px h-10 bg-linear-to-b from-(--maleficent-purple)/25 to-transparent" />
-          </div>
+      <div className="max-w-3xl mx-auto text-center">
+        {/* Decorative Icon */}
+        <div ref={iconRef} className="opacity-0 translate-y-8 transition-all duration-700 ease-out flex justify-center mb-6">
+          <svg
+            width="40" height="40" viewBox="0 0 40 40" fill="none"
+            className="text-(--maleficent-green) w-10 h-10 animate-float"
+          >
+            <path
+              d="M20 4C20 4 24 10 24 16C24 18 26 20 28 20C30 20 32 18 36 14M20 4C20 4 16 10 16 16C16 18 14 20 12 20C10 20 8 18 4 14M20 4V36M12 20C12 20 8 24 8 28M28 20C28 20 32 24 32 28M20 16C20 16 16 18 14 22M20 16C20 16 24 18 26 22"
+              stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
+            />
+            <circle cx="20" cy="16" r="2" fill="currentColor" />
+            <circle cx="12" cy="20" r="1.5" fill="currentColor" />
+            <circle cx="28" cy="20" r="1.5" fill="currentColor" />
+          </svg>
+        </div>
 
-          {/* Title area */}
-          <div className="md:w-2/5">
-            <div ref={titleRef} className="opacity-0 translate-y-8 transition-all duration-700 ease-out">
-              {/* Decorative Icon */}
-              <div className="flex justify-start mb-5">
-                <svg
-                  width="40" height="40" viewBox="0 0 40 40" fill="none"
-                  className="text-(--maleficent-green) w-8 h-8 md:w-10 md:h-10 animate-float"
-                >
-                  <path
-                    d="M20 4C20 4 24 10 24 16C24 18 26 20 28 20C30 20 32 18 36 14M20 4C20 4 16 10 16 16C16 18 14 20 12 20C10 20 8 18 4 14M20 4V36M12 20C12 20 8 24 8 28M28 20C28 20 32 24 32 28M20 16C20 16 16 18 14 22M20 16C20 16 24 18 26 22"
-                    stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
-                  />
-                  <circle cx="20" cy="16" r="2" fill="currentColor" />
-                  <circle cx="12" cy="20" r="1.5" fill="currentColor" />
-                  <circle cx="28" cy="20" r="1.5" fill="currentColor" />
-                </svg>
-              </div>
+        {/* Title */}
+        <div ref={titleRef} className="opacity-0 translate-y-8 transition-all duration-700 ease-out mb-8">
+          <h2
+            className="text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-wider leading-tight"
+            style={{ fontFamily: "var(--font-allrounder), sans-serif" }}
+          >
+            What is{" "}
+            <span className="text-(--maleficent-green)">TEDx</span>
+            <span className="text-(--maleficent-purple)">?</span>
+          </h2>
+        </div>
 
-              <h2
-                className="text-2xl sm:text-3xl md:text-5xl font-bold uppercase tracking-wider leading-tight"
-                style={{ fontFamily: "var(--font-allrounder), sans-serif" }}
-              >
-                What is{" "}
-                <span className="text-(--maleficent-green)">TEDx</span>
-                <span className="text-(--maleficent-purple)">?</span>
-              </h2>
+        {/* Paragraphs */}
+        <div ref={p1Ref} className="opacity-0 translate-y-6 transition-all duration-700 ease-out mb-5">
+          <p className="text-sm md:text-base text-gray-400 leading-relaxed">
+            In the spirit of{" "}
+            <span className="text-(--acid-green) font-medium not-italic">ideas worth spreading</span>,
+            TEDx is a program of local, self-organized events that bring people together
+            to share a TED-like experience. At a TEDx event, TED Talks video and live
+            speakers combine to spark deep discussion and connection.
+          </p>
+        </div>
 
-              <div className="flex items-center gap-2 mt-4">
-                <div className="w-12 h-px bg-(--maleficent-green)/40" />
-                <Diamond className="text-(--maleficent-green)/50 w-1.5 h-1.5" />
-                <div className="w-6 h-px bg-(--maleficent-purple)/30" />
-              </div>
-            </div>
-          </div>
-
-          {/* Content card with mouse-glow */}
-          <div className="md:w-3/5">
-            <div
-              ref={cardRef}
-              className="relative rounded-2xl border border-(--maleficent-green)/15 bg-linear-to-br from-[#0d1a0a]/40 via-(--deep-black) to-[#0f0a14]/20 p-7 md:p-10 overflow-hidden group"
-            >
-              {/* Mouse-following glow */}
-              <div
-                ref={glowRef}
-                className="absolute w-64 h-64 rounded-full pointer-events-none -translate-x-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-500 bg-linear-to-br from-(--maleficent-green)/8 to-(--maleficent-purple)/5 blur-3xl"
-              />
-
-              {/* Corner diamonds */}
-              <Diamond className="absolute -top-1.5 -left-1.5 text-(--maleficent-green)/30" />
-              <Diamond className="absolute -top-1.5 -right-1.5 text-(--maleficent-purple)/30" />
-              <Diamond className="absolute -bottom-1.5 -right-1.5 text-(--maleficent-green)/30" />
-
-              <div className="relative">
-                <div ref={p1Ref} className="opacity-0 translate-y-6 transition-all duration-700 ease-out">
-                  <p className="text-sm md:text-base text-gray-400 leading-relaxed mb-5">
-                    In the spirit of{" "}
-                    <span className="text-(--acid-green) font-medium not-italic">ideas worth spreading</span>,
-                    TEDx is a program of local, self-organized events that bring people together
-                    to share a TED-like experience. At a TEDx event, TED Talks video and live
-                    speakers combine to spark deep discussion and connection.
-                  </p>
-                </div>
-
-                <div ref={p2Ref} className="opacity-0 translate-y-6 transition-all duration-700 ease-out">
-                  <p className="text-sm md:text-base text-gray-400 leading-relaxed">
-                    These local, self-organized events are branded TEDx, where{" "}
-                    <span className="text-(--maleficent-purple) italic">x = independently organized TED event</span>.
-                    The TED Conference provides general guidance for the TEDx program,
-                    but individual TEDx events are self-organized.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div ref={p2Ref} className="opacity-0 translate-y-6 transition-all duration-700 ease-out">
+          <p className="text-sm md:text-base text-gray-400 leading-relaxed">
+            These local, self-organized events are branded TEDx, where{" "}
+            <span className="text-(--maleficent-purple) italic">x = independently organized TED event</span>.
+            The TED Conference provides general guidance for the TEDx program,
+            but individual TEDx events are self-organized.
+          </p>
         </div>
       </div>
     </section>
