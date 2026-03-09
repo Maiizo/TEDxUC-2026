@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import NavigationBar from "./components/NavigationBar";
+import Footer from "@/reusable-components/layout/Footer";
 
 const allrounder = localFont({
   src: [
@@ -43,7 +44,12 @@ export default function RootLayout({
     <NavigationBar>
 
     </NavigationBar>
+  
         {children}
+      {/* Footer */}
+    <Footer>
+
+    </Footer>
       </body>
     </html>
   );
