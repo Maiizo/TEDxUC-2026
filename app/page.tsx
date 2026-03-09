@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
 
 const galleryImages = [
   { src: "/images/bg-hero.png", alt: "TEDx event - auditorium" },
-  { src: "/images/gallery-2.jpg", alt: "TEDx event - stage performance" },
+  { src: "/images/gate.webp", alt: "TEDx event - stage performance" },
   { src: "/images/gallery-3.jpg", alt: "TEDx event - crowd" },
   { src: "/images/gallery-4.jpg", alt: "TEDx event - speaker" },
   { src: "/images/gallery-5.jpg", alt: "TEDx event - night crowd" },
@@ -314,12 +314,12 @@ function GallerySection() {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/chronicles-bg.jpg"
-          alt="Dark forest background"
+          src="/images/gate.webp"
+          alt="TEDx gate background"
           fill
-          className="object-cover opacity-20"
+          className="object-cover opacity-35"
         />
-        <div className="absolute inset-0 bg-linear-to-b from-(--void-black) via-[#0a1a08]/60 to-(--void-black)" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/10 to-black" />
       </div>
 
       <div className="relative z-10 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">
