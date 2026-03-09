@@ -8,4 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Event'
+export type * from './models/Registration'
+export type * from './models/Payment'
 export type * from './commonInputTypes'
