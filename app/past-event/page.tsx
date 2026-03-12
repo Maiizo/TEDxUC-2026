@@ -190,14 +190,14 @@ interface Speaker {
 }
 
 const speakers: Speaker[] = [
-  { name: "Dr. Sarah Mitchell", title: "The Science of Consciousness", description: "Neuroscientist exploring the mysteries of human awareness." },
-  { name: "James Rodriguez", title: "Innovation in Crisis", description: "Tech entrepreneur who built solutions during the pandemic." },
-  { name: "Maya Patel", title: "Art as Revolution", description: "Artist and activist using creativity to drive social change." },
-  { name: "Dr. Kevin Tanaka", title: "Sustainable Cities of Tomorrow", description: "Urban planner reimagining green metropolitan spaces." },
-  { name: "Lisa Chen", title: "The Future of Education", description: "EdTech pioneer transforming exciting learning experiences." },
-  { name: "Marcus Thompson", title: "Breaking Mental Barriers", description: "Performance coach helping people unlock their potential." },
-  { name: "Dr. Amira Hassan", title: "Health Tech Revolution", description: "Medical inventor advancing accessible healthcare." },
-  { name: "David Park", title: "The Power of Storytelling", description: "Filmmaker and author capturing human stories." },
+  { name: "Wilson David Mulya H.", title: "Self Development", description: "Passion is Overrated." },
+  { name: "Holly Natasha", title: "Entrepreneur", description: "How To Build a Business Without Knowing What You're Doing." },
+  { name: "Evelyn Hutani", title: "Comedy", description: "I Failed, I Fell, and Then I Laughed" },
+  { name: "R. Kukuh Rahadiansyah", title: "Technology", description: "Survival Guide to AI Wonderland." },
+  { name: "Maximilian John", title: "Photography", description: "Urban Kaleidoscope: Patterns & Perspective." },
+  { name: "Mario Oswin", title: "Culinary", description: "Culinary Journeys Food as a Map Through Cultural Labyrinths." },
+  { name: "Danyannisa", title: "Music", description: "The Art of Song Construction: Navigating the Technical Maze of Music Creation." },
+  { name: "aa aa", title: "title", description: "desc." },
 ];
 
 const highlightData = [
@@ -395,7 +395,7 @@ export default function PastEventPage() {
           {/* Subtitle + meta */}
           <div className="mt-4 md:mt-6 text-center">
             <p className="text-sm md:text-lg text-gray-400 italic tracking-widest mb-4">
-              The Awakening
+              TEMA
             </p>
 
             {/* Decorative line */}
@@ -414,14 +414,14 @@ export default function PastEventPage() {
                   <path d="M5 1V4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
                   <path d="M11 1V4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
                 </svg>
-                March 20, 2025
+                Ftgl, 2025
               </span>
               <span className="flex items-center gap-1.5">
                 <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5">
                   <path d="M8 1C4.686 1 2 3.686 2 7C2 11.5 8 15 8 15C8 15 14 11.5 14 7C14 3.686 11.314 1 8 1Z" stroke="currentColor" strokeWidth="1.2" />
                   <circle cx="8" cy="7" r="2" stroke="currentColor" strokeWidth="1.2" />
                 </svg>
-                Grand Auditorium, UC Surabaya
+                Auditorium, UC Surabaya
               </span>
               <span className="flex items-center gap-1.5">
                 <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5">
@@ -430,7 +430,7 @@ export default function PastEventPage() {
                   <circle cx="11" cy="7" r="2.5" stroke="currentColor" strokeWidth="1.2" />
                   <path d="M14 14C14 11.791 12.657 10 11 10" stroke="currentColor" strokeWidth="1.2" />
                 </svg>
-                500+ Attendees
+                100 Attendees
               </span>
             </div>
           </div>
@@ -474,22 +474,17 @@ export default function PastEventPage() {
 
                 <div className="space-y-4 text-sm md:text-base text-gray-400 leading-relaxed">
                   <p>
-                    TEDxUC Surabaya 2025 was a groundbreaking event that brought together
-                    some of the most inspiring minds from diverse fields — science,
-                    technology, arts, and social innovation.
+                    TEDxUC Surabaya 2025 was bbnjagejfkc.
                   </p>
                   <p>
-                    The event featured thought-provoking talks, captivating performances,
-                    and meaningful conversations that{" "}
+                    The event wwfrwfwele{" "}
                     <span className="text-(--maleficent-purple) italic">
-                      challenged perspectives
+                      chlekgnjwrkas
                     </span>{" "}
-                    and ignited new ideas among attendees.
+                    and fawlkfnkewgnew.
                   </p>
                   <p>
-                    Held at the Grand Auditorium of Universitas Ciputra Surabaya, the event
-                    gathered over 500 attendees for an unforgettable day of inspiration and
-                    connection.
+                    TEDx ewgnewgee.
                   </p>
                 </div>
               </div>
@@ -551,8 +546,7 @@ export default function PastEventPage() {
                 <span className="text-(--maleficent-purple)">Theme:</span>
               </h2>
               <p className="relative text-sm md:text-lg text-gray-300/80 leading-relaxed italic max-w-2xl mx-auto">
-                A journey into consciousness, innovation, and the power of transformative ideas
-                that challenge the status quo and{" "}
+                desc tema   {" "}
                 <span className="text-(--maleficent-green) not-italic font-medium">
                   awaken the potential
                 </span>{" "}
