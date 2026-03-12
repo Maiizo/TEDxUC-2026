@@ -499,7 +499,7 @@ export default function Home() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/bg-hero.png"
+            src="/images/bg-castle.webp"
             alt="The Forsaken Crown - Dark castle background"
             fill
             className="object-cover object-center"

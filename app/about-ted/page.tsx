@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
@@ -201,7 +202,7 @@ function AboutCard({
       />
 
       {/* Card body */}
-      <div className="relative bg-linear-to-b from-[#0d1a0a]/90 to-(--deep-black) rounded-2xl p-6 md:p-8 flex flex-col backdrop-blur-sm">
+      <div className="relative bg-linear-to-b from-[#0d1a0a]/90 to-(--deep-black) rounded-2xl p-6 md:p-10 flex flex-col backdrop-blur-sm min-h-[480px] md:min-h-[560px]">
         {/* Corner diamonds */}
         <Diamond className={`absolute top-3 left-3 ${diamondColor}`} />
         <Diamond className={`absolute top-3 right-3 ${diamondColor}`} />
@@ -256,10 +257,10 @@ const cards: CardData[] = [
     description:
       "A nonprofit organization devoted to spreading ideas, usually in the form of short, powerful talks.",
     bullets: [
-      "Global organization founded in 1984",
-      "Invitation-only conference",
-      "World-renowned speakers",
-      "Talks available on TED.com",
+      "-",
+      "-",
+      "-",
+      "-",
     ],
   },
   {
@@ -269,10 +270,10 @@ const cards: CardData[] = [
     description:
       "A program of local, self-organized events that bring people together to share a TED-like experience.",
     bullets: [
-      "Independently organized events",
-      "Licensed by TED",
-      "Local speakers and talent",
-      "Held worldwide in communities",
+      "-",
+      "-",
+      "-",
+      "-",
     ],
   },
   {
@@ -282,10 +283,10 @@ const cards: CardData[] = [
     description:
       "Our independently organized TEDx event in Surabaya, Indonesia.",
     bullets: [
-      "Based in Universitas Ciputra",
-      'Theme: "The Forsaken Crown"',
-      "Local and international speakers",
-      "Student-run organization",
+      "-",
+      '-"',
+      "-",
+      "-",
     ],
   },
 ];
@@ -296,7 +297,20 @@ export default function AboutTedPage() {
   const headerRef = useScrollReveal();
 
   return (
-    <div className="min-h-screen bg-(--void-black) text-white overflow-x-hidden">
+    <div className="min-h-screen text-white overflow-x-hidden">
+      {/* ── Background image ── */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <Image
+          src="/images/gate.webp"
+          alt=""
+          fill
+          className="object-cover object-center opacity-20"
+          priority
+        />
+        {/* Dark overlay to keep text readable */}
+        <div className="absolute inset-0 bg-(--void-black)/0" />
+      </div>
+
       {/* ── Global CSS for scroll-reveal ── */}
       <style jsx global>{`
         .animate-revealed {
@@ -324,7 +338,7 @@ export default function AboutTedPage() {
       `}</style>
 
       {/* ── Ambient glows ── */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-10">
         <div className="absolute top-[5%] left-[5%] w-125 h-125 bg-(--maleficent-green)/4 rounded-full blur-[160px]" />
         <div className="absolute top-[30%] right-[0%] w-100 h-150 bg-(--maleficent-purple)/5 rounded-full blur-[180px]" />
         <div className="absolute bottom-[5%] left-[30%] w-125 h-100 bg-(--maleficent-green)/3 rounded-full blur-[200px]" />
@@ -332,22 +346,28 @@ export default function AboutTedPage() {
       </div>
 
       {/* ── Thorn vines on sides (desktop only) ── */}
-      <div className="hidden lg:block fixed top-0 left-0 w-24 h-full pointer-events-none text-(--maleficent-green)">
+      <div className="hidden lg:block fixed top-0 left-0 w-24 h-full pointer-events-none text-(--maleficent-green) z-10">
         <ThornVine className="w-full h-full" />
       </div>
-      <div className="hidden lg:block fixed top-0 right-0 w-24 h-full pointer-events-none text-(--maleficent-purple)">
+      <div className="hidden lg:block fixed top-0 right-0 w-24 h-full pointer-events-none text-(--maleficent-purple) z-10">
         <ThornVine className="w-full h-full" flip />
       </div>
 
       {/* ===== HEADER ===== */}
-      <section className="relative pt-24 pb-8 md:pt-36 md:pb-12 px-6">
+      <section className="relative z-20 pt-24 pb-8 md:pt-36 md:pb-12 px-6">
         <div
           ref={headerRef}
           className="max-w-6xl mx-auto opacity-0 translate-y-10 transition-all duration-1000 ease-out"
         >
           {/* Crown — floating */}
-          <div className="flex justify-center mb-6 text-(--maleficent-green) animate-float">
-            <CrownIcon className="w-16 h-16 md:w-24 md:h-24 drop-shadow-[0_0_20px_rgba(84,110,64,0.4)]" />
+          <div className="flex justify-center mb-6 animate-float">
+            <Image
+              src="/images/crown.png"
+              alt="Crown"
+              width={96}
+              height={96}
+              className="w-16 h-16 md:w-24 md:h-24 drop-shadow-[0_0_20px_rgba(84,110,64,0.4)] object-contain"
+            />
           </div>
 
           {/* Decorative line */}
@@ -359,8 +379,8 @@ export default function AboutTedPage() {
             <div className="w-16 md:w-40 h-px bg-linear-to-l from-transparent via-(--maleficent-green)/30 to-(--maleficent-green)/60" />
           </div>
 
-          {/* Title — left-leaning on desktop */}
-          <div className="text-center md:text-left md:pl-8 lg:pl-16">
+          {/* Title — centered */}
+          <div className="text-center">
             <h1
               className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold uppercase tracking-wider leading-[1.05]"
               style={{ fontFamily: "var(--font-allrounder), sans-serif" }}
@@ -372,12 +392,12 @@ export default function AboutTedPage() {
             </h1>
           </div>
 
-          {/* Subtitle — offset to the right */}
-          <div className="text-center md:text-right md:pr-8 lg:pr-16 mt-3 md:mt-4">
+          {/* Subtitle — centered */}
+          <div className="text-center mt-3 md:mt-4">
             <p className="text-sm md:text-lg text-gray-500 italic tracking-widest">
               Understanding the Difference
             </p>
-            <div className="flex items-center justify-center md:justify-end gap-2 mt-2">
+            <div className="flex items-center justify-center gap-2 mt-2">
               <div className="w-8 h-px bg-(--maleficent-purple)/40" />
               <Diamond className="text-(--maleficent-purple)/50 w-1.5 h-1.5" />
               <div className="w-20 h-px bg-(--maleficent-purple)/30" />
@@ -386,84 +406,53 @@ export default function AboutTedPage() {
         </div>
       </section>
 
-      {/* ===== CARDS — staggered asymmetric layout ===== */}
-      <section className="relative py-12 md:py-20 px-6 md:px-10 lg:px-16">
-        <div className="max-w-7xl mx-auto">
-          {/* Desktop: 3 columns, staggered vertically. Mobile: stacked */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-10 items-start">
-            {/* Card 1 — TED: pushed up-left */}
+      {/* ===== CARDS ===== */}
+      <section className="relative z-20 py-12 md:py-20 px-4 md:px-6 lg:px-10">
+        <div className="w-full">
+          {/*
+            Phone  (default) : 1 column — stacked vertically
+            Tablet (md)      : 2-column grid — TED spans both cols (top), TEDx + TEDxUC side-by-side (bottom)
+            Desktop (lg)     : 3 equal columns
+          */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10 items-start">
+            {/* Card 1 — TED: full-width on tablet, normal on desktop */}
             <AboutCard
               card={cards[0]}
-              offsetClass="md:mt-0 md:-rotate-1"
+              offsetClass="md:col-span-2 lg:col-span-1 lg:-rotate-1"
               delay="0ms"
             />
 
-            {/* Card 2 — TEDx: pushed down-center, slightly rotated */}
+            {/* Card 2 — TEDx */}
             <AboutCard
               card={cards[1]}
-              offsetClass="md:mt-16 md:rotate-1"
+              offsetClass="lg:mt-16 lg:rotate-1"
               delay="200ms"
             />
 
-            {/* Card 3 — TEDxUC: offset higher-right */}
+            {/* Card 3 — TEDxUC */}
             <AboutCard
               card={cards[2]}
-              offsetClass="md:mt-6 md:-rotate-0.5"
+              offsetClass="lg:mt-6 lg:-rotate-0.5"
               delay="400ms"
             />
           </div>
         </div>
       </section>
 
-      {/* ===== CONNECTING NARRATIVE ===== */}
-      <section className="relative py-10 md:py-20 px-6 md:px-10 lg:px-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row items-start gap-8 md:gap-16">
-            {/* Left: decorative column */}
-            <div className="hidden md:flex flex-col items-center gap-4 pt-4">
-              <div className="w-px h-16 bg-linear-to-b from-transparent to-(--maleficent-green)/40" />
-              <Diamond className="text-(--maleficent-green)/40 w-2 h-2 animate-pulse" />
-              <div className="w-px h-24 bg-(--maleficent-green)/20" />
-              <Diamond className="text-(--maleficent-purple)/40 w-2 h-2 animate-pulse [animation-delay:1s]" />
-              <div className="w-px h-16 bg-linear-to-b from-(--maleficent-purple)/30 to-transparent" />
-            </div>
-
-            {/* Right: text content, not centered */}
-            <div className="flex-1">
-              <h2
-                className="text-xl md:text-3xl font-bold uppercase tracking-wider mb-6 text-left"
-                style={{ fontFamily: "var(--font-allrounder), sans-serif" }}
-              >
-                From Global Stage to{" "}
-                <span className="text-(--maleficent-green)">Local Roots</span>
-              </h2>
-              <div className="space-y-4 text-sm md:text-base text-gray-500 leading-relaxed max-w-3xl">
-                <p>
-                  TED began in 1984 as a conference where Technology, Entertainment, and Design
-                  converged. Today it spans across the globe — and through TEDx, that spirit
-                  reaches into communities everywhere.
-                </p>
-                <p>
-                  TEDxUniversitasCiputraSurabaya carries that torch forward. Born from the halls
-                  of UC, powered by students, and driven by the belief that{" "}
-                  <span className="text-(--maleficent-purple) italic">
-                    every idea deserves a stage
-                  </span>
-                  .
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* ===== BOTTOM ===== */}
-      <section className="relative py-12 md:py-20 px-6">
+      <section className="relative z-20 py-12 md:py-20 px-6">
         <div className="max-w-4xl mx-auto">
           {/* Decorative divider */}
           <div className="flex items-center justify-center gap-4 mb-8">
             <div className="flex-1 max-w-40 h-px bg-linear-to-r from-transparent to-(--maleficent-green)/30" />
-            <CrownIcon className="w-8 h-8 md:w-10 md:h-10 text-(--maleficent-green)/30 animate-float" />
+            <Image
+              src="/images/crown.png"
+              alt="Crown"
+              width={40}
+              height={40}
+              className="w-8 h-8 md:w-10 md:h-10 opacity-30 animate-float object-contain"
+            />
             <div className="flex-1 max-w-40 h-px bg-linear-to-l from-transparent to-(--maleficent-green)/30" />
           </div>
 
