@@ -9,12 +9,12 @@ import { useEffect, useRef, useState } from "react";
    ══════════════════════════════════════════ */
 
 const galleryImages = [
-  { src: "/images/bg-hero.png", alt: "TEDx event - auditorium" },
-  { src: "/images/gallery-2.jpg", alt: "TEDx event - stage performance" },
-  { src: "/images/gallery-3.jpg", alt: "TEDx event - crowd" },
-  { src: "/images/gallery-4.jpg", alt: "TEDx event - speaker" },
-  { src: "/images/gallery-5.jpg", alt: "TEDx event - night crowd" },
-  { src: "/images/gallery-6.jpg", alt: "TEDx event - behind the scenes" },
+  { src: "/images/gallery/pe2_4.webp", alt: "TEDx event - auditorium" },
+  { src: "/images/gallery/pe1_4.webp", alt: "TEDx event - stage performance" },
+  { src: "/images/gallery/NIC02241.JPG", alt: "TEDx event - crowd" },
+  { src: "/images/gallery/pe3_1.webp", alt: "TEDx event - speaker" },
+  { src: "/images/gallery/NIC05812.JPG", alt: "TEDx event - night crowd" },
+  { src: "/images/gallery/DSC05564.JPG", alt: "TEDx event - behind the scenes" },
 ];
 
 /* ══════════════════════════════════════════
@@ -125,30 +125,7 @@ function ThornVine({ className = "", flip = false }: { className?: string; flip?
   );
 }
 
-/* ── Floating particles ── */
-function FloatingParticles() {
-  return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-1">
-      {[...Array(8)].map((_, i) => (
-        <div
-          key={i}
-          className="absolute rounded-full animate-particle"
-          style={{
-            width: `${2 + Math.random() * 3}px`,
-            height: `${2 + Math.random() * 3}px`,
-            left: `${10 + i * 12}%`,
-            top: `${20 + (i % 3) * 30}%`,
-            background: i % 2 === 0
-              ? "rgba(84, 110, 64, 0.3)"
-              : "rgba(93, 29, 105, 0.3)",
-            animationDelay: `${i * 0.7}s`,
-            animationDuration: `${6 + Math.random() * 4}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+
 
 /* ══════════════════════════════════════════
    HERO TEXT ANIMATION
@@ -170,7 +147,13 @@ function AnimatedHeroText() {
           revealed ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-8"
         }`}
       >
-        <CrownIcon className="w-10 h-10 md:w-14 md:h-14 text-(--maleficent-green) animate-float drop-shadow-[0_0_30px_rgba(84,110,64,0.5)]" />
+        <Image
+          src="/images/crown.png"
+          alt="Crown"
+          width={300}
+          height={300}
+          className="w-28 h-28 md:w-36 md:h-36 animate-float drop-shadow-[0_0_30px_rgba(84,110,64,0.5)] object-contain"
+        />
       </div>
 
       {/* Title lines staggered */}
@@ -183,7 +166,7 @@ function AnimatedHeroText() {
             revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
           }`}
         >
-          <span className="hero-text-shimmer">The Forsaken</span>
+          The Forsaken
         </span>
         <br />
         <span
@@ -215,24 +198,10 @@ function AnimatedHeroText() {
           revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
         }`}
       >
-        Reclaim the lost power of ideas.
+        Desc of the theme.
       </p>
 
-      {/* Scroll indicator */}
-      <div
-        className={`mt-10 md:mt-14 transition-all duration-1000 delay-1200 ease-out ${
-          revealed ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <div className="flex flex-col items-center gap-2 animate-bounce [animation-duration:2s]">
-          <span className="text-[0.6rem] text-gray-600 uppercase tracking-[0.3em]">Scroll</span>
-          <svg width="16" height="24" viewBox="0 0 16 24" fill="none" className="text-gray-600">
-            <rect x="3" y="1" width="10" height="16" rx="5" stroke="currentColor" strokeWidth="1.2" />
-            <circle cx="8" cy="7" r="1.5" fill="currentColor" className="animate-pulse" />
-            <path d="M8 20L5 17M8 20L11 17" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-          </svg>
-        </div>
-      </div>
+    
     </div>
   );
 }
@@ -242,7 +211,6 @@ function AnimatedHeroText() {
    ══════════════════════════════════════════ */
 
 function TedxInfoSection() {
-  const iconRef = useScrollReveal();
   const titleRef = useScrollReveal(100);
   const p1Ref = useScrollReveal(200);
   const p2Ref = useScrollReveal(300);
@@ -250,22 +218,6 @@ function TedxInfoSection() {
   return (
     <section className="relative py-20 md:py-32 px-6 md:px-12 lg:px-20">
       <div className="max-w-3xl mx-auto text-center">
-        {/* Decorative Icon */}
-        <div ref={iconRef} className="opacity-0 translate-y-8 transition-all duration-700 ease-out flex justify-center mb-6">
-          <svg
-            width="40" height="40" viewBox="0 0 40 40" fill="none"
-            className="text-(--maleficent-green) w-10 h-10 animate-float"
-          >
-            <path
-              d="M20 4C20 4 24 10 24 16C24 18 26 20 28 20C30 20 32 18 36 14M20 4C20 4 16 10 16 16C16 18 14 20 12 20C10 20 8 18 4 14M20 4V36M12 20C12 20 8 24 8 28M28 20C28 20 32 24 32 28M20 16C20 16 16 18 14 22M20 16C20 16 24 18 26 22"
-              stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
-            />
-            <circle cx="20" cy="16" r="2" fill="currentColor" />
-            <circle cx="12" cy="20" r="1.5" fill="currentColor" />
-            <circle cx="28" cy="20" r="1.5" fill="currentColor" />
-          </svg>
-        </div>
-
         {/* Title */}
         <div ref={titleRef} className="opacity-0 translate-y-8 transition-all duration-700 ease-out mb-8">
           <h2
@@ -282,19 +234,16 @@ function TedxInfoSection() {
         <div ref={p1Ref} className="opacity-0 translate-y-6 transition-all duration-700 ease-out mb-5">
           <p className="text-sm md:text-base text-gray-400 leading-relaxed">
             In the spirit of{" "}
-            <span className="text-(--acid-green) font-medium not-italic">ideas worth spreading</span>,
-            TEDx is a program of local, self-organized events that bring people together
-            to share a TED-like experience. At a TEDx event, TED Talks video and live
-            speakers combine to spark deep discussion and connection.
+            <span className="text-(--acid-green) font-medium not-italic">The Forsaken Crown</span>,
+            TEDx is a program of 
           </p>
         </div>
 
         <div ref={p2Ref} className="opacity-0 translate-y-6 transition-all duration-700 ease-out">
           <p className="text-sm md:text-base text-gray-400 leading-relaxed">
-            These local, self-organized events are branded TEDx, where{" "}
-            <span className="text-(--maleficent-purple) italic">x = independently organized TED event</span>.
-            The TED Conference provides general guidance for the TEDx program,
-            but individual TEDx events are self-organized.
+            The
+            <span className="text-(--maleficent-purple) italic">TED</span>.
+            The TEDx 
           </p>
         </div>
       </div>
@@ -430,8 +379,7 @@ function CtaSection() {
           ref={titleRef}
           className="opacity-0 translate-y-8 transition-all duration-800 ease-out"
         >
-          <CrownIcon className="w-14 h-14 md:w-20 md:h-20 mx-auto mb-6 text-(--maleficent-green)/50 animate-float drop-shadow-[0_0_30px_rgba(84,110,64,0.3)]" />
-
+         
           <h2
             className="text-3xl sm:text-4xl md:text-6xl font-bold uppercase tracking-wider leading-tight"
             style={{ fontFamily: "var(--font-allrounder), sans-serif" }}
@@ -442,14 +390,6 @@ function CtaSection() {
               Throne
             </span>
           </h2>
-
-          {/* Divider */}
-          <div className="flex items-center justify-center gap-3 mt-5">
-            <div className="w-10 h-px bg-linear-to-r from-transparent to-(--maleficent-green)/40" />
-            <Diamond className="text-(--maleficent-green)/40 w-1.5 h-1.5" />
-            <Sparkle className="text-(--maleficent-purple)/40 w-2 h-2" />
-            <div className="w-10 h-px bg-linear-to-l from-transparent to-(--maleficent-purple)/40" />
-          </div>
 
           <p className="mt-5 md:mt-6 text-sm md:text-base text-gray-400/80 leading-relaxed max-w-lg mx-auto">
             Join us in{" "}
@@ -505,20 +445,7 @@ export default function Home() {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-8px); }
         }
-        @keyframes particle {
-          0% { transform: translate(0, 0) scale(1); opacity: 0; }
-          10% { opacity: 0.6; }
-          90% { opacity: 0.6; }
-          100% { transform: translate(var(--dx, 30px), var(--dy, -120px)) scale(0); opacity: 0; }
-        }
         .animate-float { animation: float 4s ease-in-out infinite; }
-        .animate-particle {
-          --dx: 20px;
-          --dy: -100px;
-          animation: particle 8s ease-in-out infinite;
-        }
-        .animate-particle:nth-child(odd) { --dx: -25px; --dy: -80px; }
-        .animate-particle:nth-child(3n) { --dx: 15px; --dy: -130px; }
         .hero-text-shimmer {
           background: linear-gradient(
             90deg,
@@ -555,9 +482,6 @@ export default function Home() {
       <div className="hidden lg:block fixed top-0 right-0 w-16 h-full pointer-events-none z-1 text-(--maleficent-purple)">
         <ThornVine className="w-full h-full" flip />
       </div>
-
-      {/* ── Floating particles ── */}
-      <FloatingParticles />
 
       {/* ── Floating sparkles ── */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-1">
