@@ -42,7 +42,7 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-200">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>
-          <Link href="/about" className="hover:text-white transition-colors">About</Link>
+          <Link href="/about-ted" className="hover:text-white transition-colors">About</Link>
 
           <div className="group relative flex items-center cursor-pointer hover:text-white transition-colors">
             <span>Events</span>
@@ -58,6 +58,8 @@ const Navbar = () => {
             </div>
           </div>
 
+          <Link href="/past-tedx" className="hover:text-white transition-colors">Past TEDx</Link>
+
           <Link href="/schedule" className="hover:text-white transition-colors">Speaker & Schedule</Link>
           <Link href="/gallery" className="hover:text-white transition-colors">Gallery</Link>
         </div>
@@ -68,5 +70,4 @@ const Navbar = () => {
     </nav>
   );
 };
-
-export default Navbar; ``
+export default Navbar;
