@@ -1,6 +1,6 @@
 const QRCode = require('qrcode');
 
-const generateQR = async (registrationId, registrationNumber) => {
+const generateQR = async (registrationId: string, registrationNumber: string) => {
   try {
     const qrData = JSON.stringify({
       id: registrationId,
@@ -17,7 +17,8 @@ const generateQR = async (registrationId, registrationNumber) => {
     
     return qrCodeBase64; // Langsung return string base64 gambarnya
   } catch (error) {
-    console.error(`Error generating QR: ${error.message}`);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`Error generating QR: ${message}`);
     throw new Error('Gagal membuat QR code');
   }
 };
