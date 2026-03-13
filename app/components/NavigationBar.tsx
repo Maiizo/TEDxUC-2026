@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileEventsOpen, setIsMobileEventsOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,8 +63,90 @@ const Navbar = () => {
           <Link href="/schedule" className="hover:text-white transition-colors">Speaker & Schedule</Link>
           <Link href="/gallery" className="hover:text-white transition-colors">Gallery</Link>
         </div>
-        <div className="md:hidden text-white">
-          ☰
+        <button 
+          className="md:hidden text-white p-2"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <div 
+        className={`
+          md:hidden fixed inset-0 top-[72px] bg-black/95 backdrop-blur-xl
+          transition-all duration-300 ease-in-out
+          ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
+        `}
+      >
+        <div className="flex flex-col p-6 space-y-6 text-lg font-medium text-gray-200">
+          <Link 
+            href="/" 
+            className="hover:text-white transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Home
+          </Link>
+          <Link 
+            href="/about" 
+            className="hover:text-white transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            About
+          </Link>
+
+          <div className="flex flex-col space-y-4">
+            <div 
+              className="flex items-center justify-between cursor-pointer hover:text-white transition-colors"
+              onClick={() => setIsMobileEventsOpen(!isMobileEventsOpen)}
+            >
+              <span>Events</span>
+              <ChevronDown className={`w-5 h-5 transition-transform ${isMobileEventsOpen ? 'rotate-180' : ''}`} />
+            </div>
+            
+            <div className={`
+              flex flex-col pl-4 space-y-4 text-base border-l border-white/10
+              transition-all duration-300 overflow-hidden
+              ${isMobileEventsOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'}
+            `}>
+              <Link 
+                href="/events/pre1" 
+                className="hover:text-white transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Pre Events 1
+              </Link>
+              <Link 
+                href="/events/pre2" 
+                className="hover:text-white transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Pre Events 2
+              </Link>
+              <Link 
+                href="/events/pre3" 
+                className="hover:text-white transition-colors"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Pre Events 3
+              </Link>
+            </div>
+          </div>
+
+          <Link 
+            href="/schedule" 
+            className="hover:text-white transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Speaker & Schedule
+          </Link>
+          <Link 
+            href="/gallery" 
+            className="hover:text-white transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Gallery
+          </Link>
         </div>
       </div>
     </nav>
