@@ -14,9 +14,9 @@ const Footer = () => {
           
           {/* KOLOM 1: BRANDING */}
           <div className="md:col-span-5 space-y-6">
-            <h2 className={`${cinzel.className} text-3xl tracking-wide`}>
-              <span className="text-white font-bold">TEDx</span>
-              <span className="text-red-600 font-bold">UNIVERSITASCIPUTRA</span>
+            <h2 className={`${cinzel.className} text-2xl sm:text-3xl tracking-wide leading-tight`}>
+              <span className="text-white font-bold block sm:inline">TEDx</span>
+              <span className="text-red-600 font-bold break-all sm:break-normal">UNIVERSITASCIPUTRA</span>
             </h2>
             <p className="text-sm text-gray-400 leading-relaxed max-w-sm">
               An independently organized TED event bringing together thinkers, innovators, and visionaries to share ideas worth spreading. Join us on our infinite journey.
@@ -76,9 +76,9 @@ const Footer = () => {
 
         {/* BOTTOM COPYRIGHT */}
         <div className="border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-end items-center text-xs text-gray-600">
-            <div className="text-right space-y-1">
-                <p>© 2026 TEDxUniversitasCiputraSurabaya. All rights reserved.</p>
-                <p className="italic opacity-60">This independent TEDx event is operated under license from TED.</p>
+          <div className="w-full md:w-auto text-center md:text-right space-y-1">
+            <p className="break-all sm:break-normal">© 2026 TEDxUniversitasCiputraSurabaya. All rights reserved.</p>
+            <p className="italic opacity-60 wrap-break-word">This independent TEDx event is operated under license from TED.</p>
             </div>
         </div>
       </div>
