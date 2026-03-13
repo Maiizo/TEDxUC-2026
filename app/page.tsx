@@ -1,5 +1,6 @@
 "use client";
 import Navbar from "./components/NavigationBar";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
