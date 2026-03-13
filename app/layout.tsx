@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import NavigationBar from "./components/NavigationBar";
+import Navbar from "@/reusable-components/layout/Navbar";
 import Footer from "@/reusable-components/layout/Footer";
 
 const allrounder = localFont({
@@ -41,9 +41,9 @@ export default function RootLayout({
         className={`${allrounder.variable} antialiased`}
       >
   {/*  Navbar */}
-    <NavigationBar>
+    <Navbar>
 
-    </NavigationBar>
+    </Navbar>
   
         {children}
       {/* Footer */}

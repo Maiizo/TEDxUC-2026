@@ -59,7 +59,7 @@ const Navbar = () => {
               </div>
             </div>
           </div>
-
+          <Link href="/pastevent " className="hover:text-white transition-colors">Past Event</Link>
           <Link href="/schedule" className="hover:text-white transition-colors">Speaker & Schedule</Link>
           <Link href="/gallery" className="hover:text-white transition-colors">Gallery</Link>
         </div>
