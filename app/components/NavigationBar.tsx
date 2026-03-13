@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -16,13 +16,24 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
-      <div className={`
-        flex items-center justify-between w-full max-w-6xl px-8 py-4
-        bg-black/40 backdrop-blur-md border border-white/10 rounded-full
-        transition-all duration-300
-        ${isScrolled ? 'py-3 bg-black/60' : 'py-4'}
-      `}>
+    <nav
+      className={`
+        fixed left-0 right-0 z-50 flex justify-center
+        transition-all duration-500 ease-in-out
+        ${isScrolled ? 'top-6 px-6' : 'top-0 px-0'}
+      `}
+    >
+      <div
+        className={`
+          flex items-center justify-between w-full px-8
+          bg-black/40 backdrop-blur-md border border-white/10
+          transition-all duration-500 ease-in-out
+          ${isScrolled
+            ? 'max-w-6xl rounded-full py-3 bg-black/60 border-white/20'
+            : 'max-w-full rounded-none py-5 bg-black/20 border-transparent'
+          }
+        `}
+      >
 
         <div className="flex items-center text-xl font-bold tracking-tight">
           <span className="text-white">TEDx</span>
@@ -36,7 +47,7 @@ const Navbar = () => {
           <div className="group relative flex items-center cursor-pointer hover:text-white transition-colors">
             <span>Events</span>
             <ChevronDown className="ml-1 w-4 h-4 group-hover:rotate-180 transition-transform" />
-            
+
             <div className="absolute top-full left-0 mt-2 w-40 hidden group-hover:event bg-black/80 backdrop-blur-lg rounded-xl border border-white/10 p-2">
               <Link href="/events/pre1" className="event px-4 py-2 hover:bg-white/10 rounded-lg">Pre Events 1</Link>
               <Link href="/events/pre2" className="event px-4 py-2 hover:bg-white/10 rounded-lg">Pre Events 2</Link>
@@ -55,4 +66,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;``
+export default Navbar; ``
