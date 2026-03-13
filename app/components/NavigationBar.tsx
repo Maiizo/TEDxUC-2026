@@ -26,23 +26,28 @@ const Navbar = () => {
 
         <div className="flex items-center text-xl font-bold tracking-tight">
           <span className="text-white">TEDx</span>
-          <span className="text-purple-600">UCSurabaya</span>
+          <span className="text-red-600">UCSurabaya</span>
         </div>
 
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-200">
           <Link href="/" className="hover:text-white transition-colors">Home</Link>
-          <Link href="/about" className="hover:text-white transition-colors">About</Link>
+          <Link href="/about-ted" className="hover:text-white transition-colors">About</Link>
 
           <div className="group relative flex items-center cursor-pointer hover:text-white transition-colors">
             <span>Events</span>
             <ChevronDown className="ml-1 w-4 h-4 group-hover:rotate-180 transition-transform" />
-            
-            <div className="absolute top-full left-0 mt-2 w-40 hidden group-hover:event bg-black/80 backdrop-blur-lg rounded-xl border border-white/10 p-2">
-              <Link href="/events/pre1" className="event px-4 py-2 hover:bg-white/10 rounded-lg">Pre Events 1</Link>
-              <Link href="/events/pre2" className="event px-4 py-2 hover:bg-white/10 rounded-lg">Pre Events 2</Link>
-              <Link href="/events/pre3" className="event px-4 py-2 hover:bg-white/10 rounded-lg">Pre Events 3</Link>
+
+            {/* Invisible bridge + animated dropdown */}
+            <div className="absolute top-full left-0 w-44 pt-2 opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto translate-y-2 group-hover:translate-y-0 transition-all duration-200 ease-out">
+              <div className="bg-black/80 backdrop-blur-lg rounded-xl border border-white/10 p-2">
+                <Link href="/events/pre1" className="block px-4 py-2 hover:bg-white/10 rounded-lg transition-colors">Pre Events 1</Link>
+                <Link href="/events/pre2" className="block px-4 py-2 hover:bg-white/10 rounded-lg transition-colors">Pre Events 2</Link>
+                <Link href="/events/pre3" className="block px-4 py-2 hover:bg-white/10 rounded-lg transition-colors">Pre Events 3</Link>
+              </div>
             </div>
           </div>
+
+          <Link href="/past-tedx" className="hover:text-white transition-colors">Past TEDx</Link>
 
           <Link href="/schedule" className="hover:text-white transition-colors">Speaker & Schedule</Link>
           <Link href="/gallery" className="hover:text-white transition-colors">Gallery</Link>
@@ -54,5 +59,4 @@ const Navbar = () => {
     </nav>
   );
 };
-
-export default Navbar;``
+export default Navbar;
