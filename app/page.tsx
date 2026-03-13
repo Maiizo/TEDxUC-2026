@@ -405,7 +405,7 @@ function CtaSection() {
           className="mt-9 md:mt-12 opacity-0 translate-y-6 transition-all duration-700 ease-out"
         >
           <Link
-            href="/event"
+            href="/register"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             className="relative inline-block group"
