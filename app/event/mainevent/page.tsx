@@ -204,7 +204,7 @@ export default function MainEventPage() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Date</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">June 20, 2026</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">Mei 10, 2026</p>
                 </div>
               </div>
 
