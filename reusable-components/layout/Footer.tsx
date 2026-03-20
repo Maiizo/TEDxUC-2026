@@ -8,7 +8,7 @@ const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '700'] });
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-gray-300 w-full pt-16 pb-8 border-t border-red-900/30">
+    <footer className="relative z-50 bg-black text-gray-300 w-full pt-16 pb-8 border-t border-red-900/30">
       <div className="max-w-7xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
           
