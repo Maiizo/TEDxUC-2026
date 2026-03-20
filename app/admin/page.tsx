@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface Stats {
   totalRegistrations: number;
   paidRegistrations: number;
   pendingRegistrations: number;
-  totalRevenue: number;
+  rejectedPayments: number;
 }
 
 interface EventData {
@@ -35,7 +35,16 @@ interface RegistrationData {
   attendanceStatus: string;
   createdAt: string;
   event: { name: string; type: string };
-  payments: { status: string; paymentMethod: string; amount: number }[];
+  payments: {
+    id: string;
+    status: string;
+    paymentMethod: string;
+    amount: number;
+    proofUrl: string | null;
+    proofSenderName: string | null;
+    rejectionReason: string | null;
+    createdAt: string;
+  }[];
 }
 
 export default function AdminDashboard() {
@@ -44,13 +53,10 @@ export default function AdminDashboard() {
   const [events, setEvents] = useState<EventData[]>([]);
   const [registrations, setRegistrations] = useState<RegistrationData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [actionLoadingPaymentId, setActionLoadingPaymentId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "events" | "registrations">("overview");
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const res = await fetch("/api/admin/dashboard");
       if (res.status === 401) {
@@ -68,7 +74,11 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleLogout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -79,16 +89,70 @@ export default function AdminDashboard() {
     switch (status) {
       case "paid":
       case "success":
+      case "approved":
         return "text-green-400 bg-green-950 border-green-800";
       case "pending":
+      case "verifying":
         return "text-yellow-400 bg-yellow-950 border-yellow-800";
       case "cancelled":
       case "failed":
+      case "rejected":
         return "text-red-400 bg-red-950 border-red-800";
       case "expired":
         return "text-gray-400 bg-gray-900 border-gray-700";
       default:
         return "text-gray-400 bg-gray-900 border-gray-700";
+    }
+  };
+
+  const handleApprovePayment = async (paymentId: string) => {
+    setActionLoadingPaymentId(paymentId);
+    try {
+      const res = await fetch("/api/admin/payment/approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentId }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to approve payment");
+        return;
+      }
+
+      await fetchData();
+    } catch {
+      alert("Failed to approve payment");
+    } finally {
+      setActionLoadingPaymentId(null);
+    }
+  };
+
+  const handleRejectPayment = async (paymentId: string) => {
+    const reason = window.prompt("Rejection reason:", "Proof is unclear or invalid.")?.trim();
+    if (!reason) {
+      return;
+    }
+
+    setActionLoadingPaymentId(paymentId);
+    try {
+      const res = await fetch("/api/admin/payment/reject", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ paymentId, rejectionReason: reason }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to reject payment");
+        return;
+      }
+
+      await fetchData();
+    } catch {
+      alert("Failed to reject payment");
+    } finally {
+      setActionLoadingPaymentId(null);
     }
   };
 
@@ -142,9 +206,9 @@ export default function AdminDashboard() {
             color="yellow"
           />
           <StatCard
-            label="Revenue"
-            value={`Rp ${(stats?.totalRevenue ?? 0).toLocaleString("id-ID")}`}
-            color="green"
+            label="Rejected"
+            value={stats?.rejectedPayments ?? 0}
+            color="red"
           />
         </div>
 
@@ -250,6 +314,9 @@ export default function AdminDashboard() {
               <RegistrationTable
                 registrations={registrations.slice(0, 10)}
                 statusColor={statusColor}
+                onApprove={handleApprovePayment}
+                onReject={handleRejectPayment}
+                actionLoadingPaymentId={actionLoadingPaymentId}
               />
             </section>
           </div>
@@ -317,6 +384,9 @@ export default function AdminDashboard() {
             <RegistrationTable
               registrations={registrations}
               statusColor={statusColor}
+              onApprove={handleApprovePayment}
+              onReject={handleRejectPayment}
+              actionLoadingPaymentId={actionLoadingPaymentId}
             />
           </div>
         )}
@@ -332,17 +402,19 @@ function StatCard({
 }: {
   label: string;
   value: number | string;
-  color: "green" | "purple" | "yellow";
+  color: "green" | "purple" | "yellow" | "red";
 }) {
   const borderColors = {
     green: "border-green-800/50 hover:border-green-700",
     purple: "border-purple-800/50 hover:border-purple-700",
     yellow: "border-yellow-800/50 hover:border-yellow-700",
+    red: "border-red-800/50 hover:border-red-700",
   };
   const valueColors = {
     green: "text-green-400",
     purple: "text-purple-400",
     yellow: "text-yellow-400",
+    red: "text-red-400",
   };
 
   return (
@@ -358,9 +430,15 @@ function StatCard({
 function RegistrationTable({
   registrations,
   statusColor,
+  onApprove,
+  onReject,
+  actionLoadingPaymentId,
 }: {
   registrations: RegistrationData[];
   statusColor: (s: string) => string;
+  onApprove: (paymentId: string) => Promise<void>;
+  onReject: (paymentId: string) => Promise<void>;
+  actionLoadingPaymentId: string | null;
 }) {
   return (
     <div className="overflow-x-auto">
@@ -373,52 +451,103 @@ function RegistrationTable({
             <th className="text-left py-3 px-4 font-medium">Event</th>
             <th className="text-left py-3 px-4 font-medium">Status</th>
             <th className="text-left py-3 px-4 font-medium">Payment</th>
+            <th className="text-left py-3 px-4 font-medium">Proof</th>
+            <th className="text-left py-3 px-4 font-medium">Actions</th>
             <th className="text-left py-3 px-4 font-medium">Date</th>
           </tr>
         </thead>
         <tbody>
-          {registrations.map((reg) => (
-            <tr
-              key={reg.id}
-              className="border-b border-gray-900 hover:bg-gray-950/50"
-            >
-              <td className="py-3 px-4 text-gray-400 font-mono text-xs">
-                {reg.registrationNumber}
-              </td>
-              <td className="py-3 px-4 text-white font-medium">{reg.fullName}</td>
-              <td className="py-3 px-4 text-gray-400">{reg.email}</td>
-              <td className="py-3 px-4 text-purple-400">{reg.event.type}</td>
-              <td className="py-3 px-4">
-                <span
-                  className={`text-xs px-2 py-1 rounded-full border ${statusColor(
-                    reg.status
-                  )}`}
-                >
-                  {reg.status}
-                </span>
-              </td>
-              <td className="py-3 px-4">
-                {reg.payments[0] ? (
+          {registrations.map((reg) => {
+            const latestPayment = reg.payments[0];
+            const isVerifying = latestPayment?.status === "verifying";
+            const isProcessing = latestPayment?.id === actionLoadingPaymentId;
+
+            return (
+              <tr
+                key={reg.id}
+                className="border-b border-gray-900 hover:bg-gray-950/50"
+              >
+                <td className="py-3 px-4 text-gray-400 font-mono text-xs">
+                  {reg.registrationNumber}
+                </td>
+                <td className="py-3 px-4 text-white font-medium">{reg.fullName}</td>
+                <td className="py-3 px-4 text-gray-400">{reg.email}</td>
+                <td className="py-3 px-4 text-purple-400">{reg.event.type}</td>
+                <td className="py-3 px-4">
                   <span
                     className={`text-xs px-2 py-1 rounded-full border ${statusColor(
-                      reg.payments[0].status
+                      reg.status
                     )}`}
                   >
-                    {reg.payments[0].paymentMethod}
+                    {reg.status}
                   </span>
-                ) : (
-                  <span className="text-gray-600 text-xs">—</span>
-                )}
-              </td>
-              <td className="py-3 px-4 text-gray-500 text-xs">
-                {new Date(reg.createdAt).toLocaleDateString("id-ID", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
-              </td>
-            </tr>
-          ))}
+                </td>
+                <td className="py-3 px-4">
+                  {latestPayment ? (
+                    <div className="space-y-1">
+                      <span
+                        className={`inline-block text-xs px-2 py-1 rounded-full border ${statusColor(
+                          latestPayment.status
+                        )}`}
+                      >
+                        {latestPayment.paymentMethod} • {latestPayment.status}
+                      </span>
+                      {latestPayment.rejectionReason ? (
+                        <p className="text-xs text-red-300 max-w-52 wrap-break-word">
+                          {latestPayment.rejectionReason}
+                        </p>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <span className="text-gray-600 text-xs">—</span>
+                  )}
+                </td>
+                <td className="py-3 px-4">
+                  {latestPayment?.proofUrl ? (
+                    <a
+                      href={latestPayment.proofUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-xs text-blue-400 hover:text-blue-300 underline"
+                    >
+                      View proof
+                    </a>
+                  ) : (
+                    <span className="text-gray-600 text-xs">No proof</span>
+                  )}
+                </td>
+                <td className="py-3 px-4">
+                  {latestPayment ? (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => onApprove(latestPayment.id)}
+                        disabled={!isVerifying || isProcessing}
+                        className="px-2.5 py-1 text-xs rounded border border-green-700 text-green-300 hover:bg-green-950 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => onReject(latestPayment.id)}
+                        disabled={!isVerifying || isProcessing}
+                        className="px-2.5 py-1 text-xs rounded border border-red-700 text-red-300 hover:bg-red-950 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="text-gray-600 text-xs">—</span>
+                  )}
+                </td>
+                <td className="py-3 px-4 text-gray-500 text-xs">
+                  {new Date(reg.createdAt).toLocaleDateString("id-ID", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       {registrations.length === 0 && (
