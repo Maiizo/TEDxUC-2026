@@ -55,18 +55,23 @@ model Registration {
 }
 
 model Payment {
-  id                    String       @id @default(uuid())
+  id             String       @id @default(uuid())
+  registrationId String
+  registration   Registration @relation(fields: [registrationId], references: [id])
   
-  // Relasi ke Registration
-  registrationId        String
-  registration          Registration @relation(fields: [registrationId], references: [id])
+  amount         Float
+  paymentMethod  String       // e.g., "BCA", "QRIS"
+  status         String       @default("verifying") // "verifying", "approved", "rejected"
   
-  amount                Float
-  paymentMethod         String       // Enum: 'bca_va', 'qris' , 'free'
-  status                String       @default("pending") // Enum: 'pending', 'success', 'failed', 'expired'
-  transactionId         String?      @unique
-  paymentDate           DateTime?
+  // --- FITUR BARU HASIL ADAPTASI COLOR RUN ---
+  proofUrl        String?     // URL gambar bukti transfer dari Vercel Blob
+  proofSenderName String?     // Nama pengirim di rekening bank
+  rejectionReason String?     // Alasan jika admin menolak
+  // -------------------------------------------
 
-  createdAt             DateTime     @default(now())
-  updatedAt             DateTime     @updatedAt
+  transactionId  String?      @unique
+  paymentDate    DateTime?    @default(now())
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }

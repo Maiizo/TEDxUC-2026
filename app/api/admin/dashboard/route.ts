@@ -42,7 +42,16 @@ export async function GET(request: NextRequest) {
           select: { name: true, type: true },
         },
         payments: {
-          select: { status: true, paymentMethod: true, amount: true },
+          select: {
+            id: true,
+            status: true,
+            paymentMethod: true,
+            amount: true,
+            proofUrl: true,
+            proofSenderName: true,
+            rejectionReason: true,
+            createdAt: true,
+          },
           orderBy: { createdAt: "desc" },
           take: 1,
         },
@@ -57,9 +66,8 @@ export async function GET(request: NextRequest) {
     const pendingRegistrations = await prisma.registration.count({
       where: { status: "pending" },
     });
-    const totalRevenue = await prisma.payment.aggregate({
-      _sum: { amount: true },
-      where: { status: "success" },
+    const rejectedPayments = await prisma.payment.count({
+      where: { status: "rejected" },
     });
 
     return NextResponse.json({
@@ -69,7 +77,7 @@ export async function GET(request: NextRequest) {
           totalRegistrations,
           paidRegistrations,
           pendingRegistrations,
-          totalRevenue: totalRevenue._sum.amount || 0,
+          rejectedPayments,
         },
         events,
         registrations,
