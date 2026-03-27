@@ -50,10 +50,16 @@ type FormErrors = Partial<Record<keyof FormData, string>>;
 
 interface RegistrationFormProps {
   onClose?: () => void;
+  eventKey?: EventConfig['key'];
 }
 
-const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose }) => {
-  const activeEvent = useMemo(() => getActiveEvent(), []);
+const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose, eventKey }) => {
+  const activeEvent = useMemo(() => {
+    if (eventKey) {
+      return EVENTS.find((ev) => ev.key === eventKey) ?? null;
+    }
+    return getActiveEvent();
+  }, [eventKey]);
 
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
@@ -67,6 +73,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose }) => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitMessage, setSubmitMessage] = useState('Something went wrong. Please try again.');
 
   if (!activeEvent) {
     return (
@@ -151,13 +158,42 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitStatus('idle');
+    setSubmitMessage('Something went wrong. Please try again.');
     if (!validate()) return;
 
     setIsSubmitting(true);
-    await new Promise((res) => setTimeout(res, 2000));
-    console.log('Submitted:', { event: activeEvent.key, ...formData });
-    setIsSubmitting(false);
-    setSubmitStatus('success');
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName.trim(),
+          email: formData.email.trim(),
+          phoneNumber: formData.phone.trim(),
+          gender: formData.gender,
+          age: Number(formData.age),
+          eventKey: activeEvent.key,
+          foodAllergy: activeEvent.requiresAllergy ? formData.allergies.trim() || '-' : '-',
+        }),
+      });
+
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok || !result || result.status !== 'success') {
+        setSubmitStatus('error');
+        setSubmitMessage(result?.message || 'Failed to save registration. Please try again.');
+        return;
+      }
+
+      setSubmitStatus('success');
+    } catch {
+      setSubmitStatus('error');
+      setSubmitMessage('Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClass = (field: keyof FormData) =>
@@ -218,7 +254,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose }) => {
       {submitStatus === 'error' && (
         <div className="mb-5 p-4 bg-red-900/20 border border-red-900/50 rounded-lg flex items-center gap-3 text-red-400">
           <AlertCircle size={18} />
-          <span className="text-sm">Something went wrong. Please try again.</span>
+          <span className="text-sm">{submitMessage}</span>
         </div>
       )}
 

@@ -5,24 +5,91 @@ import { generateRegNumber } from '@/utils/generateRegNumber';
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { fullName, email, phoneNumber, gender, age, eventId, foodAllergy } = body;
+    const { fullName, email, phoneNumber, gender, age, eventId, eventKey, foodAllergy } = body;
 
     // Validate required fields
-    if (!fullName || !email || !phoneNumber || !gender || !age || !eventId) {
+    if (!fullName || !email || !phoneNumber || !gender || !age || (!eventId && !eventKey)) {
       return NextResponse.json(
         { status: 'error', message: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Cek ketersediaan event
-    const event = await prisma.event.findUnique({
-      where: { id: eventId }
-    });
+    // Resolve selected event by ID or key from frontend flow
+    let event = null;
+
+    if (eventId) {
+      event = await prisma.event.findUnique({
+        where: { id: eventId }
+      });
+    }
+
+    if (!event && eventKey) {
+      if (eventKey === 'pre-event-1') {
+        event = await prisma.event.findFirst({
+          where: {
+            isActive: true,
+            OR: [
+              { type: 'Pre Event Day 1' },
+              { type: 'Pre Event 1' },
+              { type: 'Pre-Event 1' },
+              { name: { contains: 'Pre Event 1', mode: 'insensitive' } },
+              { name: { contains: 'Pre-Event 1', mode: 'insensitive' } }
+            ]
+          },
+          orderBy: { date: 'asc' }
+        });
+
+        if (!event) {
+          event = await prisma.event.create({
+            data: {
+              name: 'Pre-Event 1: The First Gathering',
+              type: 'Pre Event Day 1',
+              date: new Date('2026-04-10T14:00:00.000Z'),
+              quota: 300,
+              registeredCount: 0,
+              price: 0,
+              description: 'Auto-created Pre-Event 1 for registration flow',
+              requireFoodAllergy: false,
+              isActive: true,
+            }
+          });
+        }
+      }
+
+      if (eventKey === 'main-event') {
+        event = await prisma.event.findFirst({
+          where: {
+            isActive: true,
+            OR: [
+              { type: 'Main Event' },
+              { name: { contains: 'Main Event', mode: 'insensitive' } }
+            ]
+          },
+          orderBy: { date: 'asc' }
+        });
+
+        if (!event) {
+          event = await prisma.event.create({
+            data: {
+              name: 'TEDxUC 2026 Main Event',
+              type: 'Main Event',
+              date: new Date('2026-05-10T10:00:00.000Z'),
+              quota: 1500,
+              registeredCount: 0,
+              price: 0,
+              description: 'Auto-created Main Event for registration flow',
+              requireFoodAllergy: true,
+              isActive: true,
+            }
+          });
+        }
+      }
+    }
 
     if (!event) {
       return NextResponse.json(
-        { status: 'error', message: 'Event not found' },
+        { status: 'error', message: 'Selected event is not available' },
         { status: 404 }
       );
     }
@@ -38,8 +105,8 @@ export async function POST(req) {
         phoneNumber,
         gender,
         age: Number(age),
-        foodAllergy: foodAllergy || "-",
-        eventId,
+        foodAllergy: event.requireFoodAllergy ? (foodAllergy || '-') : '-',
+        eventId: event.id,
         registrationNumber: regNumber,
         status: "pending", // Secara eksplisit diset ke pending (meskipun defaultnya pending di schema)
       }

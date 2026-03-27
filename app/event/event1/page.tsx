@@ -285,7 +285,7 @@ export default function Event1Page() {
           className="mt-12 opacity-0 translate-y-6 transition-all duration-700 ease-out"
         >
           <Link
-            href="/register"
+            href="/register?event=pre-event-1"
             className="relative inline-block group"
           >
             <div className="absolute -inset-2 rounded-full bg-[#546e40]/0 group-hover:bg-[#546e40]/30 blur-[20px] transition-all duration-700" />

@@ -2,10 +2,18 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import RegistrationForm from '@/reusable-components/ui/RegistrationForm';
+
+type EventKey = 'pre-event-1' | 'main-event';
 
 export default function RegisterPage() {
   const [isOpen, setIsOpen] = useState(false);
+  const searchParams = useSearchParams();
+  const eventQuery = searchParams.get('event');
+
+  const eventKey: EventKey | undefined =
+    eventQuery === 'pre-event-1' || eventQuery === 'main-event' ? eventQuery : undefined;
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-6 gap-6">
@@ -25,7 +33,7 @@ export default function RegisterPage() {
             if (e.target === e.currentTarget) setIsOpen(false);
           }}
         >
-          <RegistrationForm onClose={() => setIsOpen(false)} />
+          <RegistrationForm eventKey={eventKey} onClose={() => setIsOpen(false)} />
         </div>
       )}
     </div>

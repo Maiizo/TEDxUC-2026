@@ -283,7 +283,7 @@ export default function MainEventPage() {
           className="mt-12 opacity-0 translate-y-6 transition-all duration-700 ease-out"
         >
           <Link
-            href="/register"
+            href="/register?event=main-event"
             className="relative inline-block group"
           >
             <div className="absolute -inset-2 rounded-full bg-[#5d1d69]/0 group-hover:bg-[#5d1d69]/30 blur-[20px] transition-all duration-700" />
