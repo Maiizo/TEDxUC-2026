@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import RegistrationForm from "@/reusable-components/ui/RegistrationForm";
 
 /* ══════════════════════════════════════════
    HOOKS
@@ -110,6 +110,7 @@ export default function MainEventPage() {
   const cardRef = useScrollReveal(100);
   const aboutRef = useScrollReveal(300);
   const btnRef = useScrollReveal(500);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
@@ -282,17 +283,29 @@ export default function MainEventPage() {
           ref={btnRef}
           className="mt-12 opacity-0 translate-y-6 transition-all duration-700 ease-out"
         >
-          <Link
-            href="/register?event=main-event"
+          <button
+            type="button"
+            onClick={() => setIsRegisterOpen(true)}
             className="relative inline-block group"
           >
             <div className="absolute -inset-2 rounded-full bg-[#5d1d69]/0 group-hover:bg-[#5d1d69]/30 blur-[20px] transition-all duration-700" />
             <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-[#5d1d69]/60 bg-[#5d1d69]/10 hover:bg-[#5d1d69]/20 text-white text-sm md:text-base font-medium tracking-[0.2em] uppercase rounded-full transition-all duration-500 group-hover:border-[#5d1d69] group-hover:shadow-[0_0_40px_rgba(93,29,105,0.4)]">
               Secure Your Throne
             </span>
-          </Link>
+          </button>
         </div>
       </div>
+
+      {isRegisterOpen && (
+        <div
+          className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsRegisterOpen(false);
+          }}
+        >
+          <RegistrationForm eventKey="main-event" onClose={() => setIsRegisterOpen(false)} />
+        </div>
+      )}
     </div>
   );
 }

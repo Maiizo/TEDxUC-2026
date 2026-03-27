@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import RegistrationForm from "@/reusable-components/ui/RegistrationForm";
 
 /* ══════════════════════════════════════════
    HOOKS
@@ -110,6 +110,7 @@ export default function Event1Page() {
   const cardRef = useScrollReveal(100);
   const aboutRef = useScrollReveal(300);
   const btnRef = useScrollReveal(500);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
@@ -284,17 +285,29 @@ export default function Event1Page() {
           ref={btnRef}
           className="mt-12 opacity-0 translate-y-6 transition-all duration-700 ease-out"
         >
-          <Link
-            href="/register?event=pre-event-1"
+          <button
+            type="button"
+            onClick={() => setIsRegisterOpen(true)}
             className="relative inline-block group"
           >
             <div className="absolute -inset-2 rounded-full bg-[#546e40]/0 group-hover:bg-[#546e40]/30 blur-[20px] transition-all duration-700" />
             <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-[#546e40]/60 bg-[#546e40]/10 hover:bg-[#546e40]/20 text-white text-sm md:text-base font-medium tracking-[0.2em] uppercase rounded-full transition-all duration-500 group-hover:border-[#546e40] group-hover:shadow-[0_0_40px_rgba(84,110,64,0.4)]">
               Reserve Your Place
             </span>
-          </Link>
+          </button>
         </div>
       </div>
+
+      {isRegisterOpen && (
+        <div
+          className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsRegisterOpen(false);
+          }}
+        >
+          <RegistrationForm eventKey="pre-event-1" onClose={() => setIsRegisterOpen(false)} />
+        </div>
+      )}
     </div>
   );
 }
