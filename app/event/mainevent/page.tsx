@@ -3,6 +3,13 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import RegistrationForm from "@/reusable-components/ui/RegistrationForm";
+import PaymentForm from "@/reusable-components/ui/PaymentForm";
+
+interface PaymentTarget {
+  registrationId: string;
+  registrationNumber: string;
+  amount: number;
+}
 
 /* ══════════════════════════════════════════
    HOOKS
@@ -111,6 +118,7 @@ export default function MainEventPage() {
   const aboutRef = useScrollReveal(300);
   const btnRef = useScrollReveal(500);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [paymentTarget, setPaymentTarget] = useState<PaymentTarget | null>(null);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
@@ -289,7 +297,7 @@ export default function MainEventPage() {
             className="relative inline-block group"
           >
             <div className="absolute -inset-2 rounded-full bg-[#5d1d69]/0 group-hover:bg-[#5d1d69]/30 blur-[20px] transition-all duration-700" />
-            <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-[#5d1d69]/60 bg-[#5d1d69]/10 hover:bg-[#5d1d69]/20 text-white text-sm md:text-base font-medium tracking-[0.2em] uppercase rounded-full transition-all duration-500 group-hover:border-[#5d1d69] group-hover:shadow-[0_0_40px_rgba(93,29,105,0.4)]">
+            <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-[#8f4ca0] bg-linear-to-r from-[#5d1d69] via-[#7a2e8a] to-[#9d46b1] text-white text-sm md:text-base font-semibold tracking-[0.2em] uppercase rounded-full transition-all duration-500 shadow-[0_8px_30px_rgba(93,29,105,0.35)] group-hover:from-[#6c2579] group-hover:via-[#8a3aa0] group-hover:to-[#b259c4] group-hover:border-[#b978cb] group-hover:shadow-[0_0_50px_rgba(176,89,196,0.55)] group-hover:-translate-y-0.5">
               Secure Your Throne
             </span>
           </button>
@@ -303,7 +311,35 @@ export default function MainEventPage() {
             if (e.target === e.currentTarget) setIsRegisterOpen(false);
           }}
         >
-          <RegistrationForm eventKey="main-event" onClose={() => setIsRegisterOpen(false)} />
+          <RegistrationForm
+            eventKey="main-event"
+            onClose={() => setIsRegisterOpen(false)}
+            onRegistrationSuccess={(data) => {
+              setIsRegisterOpen(false);
+              setPaymentTarget({
+                registrationId: data.id,
+                registrationNumber: data.registrationNumber,
+                amount: data.paymentAmount,
+              });
+            }}
+          />
+        </div>
+      )}
+
+      {paymentTarget && (
+        <div
+          className="fixed inset-0 z-80 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setPaymentTarget(null);
+          }}
+        >
+          <PaymentForm
+            registrationId={paymentTarget.registrationId}
+            registrationNumber={paymentTarget.registrationNumber}
+            amount={paymentTarget.amount}
+            onClose={() => setPaymentTarget(null)}
+            onSuccess={() => setPaymentTarget(null)}
+          />
         </div>
       )}
     </div>

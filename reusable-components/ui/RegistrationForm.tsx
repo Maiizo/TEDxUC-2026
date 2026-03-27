@@ -51,9 +51,20 @@ type FormErrors = Partial<Record<keyof FormData, string>>;
 interface RegistrationFormProps {
   onClose?: () => void;
   eventKey?: EventConfig['key'];
+  onRegistrationSuccess?: (data: {
+    id: string;
+    registrationNumber: string;
+    status: string;
+    qrCode: string | null;
+    paymentAmount: number;
+  }) => void | Promise<void>;
 }
 
-const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose, eventKey }) => {
+const RegistrationForm: React.FC<RegistrationFormProps> = ({
+  onClose,
+  eventKey,
+  onRegistrationSuccess,
+}) => {
   const activeEvent = useMemo(() => {
     if (eventKey) {
       return EVENTS.find((ev) => ev.key === eventKey) ?? null;
@@ -184,6 +195,22 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose, eventKey }
       if (!response.ok || !result || result.status !== 'success') {
         setSubmitStatus('error');
         setSubmitMessage(result?.message || 'Failed to save registration. Please try again.');
+        return;
+      }
+
+      const successData = {
+        id: result.data?.id,
+        registrationNumber: result.data?.registrationNumber,
+        status: result.data?.status,
+        qrCode: result.data?.qrCode ?? null,
+        paymentAmount: Number(result.data?.paymentAmount ?? 0),
+      };
+
+      if (onRegistrationSuccess) {
+        await onRegistrationSuccess(successData);
+      }
+
+      if (activeEvent.key === 'main-event') {
         return;
       }
 

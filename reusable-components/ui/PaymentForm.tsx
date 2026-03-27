@@ -31,7 +31,8 @@ export default function PaymentForm({
   const [previewUrl, setPreviewUrl] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const bankQRData = `${BANK_DETAILS.bank}|${BANK_DETAILS.account}|${amount}`;
+  const displayAmount = amount > 0 ? amount : 50000;
+  const bankQRData = `${BANK_DETAILS.bank}|${BANK_DETAILS.account}|${displayAmount}`;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -108,7 +109,7 @@ export default function PaymentForm({
   }
 
   return (
-    <div className="bg-[#1a1a1a] rounded-lg p-8 max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="bg-[#1a1a1a] rounded-lg p-8 w-full max-w-4xl">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white">Submit Payment</h2>
         {onClose && (
@@ -137,7 +138,7 @@ export default function PaymentForm({
             <span>Account Number:</span>
             <div className="text-right">
               <div className="font-mono text-green-400 text-lg font-bold">{BANK_DETAILS.account}</div>
-              <div className="text-xs text-gray-500 mt-1">Amount: Rp {amount.toLocaleString('id-ID')}</div>
+              <div className="font-mono text-green-400 text-lg font-bold mt-1">Amount: Rp {displayAmount.toLocaleString('id-ID')}</div>
             </div>
           </div>
         </div>

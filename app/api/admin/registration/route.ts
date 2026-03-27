@@ -1,6 +1,7 @@
 // 1. import NextResponse to send HTTP responses (like 200 OK or 500 Error)
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { verifyToken } from "@/lib/auth";
 
 export async function GET() {
   try {
@@ -65,6 +66,60 @@ export async function POST(request: Request) {
     console.error("Error creating registration:", error);
     return NextResponse.json(
       { error: "Failed to create registration" }, 
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const cookieHeader = request.headers.get("cookie") || "";
+    const tokenMatch = cookieHeader.match(/(?:^|;\s*)admin-token=([^;]+)/);
+    const token = tokenMatch ? decodeURIComponent(tokenMatch[1]) : undefined;
+
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const payload = await verifyToken(token);
+    if (!payload) {
+      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const registrationId = body?.registrationId;
+
+    if (!registrationId || typeof registrationId !== "string") {
+      return NextResponse.json({ error: "registrationId is required" }, { status: 400 });
+    }
+
+    const existing = await prisma.registration.findUnique({
+      where: { id: registrationId },
+      select: { id: true },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: "Registration not found" }, { status: 404 });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.payment.deleteMany({
+        where: { registrationId },
+      });
+
+      await tx.registration.delete({
+        where: { id: registrationId },
+      });
+    });
+
+    return NextResponse.json({
+      status: "success",
+      message: "Registration deleted permanently",
+    });
+  } catch (error) {
+    console.error("Error deleting registration:", error);
+    return NextResponse.json(
+      { error: "Failed to delete registration" },
       { status: 500 }
     );
   }

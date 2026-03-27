@@ -95,9 +95,13 @@ export async function POST(req) {
     }
 
     const regNumber = generateRegNumber();
+    const isPreEvent1 =
+      eventKey === 'pre-event-1' ||
+      /pre\s*-?\s*event\s*1/i.test(event.type || '') ||
+      /pre\s*-?\s*event\s*1/i.test(event.name || '');
+    const registrationStatus = isPreEvent1 ? 'paid' : 'pending';
+    const qrToken = isPreEvent1 ? `TEDx26-${regNumber}-${Date.now()}` : null;
 
-    // Create Registration - schema default status is "pending"
-    // Also handling default foodAllergy if not provided
     const registration = await prisma.registration.create({
       data: {
         fullName,
@@ -108,17 +112,22 @@ export async function POST(req) {
         foodAllergy: event.requireFoodAllergy ? (foodAllergy || '-') : '-',
         eventId: event.id,
         registrationNumber: regNumber,
-        status: "pending", // Secara eksplisit diset ke pending (meskipun defaultnya pending di schema)
+        status: registrationStatus,
+        qrCode: qrToken,
       }
     });
 
     return NextResponse.json({ 
       status: 'success', 
-      message: 'Registration successful, saved with pending status.',
+      message: isPreEvent1
+        ? 'Registration accepted automatically for Pre-Event 1.'
+        : 'Registration successful, pending proof verification.',
       data: {
         id: registration.id,
         registrationNumber: registration.registrationNumber,
-        status: registration.status
+        status: registration.status,
+        qrCode: registration.qrCode,
+        paymentAmount: event.price,
       }
     }, { status: 201 });
 

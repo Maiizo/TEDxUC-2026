@@ -291,7 +291,7 @@ export default function Event1Page() {
             className="relative inline-block group"
           >
             <div className="absolute -inset-2 rounded-full bg-[#546e40]/0 group-hover:bg-[#546e40]/30 blur-[20px] transition-all duration-700" />
-            <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-[#546e40]/60 bg-[#546e40]/10 hover:bg-[#546e40]/20 text-white text-sm md:text-base font-medium tracking-[0.2em] uppercase rounded-full transition-all duration-500 group-hover:border-[#546e40] group-hover:shadow-[0_0_40px_rgba(84,110,64,0.4)]">
+            <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-[#7ea66a] bg-linear-to-r from-[#4d6a3d] via-[#5d7e4b] to-[#6d8f59] text-white text-sm md:text-base font-semibold tracking-[0.2em] uppercase rounded-full transition-all duration-500 shadow-[0_8px_30px_rgba(84,110,64,0.35)] group-hover:from-[#5a7c48] group-hover:via-[#6a9056] group-hover:to-[#7ca866] group-hover:border-[#9ec489] group-hover:shadow-[0_0_50px_rgba(132,179,112,0.6)] group-hover:-translate-y-0.5">
               Reserve Your Place
             </span>
           </button>

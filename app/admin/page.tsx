@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { QRCodeCanvas } from "qrcode.react";
 
 interface Stats {
   totalRegistrations: number;
@@ -33,6 +34,7 @@ interface RegistrationData {
   registrationNumber: string;
   status: string;
   attendanceStatus: string;
+  qrCode: string | null;
   createdAt: string;
   event: { name: string; type: string };
   payments: {
@@ -153,6 +155,31 @@ export default function AdminDashboard() {
       alert("Failed to reject payment");
     } finally {
       setActionLoadingPaymentId(null);
+    }
+  };
+
+  const handleDeleteRegistration = async (registrationId: string) => {
+    const confirmed = window.confirm(
+      "Delete this registration permanently? This will remove payment proof and cannot be undone."
+    );
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch("/api/admin/registration", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ registrationId }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to delete registration");
+        return;
+      }
+
+      await fetchData();
+    } catch {
+      alert("Failed to delete registration");
     }
   };
 
@@ -316,6 +343,7 @@ export default function AdminDashboard() {
                 statusColor={statusColor}
                 onApprove={handleApprovePayment}
                 onReject={handleRejectPayment}
+                onDelete={handleDeleteRegistration}
                 actionLoadingPaymentId={actionLoadingPaymentId}
               />
             </section>
@@ -386,6 +414,7 @@ export default function AdminDashboard() {
               statusColor={statusColor}
               onApprove={handleApprovePayment}
               onReject={handleRejectPayment}
+              onDelete={handleDeleteRegistration}
               actionLoadingPaymentId={actionLoadingPaymentId}
             />
           </div>
@@ -432,12 +461,14 @@ function RegistrationTable({
   statusColor,
   onApprove,
   onReject,
+  onDelete,
   actionLoadingPaymentId,
 }: {
   registrations: RegistrationData[];
   statusColor: (s: string) => string;
   onApprove: (paymentId: string) => Promise<void>;
   onReject: (paymentId: string) => Promise<void>;
+  onDelete: (registrationId: string) => Promise<void>;
   actionLoadingPaymentId: string | null;
 }) {
   return (
@@ -452,6 +483,7 @@ function RegistrationTable({
             <th className="text-left py-3 px-4 font-medium">Status</th>
             <th className="text-left py-3 px-4 font-medium">Payment</th>
             <th className="text-left py-3 px-4 font-medium">Proof</th>
+            <th className="text-left py-3 px-4 font-medium">QR</th>
             <th className="text-left py-3 px-4 font-medium">Actions</th>
             <th className="text-left py-3 px-4 font-medium">Date</th>
           </tr>
@@ -490,7 +522,7 @@ function RegistrationTable({
                           latestPayment.status
                         )}`}
                       >
-                        {latestPayment.paymentMethod} • {latestPayment.status}
+                        {latestPayment.status}
                       </span>
                       {latestPayment.rejectionReason ? (
                         <p className="text-xs text-red-300 max-w-52 wrap-break-word">
@@ -517,8 +549,23 @@ function RegistrationTable({
                   )}
                 </td>
                 <td className="py-3 px-4">
-                  {latestPayment ? (
-                    <div className="flex items-center gap-2">
+                  {reg.qrCode ? (
+                    <div className="space-y-2">
+                      <div className="inline-flex bg-white p-1.5 rounded">
+                        <QRCodeCanvas value={reg.qrCode} size={56} level="M" includeMargin={false} />
+                      </div>
+                      <p className="text-[10px] text-gray-500 font-mono max-w-28 truncate" title={reg.qrCode}>
+                        {reg.qrCode}
+                      </p>
+                    </div>
+                  ) : (
+                    <span className="text-gray-600 text-xs">Not issued</span>
+                  )}
+                </td>
+                <td className="py-3 px-4">
+                  <div className="flex items-center gap-2">
+                    {latestPayment ? (
+                      <>
                       <button
                         onClick={() => onApprove(latestPayment.id)}
                         disabled={!isVerifying || isProcessing}
@@ -533,10 +580,15 @@ function RegistrationTable({
                       >
                         Reject
                       </button>
-                    </div>
-                  ) : (
-                    <span className="text-gray-600 text-xs">—</span>
-                  )}
+                      </>
+                    ) : null}
+                    <button
+                      onClick={() => onDelete(reg.id)}
+                      className="px-2.5 py-1 text-xs rounded border border-red-900 text-red-400 hover:bg-red-950/70 cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </td>
                 <td className="py-3 px-4 text-gray-500 text-xs">
                   {new Date(reg.createdAt).toLocaleDateString("id-ID", {

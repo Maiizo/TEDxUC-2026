@@ -8,10 +8,11 @@ export async function POST(request: NextRequest) {
     const registrationId = formData.get('registrationId') as string;
     const senderName = formData.get('senderName') as string;
     const proofFile = formData.get('proof') as File;
-    const amount = parseFloat(formData.get('amount') as string);
-    const paymentMethod = formData.get('paymentMethod') as string || 'BCA';
+    const amountRaw = formData.get('amount');
+    const fallbackAmount = Number(amountRaw);
+    const paymentMethod = 'PROOF_UPLOAD';
 
-    if (!registrationId || !senderName || !proofFile || !amount) {
+    if (!registrationId || !senderName || !proofFile) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -20,7 +21,14 @@ export async function POST(request: NextRequest) {
 
     // Verify registration exists
     const registration = await prisma.registration.findUnique({
-      where: { id: registrationId }
+      where: { id: registrationId },
+      include: {
+        event: {
+          select: {
+            price: true,
+          },
+        },
+      },
     });
 
     if (!registration) {
@@ -29,6 +37,11 @@ export async function POST(request: NextRequest) {
         { status: 404 }
       );
     }
+
+    // Amount is derived from the event to prevent client-side tampering.
+    const amount = Number.isNaN(Number(registration.event?.price))
+      ? (Number.isNaN(fallbackAmount) ? 0 : fallbackAmount)
+      : Number(registration.event.price);
 
     // Convert file to base64 for storage (dev only - in production use Vercel Blob or S3)
     const buffer = await proofFile.arrayBuffer();
