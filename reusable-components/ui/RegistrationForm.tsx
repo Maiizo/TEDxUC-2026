@@ -7,7 +7,7 @@ import { Cinzel } from 'next/font/google';
 const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '700'] });
 
 interface EventConfig {
-  key: 'pre-event-1' | 'pre-event-2' | 'pre-event-3' | 'main-event';
+  key: 'pre-event-1' | 'main-event';
   label: string;
   subtitle: string;
   date: Date;
@@ -23,20 +23,6 @@ const EVENTS: EventConfig[] = [
     requiresAllergy: false,
   },
   {
-    key: 'pre-event-2',
-    label: 'Pre-Event 2: The Second Gathering',
-    subtitle: 'April 11, 2026',
-    date: new Date('2026-04-11T23:59:59'),
-    requiresAllergy: false,
-  },
-  {
-    key: 'pre-event-3',
-    label: 'Pre-Event 3: The Third Gathering',
-    subtitle: 'April 13, 2026',
-    date: new Date('2026-04-13T23:59:59'),
-    requiresAllergy: false,
-  },
-  {
     key: 'main-event',
     label: 'Main Event: TEDxUC 2026',
     subtitle: 'May 10, 2026',
@@ -45,10 +31,10 @@ const EVENTS: EventConfig[] = [
   },
 ];
 
-function getActiveEvent(): EventConfig {
+// Returns the active registrable event, or null if none is currently open
+function getActiveEvent(): EventConfig | null {
   const now = new Date();
-  const upcoming = EVENTS.find((ev) => ev.date >= now);
-  return upcoming ?? EVENTS[EVENTS.length - 1];
+  return EVENTS.find((ev) => ev.date >= now) ?? null;
 }
 
 interface FormData {
@@ -82,7 +68,29 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  // ── Handle Input ──
+  if (!activeEvent) {
+    return (
+      <div className="relative bg-[#0f0f0f] border border-gray-800 rounded-2xl p-8 max-w-xl w-full text-center space-y-4 shadow-2xl">
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
+          >
+            <X size={20} />
+          </button>
+        )}
+        <div className="w-16 h-16 bg-gray-800/40 rounded-full flex items-center justify-center mx-auto">
+          <AlertCircle className="text-gray-400 w-8 h-8" />
+        </div>
+        <h3 className={`${cinzel.className} text-2xl text-white`}>Registration Closed</h3>
+        <p className="text-gray-400 text-sm leading-relaxed">
+          Registration is currently not available. Only <span className="text-white">Pre-Event 1</span> and the{' '}
+          <span className="text-white">Main Event</span> have open registration periods.
+        </p>
+      </div>
+    );
+  }
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
@@ -140,7 +148,6 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose }) => {
     return valid;
   };
 
-  // ── Submit ──
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitStatus('idle');
@@ -153,12 +160,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose }) => {
     setSubmitStatus('success');
   };
 
-  // ── Style helpers ──
   const inputClass = (field: keyof FormData) =>
     `w-full bg-[#1a1a1a] border ${errors[field] ? 'border-red-500' : 'border-[#333] focus:border-[#4A5D45]'
     } rounded-lg px-4 py-3 text-white placeholder-gray-600 outline-none transition-colors text-sm`;
-
-  // ── Success screen ──
   if (submitStatus === 'success') {
     return (
       <div className="relative bg-[#0f0f0f] border border-gray-800 rounded-2xl p-8 max-w-xl w-full text-center space-y-4 shadow-2xl">
@@ -191,10 +195,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClose }) => {
     );
   }
 
-  // ── Main Form ──
   return (
     <div className="relative bg-[#0f0f0f] border border-[#2a2a2a] rounded-2xl p-8 max-w-xl w-full shadow-[0_8px_60px_rgba(0,0,0,0.8)] overflow-y-auto max-h-[90vh]">
-      {/* Close button */}
       {onClose && (
         <button
           onClick={onClose}
