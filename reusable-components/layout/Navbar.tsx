@@ -62,7 +62,7 @@ const Navbar = () => {
         {/* Desktop Links */}
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
           <Link href="/" className={linkClass('/')}>Home</Link>
-          <Link href="/about" className={linkClass('/about')}>About</Link>
+          <Link href="/about-ted" className={linkClass('/about-ted')}>About</Link>
 
           {/* Events dropdown */}
           <div className={`group relative flex items-center cursor-pointer transition-colors ${isEventsActive ? 'text-red-500' : 'text-gray-300 hover:text-red-500'}`}>
@@ -80,7 +80,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <Link href="/pastevent" className={linkClass('/pastevent')}>Past Event</Link>
+          <Link href="/past-tedx" className={linkClass('/past-tedx')}>Past Event</Link>
           <Link href="/schedule" className={linkClass('/schedule')}>Speaker & Schedule</Link>
           <Link href="/gallery" className={linkClass('/gallery')}>Gallery</Link>
         </div>

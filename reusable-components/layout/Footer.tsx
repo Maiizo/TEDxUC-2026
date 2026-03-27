@@ -24,11 +24,8 @@ const Footer = () => {
             
             {/* ICON SOSIAL MEDIA */}
             <div className="flex gap-3 pt-2">
-              <SocialIcon icon={<FaInstagram size={14} />} href="#" />
-              <SocialIcon icon={<FaTwitter size={14} />} href="#" />
-              <SocialIcon icon={<FaFacebookF size={14} />} href="#" />
-              <SocialIcon icon={<FaLinkedinIn size={14} />} href="#" />
-              <SocialIcon icon={<FaYoutube size={14} />} href="#" />
+              <SocialIcon icon={<FaInstagram size={14} />} href="https://www.instagram.com/tedxuniversitasciputrasurabaya/" label="Instagram" />
+              <SocialIcon icon={<FaYoutube size={14} />} href="https://www.youtube.com/@TEDxUCSurabaya" label="YouTube" />
             </div>
           </div>
 
@@ -38,12 +35,11 @@ const Footer = () => {
               Quick Links
             </h3>
             <ul className="space-y-3 text-sm text-gray-400">
-              <FooterLink href="#">About TEDx</FooterLink>
-              <FooterLink href="#">Speakers</FooterLink>
-              <FooterLink href="#">Schedule</FooterLink>
-              <FooterLink href="#">Gallery</FooterLink>
-              <FooterLink href="#">Partners</FooterLink>
-              <FooterLink href="#">Contact Us</FooterLink>
+              <FooterLink href="/about-ted">About TED</FooterLink>
+              <FooterLink href="/past-tedx">Past TEDxUC</FooterLink>
+              <FooterLink href="/schedule">Speakers & Schedule</FooterLink>
+              <FooterLink href="/gallery">Gallery</FooterLink>
+              {/* <FooterLink href="/sponsor">Sponsor</FooterLink> */}
             </ul>
           </div>
 
@@ -86,21 +82,36 @@ const Footer = () => {
   );
 };
 
-const SocialIcon = ({ icon, href }: { icon: React.ReactNode, href: string }) => (
+const SocialIcon = ({ icon, href, label }: { icon: React.ReactNode, href: string, label: string }) => (
   <a 
     href={href} 
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label={label}
     className="w-8 h-8 rounded-full border border-gray-700 flex items-center justify-center text-gray-400 hover:text-red-600 hover:border-red-600 transition-all duration-300"
   >
     {icon}
   </a>
 );
 
-const FooterLink = ({ href, children }: { href: string, children: React.ReactNode }) => (
-  <li>
-    <Link href={href} className="hover:text-red-500 transition-colors duration-200 block">
-      {children}
-    </Link>
-  </li>
-);
+const FooterLink = ({ href, children }: { href: string, children: React.ReactNode }) => {
+  if (href.startsWith('mailto:')) {
+    return (
+      <li>
+        <a href={href} className="hover:text-red-500 transition-colors duration-200 block">
+          {children}
+        </a>
+      </li>
+    );
+  }
+
+  return (
+    <li>
+      <Link href={href} className="hover:text-red-500 transition-colors duration-200 block">
+        {children}
+      </Link>
+    </li>
+  );
+};
 
 export default Footer;
