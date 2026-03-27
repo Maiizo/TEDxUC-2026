@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 
@@ -236,12 +235,12 @@ export default function Event3Page() {
           ref={btnRef}
           className="mt-12 opacity-0 translate-y-6 transition-all duration-700 ease-out"
         >
-          <Link href="/register" className="relative inline-block group">
-            <div className="absolute -inset-2 rounded-full bg-[#546e40]/0 group-hover:bg-[#546e40]/30 blur-[20px] transition-all duration-700" />
-            <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-[#546e40]/60 bg-[#546e40]/10 hover:bg-[#546e40]/20 text-white text-sm md:text-base font-medium tracking-[0.2em] uppercase rounded-full transition-all duration-500 group-hover:border-[#546e40] group-hover:shadow-[0_0_40px_rgba(84,110,64,0.4)]">
-              Reserve Your Place
+          <div className="relative inline-block cursor-not-allowed">
+            <div className="absolute -inset-2 rounded-full bg-gray-500/0 blur-[20px]" />
+            <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-gray-700/60 bg-gray-800/20 text-gray-500 text-sm md:text-base font-medium tracking-[0.2em] uppercase rounded-full select-none">
+              Registration Unavailable
             </span>
-          </Link>
+          </div>
         </div>
       </div>
     </div>
