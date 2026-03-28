@@ -16,6 +16,22 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## Vercel Blob Setup (Payment Proof)
+
+Payment proof uploads use Vercel Blob from the API route `app/api/payment/route.ts`.
+
+Set this environment variable in local `.env` and in your Vercel project settings:
+
+```bash
+BLOB_READ_WRITE_TOKEN=your_vercel_blob_read_write_token
+```
+
+How to get the token:
+1. Open Vercel Dashboard.
+2. Go to your project.
+3. Storage -> Blob -> Connect/Create store.
+4. Copy the Read/Write token and set it as `BLOB_READ_WRITE_TOKEN`.
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More

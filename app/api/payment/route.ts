@@ -1,5 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { put } from '@vercel/blob';
 import { prisma } from '@/lib/db';
+
+const MAX_PROOF_SIZE_BYTES = 10 * 1024 * 1024;
+const ALLOWED_PROOF_TYPES = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'image/gif',
+]);
+
+function getSafeExtFromFile(file: File): string {
+  const extFromName = file.name.split('.').pop()?.toLowerCase();
+  if (extFromName && /^[a-z0-9]+$/.test(extFromName)) {
+    return extFromName;
+  }
+
+  const fromMime: Record<string, string> = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'image/gif': 'gif',
+  };
+
+  return fromMime[file.type] ?? 'bin';
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,6 +40,27 @@ export async function POST(request: NextRequest) {
     if (!registrationId || !senderName || !proofFile) {
       return NextResponse.json(
         { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
+    if (!(proofFile instanceof File)) {
+      return NextResponse.json(
+        { error: 'Invalid payment proof file' },
+        { status: 400 }
+      );
+    }
+
+    if (!ALLOWED_PROOF_TYPES.has(proofFile.type)) {
+      return NextResponse.json(
+        { error: 'Invalid file type. Use PNG, JPG, WEBP, or GIF.' },
+        { status: 400 }
+      );
+    }
+
+    if (proofFile.size > MAX_PROOF_SIZE_BYTES) {
+      return NextResponse.json(
+        { error: 'File is too large. Maximum size is 10MB.' },
         { status: 400 }
       );
     }
@@ -43,11 +89,16 @@ export async function POST(request: NextRequest) {
       ? (Number.isNaN(fallbackAmount) ? 0 : fallbackAmount)
       : Number(registration.event.price);
 
-    // Convert file to base64 for storage (dev only - in production use Vercel Blob or S3)
-    const buffer = await proofFile.arrayBuffer();
-    const base64 = Buffer.from(buffer).toString('base64');
-    const mimeType = proofFile.type;
-    const proofUrl = `data:${mimeType};base64,${base64}`;
+    const safeSenderName = senderName.trim();
+    const safeRegNumber = registration.registrationNumber.replace(/[^a-zA-Z0-9-_]/g, '-');
+    const ext = getSafeExtFromFile(proofFile);
+    const blobPath = `payment-proofs/${safeRegNumber}-${Date.now()}.${ext}`;
+
+    const blob = await put(blobPath, proofFile, {
+      access: 'public',
+      addRandomSuffix: true,
+      contentType: proofFile.type,
+    });
 
     // Create payment record
     const payment = await prisma.payment.create({
@@ -56,8 +107,8 @@ export async function POST(request: NextRequest) {
         amount,
         paymentMethod,
         status: 'verifying',
-        proofUrl,
-        proofSenderName: senderName,
+        proofUrl: blob.url,
+        proofSenderName: safeSenderName,
       },
     });
 

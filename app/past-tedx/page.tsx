@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -617,9 +618,19 @@ export default function PastEventPage() {
             </div>
           </div>
 
-          {/* Uniform 4-column grid */}
+          {/* Uniform 4-column grid with actual gallery images */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-            {Array.from({ length: 12 }).map((_, i) => {
+            {[
+              { src: '/images/gallery/pe1_4.webp', alt: 'Pre-Event 1' },
+              { src: '/images/gallery/pe2_4.webp', alt: 'Pre-Event 2' },
+              { src: '/images/gallery/DSC05505 (1).jpg', alt: 'Event moment' },
+              { src: '/images/gallery/pe3_1.webp', alt: 'Pre-Event 3' },
+              { src: '/images/gallery/DSC05632 (1).jpg', alt: 'Event moment' },
+              { src: '/images/gallery/UCD05067.JPG', alt: 'Main Event' },
+              { src: '/images/gallery/DSC05642 (1).jpg', alt: 'Event moment' },
+              { src: '/images/gallery/DSC05694.webp', alt: 'Event moment' },
+              { src: '/images/gallery/IMG_3243 (1).jpg', alt: 'Event moment' },
+            ].map((img, i) => {
               const accent = i % 3 === 0 ? "maleficent-green" : i % 3 === 1 ? "maleficent-purple" : "acid-green";
 
               return (
@@ -627,23 +638,16 @@ export default function PastEventPage() {
                   key={i}
                   className={`relative aspect-4/3 rounded-xl overflow-hidden border border-gray-800/30 group hover:border-(--${accent})/30 transition-all duration-500`}
                 >
-                  {/* Themed gradient background */}
-                  <div className={`absolute inset-0 bg-linear-to-br ${
-                    i % 3 === 0
-                      ? "from-[#0d1a0a]/60 to-(--deep-black)"
-                      : i % 3 === 1
-                        ? "from-[#12081a]/50 to-(--deep-black)"
-                        : "from-[#0a120a]/50 to-(--deep-black)"
-                  }`} />
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  />
 
-                  {/* Subtle image icon */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-20 group-hover:opacity-40 transition-opacity duration-500">
-                    <svg viewBox="0 0 48 48" fill="none" className="w-8 h-8 text-gray-600">
-                      <rect x="4" y="8" width="40" height="32" rx="2" stroke="currentColor" strokeWidth="1.5" />
-                      <circle cx="16" cy="20" r="4" stroke="currentColor" strokeWidth="1.5" />
-                      <path d="M4 34L16 24L24 30L34 20L44 28" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
-                    </svg>
-                  </div>
+                  {/* Dark overlay */}
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-500" />
 
                   {/* Hover glow */}
                   <div className={`absolute -bottom-4 -right-4 w-20 h-20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-(--${accent})/15`} />

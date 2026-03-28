@@ -38,6 +38,36 @@ const GALLERY_ITEMS: GalleryItem[] = [
     date: 'May 10, 2026',
     span: 'wide',
   },
+  {
+    src: '/images/gallery/DSC05505 (1).jpg',
+    title: 'The Crowned Moment',
+    date: 'May 10, 2026',
+    span: 'normal',
+  },
+  {
+    src: '/images/gallery/DSC05632 (1).jpg',
+    title: 'Echoes of Wisdom',
+    date: 'May 11, 2026',
+    span: 'normal',
+  },
+  {
+    src: '/images/gallery/DSC05642 (1).jpg',
+    title: 'Standing Proud',
+    date: 'May 11, 2026',
+    span: 'normal',
+  },
+  {
+    src: '/images/gallery/DSC05694.webp',
+    title: 'The Forsaken Legacy',
+    date: 'May 12, 2026',
+    span: 'wide',
+  },
+  {
+    src: '/images/gallery/IMG_3243 (1).jpg',
+    title: 'A Moment Captured',
+    date: 'May 12, 2026',
+    span: 'normal',
+  },
 ];
 
 function GalleryCard({ item }: { item: GalleryItem }) {

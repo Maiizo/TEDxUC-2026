@@ -12,10 +12,10 @@ import { useEffect, useRef, useState } from "react";
 const galleryImages = [
   { src: "/images/gallery/pe2_4.webp", alt: "TEDx event - auditorium" },
   { src: "/images/gallery/pe1_4.webp", alt: "TEDx event - stage performance" },
-  { src: "/images/gallery/NIC02241.JPG", alt: "TEDx event - crowd" },
+  { src: "/images/gallery/DSC05505 (1).jpg", alt: "TEDx event - crowd" },
   { src: "/images/gallery/pe3_1.webp", alt: "TEDx event - speaker" },
-  { src: "/images/gallery/NIC05812.JPG", alt: "TEDx event - night crowd" },
-  { src: "/images/gallery/DSC05564.JPG", alt: "TEDx event - behind the scenes" },
+  { src: "/images/gallery/DSC05632 (1).jpg", alt: "TEDx event - night crowd" },
+  { src: "/images/gallery/UCD05067.JPG", alt: "TEDx event - behind the scenes" },
 ];
 
 /* ══════════════════════════════════════════
