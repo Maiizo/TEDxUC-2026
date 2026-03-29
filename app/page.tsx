@@ -13,9 +13,9 @@ const galleryImages = [
   { src: "/images/gallery/pe2_4.webp", alt: "TEDx event - auditorium" },
   { src: "/images/gallery/pe1_4.webp", alt: "TEDx event - stage performance" },
   { src: "/images/gallery/DSC05505 (1).jpg", alt: "TEDx event - crowd" },
+  { src: "/images/gallery/DSC05596.JPG", alt: "TEDx event - night crowd" },
   { src: "/images/gallery/pe3_1.webp", alt: "TEDx event - speaker" },
-  { src: "/images/gallery/DSC05632 (1).jpg", alt: "TEDx event - night crowd" },
-  { src: "/images/gallery/UCD05067.JPG", alt: "TEDx event - behind the scenes" },
+  { src: "/images/gallery/IMG_3243 (1).jpg", alt: "TEDx event - moment capture" },
 ];
 
 /* ══════════════════════════════════════════
@@ -405,7 +405,7 @@ function CtaSection() {
           className="mt-9 md:mt-12 opacity-0 translate-y-6 transition-all duration-700 ease-out"
         >
           <Link
-            href="/register"
+            href="/event/mainevent"
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
             className="relative inline-block group"

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, Menu, X } from 'lucide-react';
@@ -54,10 +55,16 @@ const Navbar = () => {
       >
 
         {/* Logo */}
-        <div className="flex items-center text-xl font-bold tracking-tight">
-          <span className="text-white">TEDx</span>
-          <span className="text-red-600">UNIVERSITASCIPUTRA</span>
-        </div>
+        <Link href="/" className="flex items-center" aria-label="TEDxUC Home">
+          <Image
+            src="/images/logo_new.webp"
+            alt="TEDxUC"
+            width={180}
+            height={48}
+            className="h-8 w-auto md:h-10"
+            priority
+          />
+        </Link>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium">

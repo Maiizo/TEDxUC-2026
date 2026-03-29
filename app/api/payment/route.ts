@@ -95,10 +95,12 @@ export async function POST(request: NextRequest) {
     const blobPath = `payment-proofs/${safeRegNumber}-${Date.now()}.${ext}`;
 
     const blob = await put(blobPath, proofFile, {
-      access: 'public',
+      access: 'private',
       addRandomSuffix: true,
       contentType: proofFile.type,
     });
+
+    const proofUrl = blob.downloadUrl ?? blob.url;
 
     // Create payment record
     const payment = await prisma.payment.create({
@@ -107,7 +109,7 @@ export async function POST(request: NextRequest) {
         amount,
         paymentMethod,
         status: 'verifying',
-        proofUrl: blob.url,
+        proofUrl,
         proofSenderName: safeSenderName,
       },
     });

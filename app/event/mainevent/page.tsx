@@ -145,13 +145,13 @@ export default function MainEventPage() {
       {/* ── Background image ── */}
       <div className="fixed inset-0 z-0">
         <Image
-          src="/images/bg-castle.webp"
+          src="/images/palace.jpg"
           alt="Background"
           fill
           className="object-cover object-center opacity-20"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/80 via-[#050505]/60 to-[#050505]/95" />
+        <div className="absolute inset-0 bg-(--void-black)/0" />
       </div>
 
       {/* ── Corner diamond decorations ── */}
@@ -235,7 +235,7 @@ export default function MainEventPage() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Venue</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">Grand Castle Theater</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">Theater, 7th Floor,UC Surabaya</p>
                 </div>
               </div>
 
@@ -246,7 +246,7 @@ export default function MainEventPage() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Capacity</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">1,500 Attendees</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">100 Attendees</p>
                 </div>
               </div>
             </div>
@@ -276,11 +276,11 @@ export default function MainEventPage() {
               </div>
               <div className="space-y-4 pl-1">
                 <p className="text-sm md:text-base text-gray-400 leading-relaxed font-light">
-                  Join us for the culmination of our journey. The Main Event brings together world-class thought leaders, innovators, and storytellers under one magnificent roof to explore the profound implications of "The Forsaken Crown."
-                </p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel lorem nec nulla dignissim
+                  tincidunt vel at justo. Sed euismod libero non metus sodales, a tincidunt sapien iaculis.  </p>
                 <p className="text-sm md:text-base text-gray-400 leading-relaxed font-light">
-                  Prepare for a day of immersive experiences, thought-provoking talks, and transformative ideas that will challenge your perspective and ignite your imagination. This is where the scattered pieces of our pre-events unite into a complete masterpiece.
-                </p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel lorem nec nulla dignissim
+                  tincidunt vel at justo. Sed euismod libero non metus sodales, a tincidunt sapien iaculis.  </p>
               </div>
             </div>
           </div>

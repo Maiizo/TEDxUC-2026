@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 /* ══════════════════════════════════════════
@@ -188,22 +187,22 @@ interface Speaker {
   name: string;
   title: string;
   description: string;
+  image: string;
 }
 
 const speakers: Speaker[] = [
-  { name: "Wilson David Mulya H.", title: "Self Development", description: "Passion is Overrated." },
-  { name: "Holly Natasha", title: "Entrepreneur", description: "How To Build a Business Without Knowing What You're Doing." },
-  { name: "Evelyn Hutani", title: "Comedy", description: "I Failed, I Fell, and Then I Laughed" },
-  { name: "R. Kukuh Rahadiansyah", title: "Technology", description: "Survival Guide to AI Wonderland." },
-  { name: "Maximilian John", title: "Photography", description: "Urban Kaleidoscope: Patterns & Perspective." },
-  { name: "Mario Oswin", title: "Culinary", description: "Culinary Journeys Food as a Map Through Cultural Labyrinths." },
-  { name: "Danyannisa", title: "Music", description: "The Art of Song Construction: Navigating the Technical Maze of Music Creation." },
-  { name: "aa aa", title: "title", description: "desc." },
+  { name: "Wilson David Mulya H.", title: "Self Development", description: "Passion is Overrated.", image: "/images/gallery/wilson.JPG" },
+  { name: "Holly Natasha", title: "Entrepreneur", description: "How To Build a Business Without Knowing What You're Doing.", image: "/images/gallery/holly.jpg" },
+  { name: "Evelyn Hutani", title: "Comedy", description: "I Failed, I Fell, and Then I Laughed", image: "/images/gallery/evelyn.jpg" },
+  { name: "R. Kukuh Rahadiansyah", title: "Technology", description: "Survival Guide to AI Wonderland.", image: "/images/gallery/kukuh.webp" },
+  { name: "Maximilian John", title: "Photography", description: "Urban Kaleidoscope: Patterns & Perspective.", image: "/images/gallery/max.JPG" },
+  { name: "Mario Oswin", title: "Culinary", description: "Culinary Journeys Food as a Map Through Cultural Labyrinths.", image: "/images/gallery/mario.JPG" },
+  { name: "Danyannisa", title: "Music", description: "The Art of Song Construction: Navigating the Technical Maze of Music Creation.", image: "/images/gallery/Danyannisa.JPG" },
 ];
 
 const highlightData = [
   { icon: <AttendeesIcon className="w-9 h-9 md:w-11 md:h-11" />, value: 100, display: "100", label: "Attendees" },
-  { icon: <SpeakersIcon className="w-9 h-9 md:w-11 md:h-11" />, value: 8, display: "8", label: "Speakers" },
+  { icon: <SpeakersIcon className="w-9 h-9 md:w-11 md:h-11" />, value: 7, display: "7", label: "Speakers" },
   { icon: <PerformancesIcon className="w-9 h-9 md:w-11 md:h-11" />, value: 2, display: "2", label: "Performances" },
   { icon: <PhotosIcon className="w-9 h-9 md:w-11 md:h-11" />, value: 100, display: "100+", label: "Photos Captured" },
 ];
@@ -266,22 +265,18 @@ function SpeakerCard({ speaker, index }: { speaker: Speaker; index: number }) {
       ref={ref}
       className="opacity-0 translate-y-8 transition-all duration-700 ease-out group"
     >
-      {/* Photo placeholder with themed overlay */}
-      <div className={`relative aspect-3/4 rounded-xl overflow-hidden mb-3 border border-gray-800/40 group-hover:border-(--${accent})/40 transition-colors duration-500`}>
-        {/* Gradient fill */}
-        <div className={`absolute inset-0 bg-linear-to-b ${
-          isEven
-            ? "from-[#0d1a0a]/80 to-(--deep-black)"
-            : "from-[#1a0d1f]/80 to-(--deep-black)"
-        }`} />
+      {/* Speaker photo */}
+      <div className="relative aspect-3/4 rounded-xl overflow-hidden mb-3 border border-gray-800/40">
+        <Image
+          src={speaker.image}
+          alt={speaker.name}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
+          sizes="(max-width: 768px) 50vw, 25vw"
+        />
 
-        {/* Silhouette */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <svg viewBox="0 0 48 48" fill="none" className="w-14 h-14 text-gray-700/60 group-hover:text-gray-600/80 transition-colors duration-500">
-            <circle cx="24" cy="18" r="8" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M10 42C10 32 16 26 24 26C32 26 38 32 38 42" stroke="currentColor" strokeWidth="1.5" />
-          </svg>
-        </div>
+        {/* Contrast overlay for readable text below and visual consistency */}
+        <div className="absolute inset-0 bg-linear-to-t from-black/20 via-transparent to-transparent" />
 
         {/* Corner glow on hover */}
         <div className={`absolute -bottom-4 -right-4 w-24 h-24 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-(--${accent})/15`} />
@@ -289,7 +284,7 @@ function SpeakerCard({ speaker, index }: { speaker: Speaker; index: number }) {
 
       {/* Name */}
       <h4
-        className={`text-xs md:text-sm font-bold uppercase tracking-wide mb-0.5 text-(--${accent}) group-hover:tracking-wider transition-all duration-500`}
+        className={`text-xs md:text-sm font-bold uppercase tracking-wide mb-0.5 text-(--${accent})`}
         style={{ fontFamily: "var(--font-allrounder), sans-serif" }}
       >
         {speaker.name}
@@ -312,6 +307,18 @@ export default function PastEventPage() {
 
   return (
     <div className="min-h-screen bg-(--void-black) text-white overflow-x-hidden">
+      {/* Background image */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <Image
+          src="/images/hallway.jpg"
+          alt=""
+          fill
+          className="object-cover object-center opacity-20"
+          priority
+        />
+        <div className="absolute inset-0 bg-(--void-black)/0" />
+      </div>
+
       {/* ── Global animations ── */}
       <style jsx global>{`
         .revealed {
@@ -399,12 +406,7 @@ export default function PastEventPage() {
               TEMA
             </p>
 
-            {/* Decorative line */}
-            <div className="flex items-center justify-center gap-2 mb-5">
-              <div className="w-8 h-px bg-(--maleficent-purple)/40" />
-              <Diamond className="text-(--maleficent-purple)/40 w-1.5 h-1.5" />
-              <div className="w-24 h-px bg-linear-to-l from-(--maleficent-green)/40 to-transparent" />
-            </div>
+         
 
             {/* Meta row */}
             <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-xs md:text-sm text-gray-500">
@@ -415,7 +417,7 @@ export default function PastEventPage() {
                   <path d="M5 1V4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
                   <path d="M11 1V4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
                 </svg>
-                Ftgl, 2025
+                tgl, 2025
               </span>
               <span className="flex items-center gap-1.5">
                 <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5">
@@ -423,15 +425,6 @@ export default function PastEventPage() {
                   <circle cx="8" cy="7" r="2" stroke="currentColor" strokeWidth="1.2" />
                 </svg>
                 Auditorium, UC Surabaya
-              </span>
-              <span className="flex items-center gap-1.5">
-                <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5">
-                  <circle cx="6" cy="6" r="3" stroke="currentColor" strokeWidth="1.2" />
-                  <path d="M2 14C2 11.238 3.79 9 6 9" stroke="currentColor" strokeWidth="1.2" />
-                  <circle cx="11" cy="7" r="2.5" stroke="currentColor" strokeWidth="1.2" />
-                  <path d="M14 14C14 11.791 12.657 10 11 10" stroke="currentColor" strokeWidth="1.2" />
-                </svg>
-                100 Attendees
               </span>
             </div>
           </div>
@@ -446,12 +439,7 @@ export default function PastEventPage() {
           <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
             {/* Left decorative column */}
             <div className="hidden md:flex flex-col items-center gap-3 pt-6 min-w-8">
-              <div className="w-px h-12 bg-linear-to-b from-transparent to-(--maleficent-green)/40" />
-              <Diamond className="text-(--maleficent-green)/40 w-2 h-2 animate-pulse" />
-              <div className="w-px h-20 bg-(--maleficent-green)/20" />
-              <Diamond className="text-(--maleficent-purple)/40 w-2 h-2 animate-pulse [animation-delay:1s]" />
-              <div className="w-px h-12 bg-linear-to-b from-(--maleficent-purple)/25 to-transparent" />
-            </div>
+              </div>
 
             {/* Content card */}
             <div
@@ -508,9 +496,7 @@ export default function PastEventPage() {
               <span className="text-(--maleficent-green)">Highlights</span>
             </h2>
             <div className="flex items-center justify-center md:justify-start gap-2 mt-3">
-              <div className="w-16 h-px bg-(--maleficent-green)/40" />
-              <Diamond className="text-(--maleficent-green)/50 w-1.5 h-1.5" />
-              <div className="w-8 h-px bg-(--maleficent-purple)/30" />
+             
             </div>
           </div>
 
@@ -549,9 +535,9 @@ export default function PastEventPage() {
               <p className="relative text-sm md:text-lg text-gray-300/80 leading-relaxed italic max-w-2xl mx-auto">
                 desc tema   {" "}
                 <span className="text-(--maleficent-green) not-italic font-medium">
-                  awaken the potential
+                  egeaerg
                 </span>{" "}
-                within each of us.
+                awegawegus.
               </p>
             </div>
           </div>
@@ -563,8 +549,8 @@ export default function PastEventPage() {
           ═══════════════════════════════════ */}
       <section className="relative py-12 md:py-20 px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto">
-          {/* Title — right aligned on desktop */}
-          <div className="text-center md:text-right mb-10 md:mb-14 md:pr-4">
+          {/* Title — left aligned */}
+          <div className="text-left mb-10 md:mb-14">
             <h2
               className="text-2xl md:text-4xl font-bold uppercase tracking-wider"
               style={{ fontFamily: "var(--font-allrounder), sans-serif" }}
@@ -572,11 +558,7 @@ export default function PastEventPage() {
               Our{" "}
               <span className="text-(--maleficent-purple)">Speakers</span>
             </h2>
-            <div className="flex items-center justify-center md:justify-end gap-2 mt-3">
-              <div className="w-8 h-px bg-(--maleficent-green)/30" />
-              <Diamond className="text-(--maleficent-purple)/50 w-1.5 h-1.5" />
-              <div className="w-16 h-px bg-(--maleficent-purple)/40" />
-            </div>
+            
           </div>
 
           {/* Top 4 — shifted left on desktop */}
@@ -585,9 +567,9 @@ export default function PastEventPage() {
               <SpeakerCard key={i} speaker={speaker} index={i} />
             ))}
           </div>
-          {/* Bottom 4 — shifted right on desktop */}
+          {/* Bottom speakers — shifted right on desktop */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-7 mt-6 md:mt-10 md:ml-12 lg:ml-20">
-            {speakers.slice(4, 8).map((speaker, i) => (
+            {speakers.slice(4).map((speaker, i) => (
               <SpeakerCard key={i + 4} speaker={speaker} index={i + 4} />
             ))}
           </div>
@@ -601,7 +583,7 @@ export default function PastEventPage() {
         <div className="max-w-7xl mx-auto">
           <div
             ref={galleryTitleRef}
-            className="text-center mb-10 md:mb-14 opacity-0 translate-y-6 transition-all duration-700"
+            className="text-left mb-10 md:mb-14 opacity-0 translate-y-6 transition-all duration-700"
           >
             <h2
               className="text-2xl md:text-4xl font-bold uppercase tracking-wider"
@@ -610,11 +592,8 @@ export default function PastEventPage() {
               Event{" "}
               <span className="text-(--acid-green)">Gallery</span>
             </h2>
-            <div className="flex items-center justify-center gap-2 mt-3">
-              <div className="w-12 h-px bg-(--maleficent-green)/40" />
-              <Diamond className="text-(--acid-green)/50 w-1.5 h-1.5" />
-              <Diamond className="text-(--maleficent-purple)/40 w-1.5 h-1.5" />
-              <div className="w-12 h-px bg-(--maleficent-purple)/40" />
+            <div className="flex items-center justify-start gap-2 mt-3">
+             
             </div>
           </div>
 
@@ -625,10 +604,9 @@ export default function PastEventPage() {
               { src: '/images/gallery/pe2_4.webp', alt: 'Pre-Event 2' },
               { src: '/images/gallery/DSC05505 (1).jpg', alt: 'Event moment' },
               { src: '/images/gallery/pe3_1.webp', alt: 'Pre-Event 3' },
-              { src: '/images/gallery/DSC05632 (1).jpg', alt: 'Event moment' },
+              { src: '/images/gallery/DSC05596.JPG', alt: 'Event moment' },
               { src: '/images/gallery/UCD05067.JPG', alt: 'Main Event' },
-              { src: '/images/gallery/DSC05642 (1).jpg', alt: 'Event moment' },
-              { src: '/images/gallery/DSC05694.webp', alt: 'Event moment' },
+              { src: '/images/gallery/IMG_3140.JPG', alt: 'Event moment' },
               { src: '/images/gallery/IMG_3243 (1).jpg', alt: 'Event moment' },
             ].map((img, i) => {
               const accent = i % 3 === 0 ? "maleficent-green" : i % 3 === 1 ? "maleficent-purple" : "acid-green";
@@ -654,38 +632,6 @@ export default function PastEventPage() {
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════
-          FOOTER / BACK
-          ═══════════════════════════════════ */}
-      <section className="relative py-12 md:py-20 px-6">
-        <div className="max-w-4xl mx-auto">
-          {/* Decorative divider */}
-          <div className="flex items-center justify-center gap-4 mb-8">
-            <div className="flex-1 max-w-40 h-px bg-linear-to-r from-transparent via-(--maleficent-green)/20 to-(--maleficent-green)/40" />
-            <CrownIcon className="w-8 h-8 md:w-10 md:h-10 text-(--maleficent-green)/30 animate-float" />
-            <div className="flex-1 max-w-40 h-px bg-linear-to-l from-transparent via-(--maleficent-purple)/20 to-(--maleficent-purple)/40" />
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm text-gray-600 mb-5 italic">
-              Relive the moments that defined TEDxUC Surabaya 2025.
-            </p>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-(--acid-green) transition-colors duration-300 group"
-            >
-              <svg
-                width="16" height="16" viewBox="0 0 16 16" fill="none"
-                className="rotate-180 group-hover:-translate-x-1 transition-transform duration-300"
-              >
-                <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Back to Home
-            </Link>
           </div>
         </div>
       </section>

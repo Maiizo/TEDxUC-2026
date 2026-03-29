@@ -110,13 +110,13 @@ export default function Event2Page() {
       {/* Background image */}
       <div className="fixed inset-0 z-0">
         <Image
-          src="/images/bg-castle.webp"
+          src="/images/palace.jpg"
           alt="Background"
           fill
           className="object-cover object-center opacity-20"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/80 via-[#050505]/60 to-[#050505]/95" />
+        <div className="absolute inset-0 bg-(--void-black)/0" />
       </div>
 
       {/* Corner diamonds */}
@@ -180,7 +180,7 @@ export default function Event2Page() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Venue</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">Castle Hall B, UC Surabaya</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">Theater, 7th Floor,UC Surabaya</p>
                 </div>
               </div>
 
@@ -190,7 +190,7 @@ export default function Event2Page() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Capacity</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">120 Attendees</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">100 Attendees</p>
                 </div>
               </div>
             </div>

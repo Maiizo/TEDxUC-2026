@@ -9,64 +9,44 @@ const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '700'] });
 interface GalleryItem {
   src: string;
   title: string;
-  date: string;
   span?: 'tall' | 'wide' | 'normal';
 }
 
 const GALLERY_ITEMS: GalleryItem[] = [
   {
     src: '/images/gallery/pe1_4.webp',
-    title: 'Pre-Event 1: The First Gathering',
-    date: 'April 10, 2026',
+    title: 'Pre-Event 1',
     span: 'tall',
   },
   {
     src: '/images/gallery/pe2_4.webp',
-    title: 'Pre-Event 2: The Second Gathering',
-    date: 'April 11, 2026',
+    title: 'Pre-Event 2',
     span: 'normal',
   },
   {
     src: '/images/gallery/pe3_1.webp',
-    title: 'Pre-Event 3: The Third Gathering',
-    date: 'April 13, 2026',
+    title: 'Pre-Event 3',
     span: 'normal',
-  },
-  {
-    src: '/images/gallery/UCD05067.JPG',
-    title: 'Main Event: TEDxUC 2026',
-    date: 'May 10, 2026',
-    span: 'wide',
   },
   {
     src: '/images/gallery/DSC05505 (1).jpg',
-    title: 'The Crowned Moment',
-    date: 'May 10, 2026',
+    title: 'Main Event ',
     span: 'normal',
   },
   {
-    src: '/images/gallery/DSC05632 (1).jpg',
-    title: 'Echoes of Wisdom',
-    date: 'May 11, 2026',
+    src: '/images/gallery/DSC05596.JPG',
+    title: 'Main Event ',
     span: 'normal',
   },
   {
-    src: '/images/gallery/DSC05642 (1).jpg',
-    title: 'Standing Proud',
-    date: 'May 11, 2026',
+    src: '/images/gallery/IMG_3140.JPG',
+    title: 'Main Event ',
     span: 'normal',
-  },
-  {
-    src: '/images/gallery/DSC05694.webp',
-    title: 'The Forsaken Legacy',
-    date: 'May 12, 2026',
-    span: 'wide',
   },
   {
     src: '/images/gallery/IMG_3243 (1).jpg',
-    title: 'A Moment Captured',
-    date: 'May 12, 2026',
-    span: 'normal',
+    title: 'Main Event ',
+    span: 'wide',
   },
 ];
 
@@ -131,10 +111,7 @@ function GalleryCard({ item }: { item: GalleryItem }) {
         className={`absolute bottom-0 left-0 right-0 p-5 transition-all duration-500 ease-out ${hovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
           }`}
       >
-        {/* Date badge */}
-        <span className="inline-block text-[10px] font-semibold tracking-[0.25em] uppercase text-[#8ab385] mb-2">
-          {item.date}
-        </span>
+        {/* Title only (no event/date badge) */}
         {/* Title */}
         <h3
           className={`${cinzel.className} text-white text-base md:text-lg leading-tight`}
@@ -149,6 +126,18 @@ function GalleryCard({ item }: { item: GalleryItem }) {
 export default function GalleryPage() {
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
+      {/* Background image */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <Image
+          src="/images/hallway.jpg"
+          alt=""
+          fill
+          className="object-cover object-center opacity-20"
+          priority
+        />
+        <div className="absolute inset-0 bg-(--void-black)/0" />
+      </div>
+
       {/* Ambient glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-[5%] left-[-15%] w-[600px] h-[500px] bg-[#546e40]/5 rounded-full blur-[200px]" />
@@ -164,9 +153,7 @@ export default function GalleryPage() {
           {/* Decorative line */}
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#546e40]/60" />
-            <svg viewBox="0 0 12 12" fill="currentColor" className="w-2.5 h-2.5 text-[#6d8a58]/60">
-              <path d="M6 0L12 6L6 12L0 6Z" />
-            </svg>
+          
             <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#546e40]/60" />
           </div>
 
@@ -175,18 +162,6 @@ export default function GalleryPage() {
           >
             The Grand Gallery
           </h1>
-          <p className="text-gray-500 italic tracking-[0.3em] text-sm md:text-base uppercase mt-3">
-            Chronicles of our kingdom&apos;s past
-          </p>
-
-          {/* Bottom decorative */}
-          <div className="flex items-center justify-center gap-4 mt-6">
-            <div className="h-px w-24 bg-gradient-to-r from-transparent via-[#546e40]/40 to-transparent" />
-            <svg viewBox="0 0 12 12" fill="currentColor" className="w-2 h-2 text-[#5d1d69]/50">
-              <path d="M6 0L12 6L6 12L0 6Z" />
-            </svg>
-            <div className="h-px w-24 bg-gradient-to-r from-transparent via-[#5d1d69]/40 to-transparent" />
-          </div>
         </div>
 
         {/* Gallery Grid */}

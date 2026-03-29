@@ -109,7 +109,7 @@ export default function PaymentForm({
   }
 
   return (
-    <div className="bg-[#1a1a1a] rounded-lg p-8 w-full max-w-4xl">
+    <div className="bg-[#1a1a1a] rounded-lg p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white">Submit Payment</h2>
         {onClose && (
@@ -125,6 +125,9 @@ export default function PaymentForm({
       {/* Bank Details Section */}
       <div className="bg-[#0a0a0a] rounded-lg p-6 mb-6">
         <h3 className="text-lg font-semibold text-white mb-4">Bank Details</h3>
+        <p className="text-xs text-gray-400 mb-4">
+          Scan this transfer QR to pay to TEDxUC&apos;s BCA account, then upload your payment proof below.
+        </p>
         <div className="space-y-3 text-gray-300 mb-6">
           <div className="flex justify-between">
             <span>Bank:</span>
@@ -224,6 +227,13 @@ export default function PaymentForm({
             <p className="text-sm text-red-400">{error}</p>
           </div>
         )}
+
+        <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
+          <p className="text-xs text-blue-200 leading-relaxed">
+            Note: Our team will verify your payment proof. You will receive an email once your payment is approved or rejected.
+            If approved, the email includes your unique QR ticket for entry on event day.
+          </p>
+        </div>
 
         {/* Submit Button */}
         <button

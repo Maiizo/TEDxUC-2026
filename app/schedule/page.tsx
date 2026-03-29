@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Cinzel } from 'next/font/google';
 
 const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '700'] });
@@ -15,6 +16,18 @@ function Diamond({ className = '' }: { className?: string }) {
 export default function SchedulePage() {
   return (
     <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center overflow-hidden relative">
+      {/* Background image */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <Image
+          src="/images/hallway.jpg"
+          alt=""
+          fill
+          className="object-cover object-center opacity-20"
+          priority
+        />
+        <div className="absolute inset-0 bg-(--void-black)/0" />
+      </div>
+
       {/* Ambient glows */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute top-[10%] left-[-10%] w-[600px] h-[500px] bg-[#546e40]/6 rounded-full blur-[200px]" />
@@ -65,7 +78,7 @@ export default function SchedulePage() {
         {/* Event date hint */}
         <div className="mt-4 px-8 py-4 border border-white/5 rounded-2xl bg-white/[0.02] backdrop-blur-sm">
           <p className="text-gray-600 text-xs tracking-[0.3em] uppercase mb-1">Main Event</p>
-          <p className="text-gray-300 text-sm font-medium tracking-wide">May 10, 2026</p>
+          <p className="text-gray-300 text-sm font-medium tracking-wide">April 1, 2026</p>
         </div>
       </div>
     </div>

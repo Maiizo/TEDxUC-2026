@@ -133,7 +133,6 @@ interface CardData {
   icon: React.ReactNode;
   title: string;
   description: string;
-  bullets: string[];
   accent: "green" | "purple" | "mixed";
 }
 
@@ -167,11 +166,6 @@ function AboutCard({
       ? "text-(--maleficent-purple)/60"
       : "text-(--maleficent-green)/60";
 
-  const bulletColor =
-    card.accent === "purple"
-      ? "text-(--maleficent-purple)/70"
-      : "text-(--maleficent-green)/70";
-
   const dividerColor =
     card.accent === "purple"
       ? "bg-(--maleficent-purple)/40"
@@ -202,7 +196,7 @@ function AboutCard({
       />
 
       {/* Card body */}
-      <div className="relative bg-linear-to-b from-[#0d1a0a]/90 to-(--deep-black) rounded-2xl p-6 md:p-10 flex flex-col backdrop-blur-sm min-h-[480px] md:min-h-[560px]">
+      <div className="relative bg-linear-to-b from-[#0d1a0a]/90 to-(--deep-black) rounded-2xl p-6 md:p-10 flex flex-col backdrop-blur-sm min-h-120 md:min-h-140">
         {/* Corner diamonds */}
         <Diamond className={`absolute top-3 left-3 ${diamondColor}`} />
         <Diamond className={`absolute top-3 right-3 ${diamondColor}`} />
@@ -226,22 +220,10 @@ function AboutCard({
         <div className={`w-12 group-hover:w-20 h-px ${dividerColor} mx-auto mb-4 transition-all duration-500`} />
 
         {/* Description */}
-        <p className="text-sm text-gray-400 text-center leading-relaxed mb-6">
+        <p className="text-sm text-gray-400 text-center leading-relaxed mb-6 whitespace-pre-line">
           {card.description}
         </p>
 
-        {/* Bullet points */}
-        <ul className="space-y-3 mt-auto">
-          {card.bullets.map((bullet, i) => (
-            <li
-              key={i}
-              className="flex items-start gap-3 text-xs md:text-sm text-gray-400/90"
-            >
-              <Diamond className={`w-2 h-2 min-w-2 mt-1 ${bulletColor}`} />
-              <span>{bullet}</span>
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );
@@ -255,39 +237,21 @@ const cards: CardData[] = [
     title: "TED",
     accent: "green",
     description:
-      "A nonprofit organization devoted to spreading ideas, usually in the form of short, powerful talks.",
-    bullets: [
-      "-",
-      "-",
-      "-",
-      "-",
-    ],
+      "It all started with a simple yet powerful mission: ideas worth spreading. TED (Technology, Entertainment, Design) began as a conference in 1984, bringing togethervisionaries to share groundbreaking ideas. Over time, it evolved into a global platform, hosting talks that challenge, perspectives and ignite change in fields like science, business, education, and beyond..",
   },
   {
     icon: <ConnectedIcon className="w-11 h-11 md:w-14 md:h-14" />,
     title: "TEDx",
     accent: "purple",
     description:
-      "A program of local, self-organized events that bring people together to share a TED-like experience.",
-    bullets: [
-      "-",
-      "-",
-      "-",
-      "-",
-    ],
+      "TED's influence didn't stop there. To bring its spirit of innovation to local communities, TEDx was born—independently organized events that foster dialogue, curiosity, and action. Through TEDx, people worldwide can experience the power of ideas in a setting that sparks connection and inspiration.",
   },
   {
     icon: <SmallCrownIcon className="w-11 h-11 md:w-14 md:h-14" />,
     title: "TEDxUC",
     accent: "mixed",
     description:
-      "Our independently organized TEDx event in Surabaya, Indonesia.",
-    bullets: [
-      "-",
-      '-"',
-      "-",
-      "-",
-    ],
+      "TEDxUniversitasCiputraSurabaya is our way of bringing this global movement closer to our community. Hosted by Universitas Ciputra Surabaya, we gather forward-thinkers, innovators, and changemakers in one space, to exchange ideas, spark conversations, and shape what’s ahead. \nWith “The Forsaken Crown” as this year’s theme, we invite you to rediscover what was once lost confidence, purpose, and the courage to rise again..",
   },
 ];
 
@@ -370,14 +334,6 @@ export default function AboutTedPage() {
             />
           </div>
 
-          {/* Decorative line */}
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-16 md:w-40 h-px bg-linear-to-r from-transparent via-(--maleficent-green)/30 to-(--maleficent-green)/60" />
-            <Diamond className="text-(--maleficent-green) w-2.5 h-2.5" />
-            <Diamond className="text-(--maleficent-purple) w-2 h-2" />
-            <Diamond className="text-(--maleficent-green) w-2.5 h-2.5" />
-            <div className="w-16 md:w-40 h-px bg-linear-to-l from-transparent via-(--maleficent-green)/30 to-(--maleficent-green)/60" />
-          </div>
 
           {/* Title — centered */}
           <div className="text-center">
@@ -397,18 +353,14 @@ export default function AboutTedPage() {
             <p className="text-sm md:text-lg text-gray-500 italic tracking-widest">
               Understanding the Difference
             </p>
-            <div className="flex items-center justify-center gap-2 mt-2">
-              <div className="w-8 h-px bg-(--maleficent-purple)/40" />
-              <Diamond className="text-(--maleficent-purple)/50 w-1.5 h-1.5" />
-              <div className="w-20 h-px bg-(--maleficent-purple)/30" />
-            </div>
+           
           </div>
         </div>
       </section>
 
       {/* ===== CARDS ===== */}
-      <section className="relative z-20 py-12 md:py-20 px-4 md:px-6 lg:px-10">
-        <div className="w-full">
+      <section className="relative z-20 py-12 md:py-20 px-6 md:px-10 lg:px-16 xl:px-24">
+        <div className="w-full max-w-7xl mx-auto">
           {/*
             Phone  (default) : 1 column — stacked vertically
             Tablet (md)      : 2-column grid — TED spans both cols (top), TEDx + TEDxUC side-by-side (bottom)
@@ -454,24 +406,6 @@ export default function AboutTedPage() {
               className="w-8 h-8 md:w-10 md:h-10 opacity-30 animate-float object-contain"
             />
             <div className="flex-1 max-w-40 h-px bg-linear-to-l from-transparent to-(--maleficent-green)/30" />
-          </div>
-
-          <div className="text-center">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-(--acid-green) transition-colors duration-300 group"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                className="rotate-180 group-hover:-translate-x-1 transition-transform duration-300"
-              >
-                <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Back to Home
-            </Link>
           </div>
         </div>
       </section>
