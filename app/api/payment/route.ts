@@ -100,7 +100,8 @@ export async function POST(request: NextRequest) {
       contentType: proofFile.type,
     });
 
-    const proofUrl = blob.downloadUrl ?? blob.url;
+    // Persist a stable reference (pathname) instead of an expiring download URL.
+    const proofUrl = blob.pathname || blob.url;
 
     // Create payment record
     const payment = await prisma.payment.create({

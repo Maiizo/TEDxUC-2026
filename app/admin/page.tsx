@@ -537,7 +537,7 @@ function RegistrationTable({
                 <td className="py-3 px-4">
                   {latestPayment?.proofUrl ? (
                     <a
-                      href={latestPayment.proofUrl}
+                      href={`/api/admin/payment/proof/${latestPayment.id}`}
                       target="_blank"
                       rel="noreferrer"
                       className="text-xs text-blue-400 hover:text-blue-300 underline"
