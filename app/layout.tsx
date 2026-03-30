@@ -37,19 +37,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${allrounder.variable} antialiased`}
-      >
-  {/*  Navbar */}
-    <Navbar>
-
-    </Navbar>
-  
-        {children}
-      {/* Footer */}
-    <Footer>
-
-    </Footer>
+      <body className={`${allrounder.variable} antialiased`}>
+        <Navbar />
+        <main className="min-h-screen overflow-x-clip pt-20 md:pt-24">
+          {children}
+        </main>
+        <Footer />
       </body>
     </html>
   );

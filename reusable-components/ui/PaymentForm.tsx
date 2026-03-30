@@ -97,7 +97,7 @@ export default function PaymentForm({
 
   if (success) {
     return (
-      <div className="bg-[#1a1a1a] rounded-lg p-8 text-center max-w-md">
+      <div className="bg-[#1a1a1a] rounded-lg p-5 sm:p-8 text-center max-w-md w-full">
         <div className="text-4xl mb-4">✓</div>
         <h2 className="text-xl font-bold text-green-500 mb-2">Payment Submitted!</h2>
         <p className="text-gray-400 text-sm">
@@ -109,9 +109,9 @@ export default function PaymentForm({
   }
 
   return (
-    <div className="bg-[#1a1a1a] rounded-lg p-8 w-full max-w-4xl max-h-[90vh] overflow-y-auto no-scrollbar">
+    <div className="bg-[#1a1a1a] rounded-lg p-5 sm:p-8 w-full max-w-4xl max-h-[88vh] overflow-y-auto no-scrollbar">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">Submit Payment</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-white">Submit Payment</h2>
         {onClose && (
           <button
             onClick={onClose}
@@ -123,21 +123,21 @@ export default function PaymentForm({
       </div>
 
       {/* Bank Details Section */}
-      <div className="bg-[#0a0a0a] rounded-lg p-6 mb-6">
+      <div className="bg-[#0a0a0a] rounded-lg p-4 sm:p-6 mb-6">
         <h3 className="text-lg font-semibold text-white mb-4">Bank Details</h3>
         <p className="text-xs text-gray-400 mb-4">
           Scan this transfer QR to pay to TEDxUC&apos;s BCA account, then upload your payment proof below.
         </p>
         <div className="space-y-3 text-gray-300 mb-6">
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-4">
             <span>Bank:</span>
-            <span className="font-mono text-green-400">{BANK_DETAILS.bank}</span>
+            <span className="font-mono text-green-400 text-right">{BANK_DETAILS.bank}</span>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-4">
             <span>Account Name:</span>
-            <span className="font-mono text-green-400">{BANK_DETAILS.name}</span>
+            <span className="font-mono text-green-400 text-right wrap-break-word">{BANK_DETAILS.name}</span>
           </div>
-          <div className="flex justify-between items-start">
+          <div className="flex justify-between items-start gap-4">
             <span>Account Number:</span>
             <div className="text-right">
               <div className="font-mono text-green-400 text-lg font-bold">{BANK_DETAILS.account}</div>
@@ -194,7 +194,7 @@ export default function PaymentForm({
                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                   />
                 </svg>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-400 break-all text-center">
                   {proofFile ? proofFile.name : 'Click to upload or drag and drop'}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>

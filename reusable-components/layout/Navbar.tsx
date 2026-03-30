@@ -20,6 +20,23 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsMobileEventsOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      document.body.style.overflow = '';
+      return;
+    }
+
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
   // Returns red if active, gray+red-hover if not
   const linkClass = (href: string) =>
     pathname === href
@@ -32,24 +49,24 @@ const Navbar = () => {
       ? 'block px-4 py-2 rounded-lg text-red-500 bg-white/5 transition-colors'
       : 'block px-4 py-2 rounded-lg text-gray-300 hover:text-red-500 hover:bg-white/10 transition-colors';
 
-  const isEventsActive = pathname.startsWith('/event/event');
+  const isEventsActive = pathname.startsWith('/event/');
 
   return (
     <nav
       className={`
         fixed left-0 right-0 z-50 flex justify-center
         transition-all duration-500 ease-in-out
-        ${isScrolled ? 'top-6 px-6' : 'top-0 px-0'}
+        ${isScrolled ? 'top-3 px-3 md:top-6 md:px-6' : 'top-0 px-0'}
       `}
     >
       <div
         className={`
-          flex items-center justify-between w-full px-8
+          flex items-center justify-between w-full px-4 sm:px-6 md:px-8
           bg-black/40 backdrop-blur-md border border-white/10
           transition-all duration-500 ease-in-out
           ${isScrolled
-            ? 'max-w-6xl rounded-full py-3 bg-black/60 border-white/20'
-            : 'max-w-full rounded-none py-5 bg-black/20 border-transparent'
+            ? 'max-w-6xl rounded-2xl md:rounded-full py-3 bg-black/70 border-white/20'
+            : 'max-w-full rounded-none py-4 md:py-5 bg-black/20 border-transparent'
           }
         `}
       >
@@ -95,6 +112,9 @@ const Navbar = () => {
         {/* Hamburger */}
         <button
           className="md:hidden text-white p-2"
+          type="button"
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMobileMenuOpen}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -104,7 +124,7 @@ const Navbar = () => {
       {/* Mobile Menu Overlay */}
       <div
         className={`
-          md:hidden fixed inset-0 top-[72px] bg-black/95 backdrop-blur-xl
+          md:hidden fixed inset-0 top-0 z-[-1] bg-black/95 backdrop-blur-xl pt-20 pb-6 overflow-y-auto
           transition-all duration-300 ease-in-out
           ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
         `}
@@ -118,8 +138,8 @@ const Navbar = () => {
             Home
           </Link>
           <Link
-            href="/about"
-            className={`hover:text-red-500 transition-colors ${pathname === '/about' ? 'text-red-500' : ''}`}
+            href="/about-ted"
+            className={`hover:text-red-500 transition-colors ${pathname === '/about-ted' ? 'text-red-500' : ''}`}
             onClick={() => setIsMobileMenuOpen(false)}
           >
             About
@@ -154,8 +174,8 @@ const Navbar = () => {
           </div>
 
           <Link
-            href="/pastevent"
-            className={`hover:text-red-500 transition-colors ${pathname === '/pastevent' ? 'text-red-500' : ''}`}
+            href="/past-tedx"
+            className={`hover:text-red-500 transition-colors ${pathname === '/past-tedx' ? 'text-red-500' : ''}`}
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Past Event

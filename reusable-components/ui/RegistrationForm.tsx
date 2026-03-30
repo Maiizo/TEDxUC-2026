@@ -228,7 +228,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     } rounded-lg px-4 py-3 text-white placeholder-gray-600 outline-none transition-colors text-sm`;
   if (submitStatus === 'success') {
     return (
-      <div className="relative bg-[#0f0f0f] border border-gray-800 rounded-2xl p-8 max-w-xl w-full text-center space-y-4 shadow-2xl">
+      <div className="relative bg-[#0f0f0f] border border-gray-800 rounded-2xl p-5 sm:p-8 max-w-xl w-full text-center space-y-4 shadow-2xl">
         {onClose && (
           <button
             onClick={onClose}
@@ -240,7 +240,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         <div className="w-16 h-16 bg-green-900/20 rounded-full flex items-center justify-center mx-auto">
           <CheckCircle2 className="text-green-500 w-8 h-8" />
         </div>
-        <h3 className={`${cinzel.className} text-2xl text-white`}>Registration Successful!</h3>
+        <h3 className={`${cinzel.className} text-xl sm:text-2xl text-white`}>Registration Successful!</h3>
         <p className="text-gray-400 text-sm">
           Thank you for registering for <span className="text-white">{activeEvent.label}</span>.
           Check your email for confirmation and ticket details.
@@ -259,7 +259,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
   }
 
   return (
-    <div className="relative bg-[#0f0f0f] border border-[#2a2a2a] rounded-2xl p-8 max-w-xl w-full shadow-[0_8px_60px_rgba(0,0,0,0.8)] overflow-y-auto max-h-[90vh]">
+    <div className="relative bg-[#0f0f0f] border border-[#2a2a2a] rounded-2xl p-5 sm:p-8 max-w-xl w-full shadow-[0_8px_60px_rgba(0,0,0,0.8)] overflow-y-auto max-h-[88vh]">
       {onClose && (
         <button
           onClick={onClose}
@@ -271,7 +271,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
       {/* Header */}
       <div className="mb-6 pr-8">
-        <h2 className={`${cinzel.className} text-2xl md:text-3xl text-white leading-tight mb-1`}>
+        <h2 className={`${cinzel.className} text-xl sm:text-2xl md:text-3xl text-white leading-tight mb-1`}>
           Register for {activeEvent.label}
         </h2>
         <p className="text-gray-500 text-sm">Fill in your details to secure your place</p>

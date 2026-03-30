@@ -23,7 +23,7 @@ export default function RegisterContent() {
     eventQuery === 'pre-event-1' || eventQuery === 'main-event' ? eventQuery : undefined;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-6 gap-6">
+    <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center p-4 sm:p-6 gap-6">
       {/* Tombol untuk membuka popup */}
       <button
         onClick={() => setIsOpen(true)}
@@ -35,7 +35,7 @@ export default function RegisterContent() {
       {/* Popup Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-4 pt-24 sm:pt-4 bg-black/75 backdrop-blur-sm"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsOpen(false);
           }}
@@ -59,7 +59,7 @@ export default function RegisterContent() {
 
       {paymentTarget && (
         <div
-          className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          className="fixed inset-0 z-60 flex items-start sm:items-center justify-center p-4 pt-24 sm:pt-4 bg-black/80 backdrop-blur-sm"
           onClick={(e) => {
             if (e.target === e.currentTarget) setPaymentTarget(null);
           }}
