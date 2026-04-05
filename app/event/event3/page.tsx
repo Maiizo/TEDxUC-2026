@@ -75,20 +75,8 @@ function UsersIcon() {
   );
 }
 
-function ScrollIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" stroke="currentColor" strokeWidth="1.5">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <polyline points="14 2 14 8 20 8" />
-      <line x1="16" y1="13" x2="8" y2="13" />
-      <line x1="16" y1="17" x2="8" y2="17" />
-    </svg>
-  );
-}
-
 export default function Event3Page() {
   const cardRef = useScrollReveal(100);
-  const aboutRef = useScrollReveal(300);
   const btnRef = useScrollReveal(500);
 
   return (
@@ -196,36 +184,10 @@ export default function Event3Page() {
             </div>
 
             {/* Divider */}
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center gap-4">
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#546e40]/50 to-transparent" />
               <Diamond className="text-[#6d8a58]/50 w-2.5 h-2.5" />
               <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#546e40]/50 to-transparent" />
-            </div>
-
-            {/* About section */}
-            <div
-              ref={aboutRef}
-              className="opacity-0 translate-y-6 transition-all duration-700 ease-out"
-            >
-              <div className="flex items-center gap-3 mb-5">
-                <div className="text-[#6d8a58]"><ScrollIcon /></div>
-                <h2
-                  className="text-lg font-bold uppercase tracking-widest text-gray-100"
-                  style={{ fontFamily: "var(--font-allrounder), sans-serif" }}
-                >
-                  About This Gathering
-                </h2>
-              </div>
-              <div className="space-y-4 pl-1">
-                <p className="text-sm md:text-base text-gray-400 leading-relaxed font-light">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vel lorem nec nulla dignissim
-                  tincidunt vel at justo. Sed euismod libero non metus sodales, a tincidunt sapien iaculis.
-                </p>
-                <p className="text-sm md:text-base text-gray-400 leading-relaxed font-light">
-                  Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                  Vivamus pellentesque nisi eget leo tincidunt, at commodo nunc dapibus.
-                </p>
-              </div>
             </div>
           </div>
         </div>
