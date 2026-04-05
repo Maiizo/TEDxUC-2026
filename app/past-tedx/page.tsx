@@ -313,7 +313,7 @@ export default function PastEventPage() {
           src="/images/hallway.jpg"
           alt=""
           fill
-          className="object-cover object-center opacity-20"
+          className="object-cover object-center opacity-17"
           priority
         />
         <div className="absolute inset-0 bg-(--void-black)/0" />

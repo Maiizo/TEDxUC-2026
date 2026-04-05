@@ -28,6 +28,11 @@ const allrounder = localFont({
 export const metadata: Metadata = {
   title: "TEDxUC 2026",
   description: "TEDxUC 2026",
+  icons: {
+    icon: "/icon.png?v=2",
+    shortcut: "/icon.png?v=2",
+    apple: "/apple-icon.png?v=2",
+  },
 };
 
 export default function RootLayout({

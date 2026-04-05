@@ -181,7 +181,7 @@ export default function MainEventPage() {
 
         {/* Subtitle / theme */}
         <p className="text-gray-300 italic text-lg md:text-xl tracking-[0.3em] mb-12 text-center uppercase drop-shadow-[0_0_15px_rgba(93,29,105,0.8)]">
-          The Forsaken Crown
+          Personal Growth, Social Media, Art/Entertaiment, Finance, Public Speaking, Comedy, AI, Mental Health
         </p>
 
         {/* Main Info Card */}
@@ -213,7 +213,7 @@ export default function MainEventPage() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Date</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">Mei 10, 2026</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">10 Mei 2026</p>
                 </div>
               </div>
 
@@ -224,7 +224,7 @@ export default function MainEventPage() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Time</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">10:00 – 18:00 WIB</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">10.00-15.15</p>
                 </div>
               </div>
 
@@ -235,7 +235,7 @@ export default function MainEventPage() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Venue</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">Theater, 7th Floor,UC Surabaya</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">Integrity Hall</p>
                 </div>
               </div>
 
@@ -246,7 +246,7 @@ export default function MainEventPage() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Capacity</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">100 Attendees</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">70 orang</p>
                 </div>
               </div>
             </div>

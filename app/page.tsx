@@ -4,6 +4,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { SHOW_GALLERY } from "@/lib/features";
 
 /* ══════════════════════════════════════════
    DATA
@@ -526,7 +527,7 @@ export default function Home() {
       {/* ═══════════════════════════════════
           CHRONICLES GALLERY
           ═══════════════════════════════════ */}
-      <GallerySection />
+        {SHOW_GALLERY && <GallerySection />}
 
       {/* ═══════════════════════════════════
           CLAIM YOUR THRONE CTA

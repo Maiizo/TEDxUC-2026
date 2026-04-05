@@ -137,7 +137,7 @@ export default function Event3Page() {
         </h1>
 
         <p className="text-gray-300 italic text-lg md:text-xl tracking-[0.3em] mb-12 text-center uppercase drop-shadow-[0_0_15px_rgba(84,110,64,0.8)]">
-          tema
+          Money Management
         </p>
 
         {/* Main Info Card */}
@@ -160,7 +160,7 @@ export default function Event3Page() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Date</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">April 15, 2026</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">15 April 2026</p>
                 </div>
               </div>
 
@@ -170,7 +170,7 @@ export default function Event3Page() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Time</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">15:00 – 18:00 WIB</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">16.00-19.00</p>
                 </div>
               </div>
 
@@ -180,7 +180,7 @@ export default function Event3Page() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Venue</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">Auditorium, UC Surabaya</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">Integrity Hall</p>
                 </div>
               </div>
 
@@ -190,7 +190,7 @@ export default function Event3Page() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Capacity</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">100 Attendees</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">70 orang</p>
                 </div>
               </div>
             </div>

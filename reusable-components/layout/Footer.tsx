@@ -3,6 +3,7 @@ import { FaInstagram, FaTwitter, FaFacebookF, FaLinkedinIn, FaYoutube } from "re
 import { FiMapPin, FiMail } from "react-icons/fi"; 
 import Link from 'next/link';
 import { Cinzel } from 'next/font/google';
+import { SHOW_GALLERY } from '@/lib/features';
 
 const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '700'] });
 
@@ -38,7 +39,7 @@ const Footer = () => {
               <FooterLink href="/about-ted">About TED</FooterLink>
               <FooterLink href="/past-tedx">Past TEDxUC</FooterLink>
               <FooterLink href="/schedule">Speakers & Schedule</FooterLink>
-              <FooterLink href="/gallery">Gallery</FooterLink>
+              {SHOW_GALLERY && <FooterLink href="/gallery">Gallery</FooterLink>}
               {/* <FooterLink href="/sponsor">Sponsor</FooterLink> */}
             </ul>
           </div>

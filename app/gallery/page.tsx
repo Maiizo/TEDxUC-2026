@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { Cinzel } from 'next/font/google';
+import { SHOW_GALLERY } from '@/lib/features';
 
 const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '700'] });
 
@@ -124,6 +125,10 @@ function GalleryCard({ item }: { item: GalleryItem }) {
 }
 
 export default function GalleryPage() {
+  if (!SHOW_GALLERY) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
       {/* Background image */}
@@ -132,7 +137,7 @@ export default function GalleryPage() {
           src="/images/hallway.jpg"
           alt=""
           fill
-          className="object-cover object-center opacity-20"
+          className="object-cover object-center opacity-17"
           priority
         />
         <div className="absolute inset-0 bg-(--void-black)/0" />

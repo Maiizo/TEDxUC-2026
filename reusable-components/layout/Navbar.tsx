@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronDown, Menu, X } from 'lucide-react';
+import { SHOW_GALLERY } from '@/lib/features';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -74,7 +75,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link href="/" className="flex items-center" aria-label="TEDxUC Home">
           <Image
-            src="/images/logo_new.webp"
+            src="/images/logo_white.png"
             alt="TEDxUC"
             width={180}
             height={48}
@@ -106,7 +107,9 @@ const Navbar = () => {
 
           <Link href="/past-tedx" className={linkClass('/past-tedx')}>Past Event</Link>
           <Link href="/schedule" className={linkClass('/schedule')}>Speaker & Schedule</Link>
-          <Link href="/gallery" className={linkClass('/gallery')}>Gallery</Link>
+          {SHOW_GALLERY && (
+            <Link href="/gallery" className={linkClass('/gallery')}>Gallery</Link>
+          )}
         </div>
 
         {/* Hamburger */}
@@ -187,13 +190,15 @@ const Navbar = () => {
           >
             Speaker & Schedule
           </Link>
-          <Link
-            href="/gallery"
-            className={`hover:text-red-500 transition-colors ${pathname === '/gallery' ? 'text-red-500' : ''}`}
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            Gallery
-          </Link>
+          {SHOW_GALLERY && (
+            <Link
+              href="/gallery"
+              className={`hover:text-red-500 transition-colors ${pathname === '/gallery' ? 'text-red-500' : ''}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Gallery
+            </Link>
+          )}
         </div>
       </div>
     </nav>
