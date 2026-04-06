@@ -9,9 +9,9 @@ const cinzel = Cinzel({ subsets: ['latin'], weight: ['400', '700'] });
 
 const Footer = () => {
   return (
-    <footer className="relative z-50 bg-black text-gray-300 w-full pt-16 pb-8 border-t border-red-900/30">
+    <footer className="relative z-50 bg-black text-gray-300 w-full pt-10 md:pt-16 pb-5 md:pb-8 border-t border-red-900/30">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-6 md:mb-12">
           
           {/* KOLOM 1: BRANDING */}
           <div className="md:col-span-5 space-y-6">
@@ -72,7 +72,7 @@ const Footer = () => {
         </div>
 
         {/* BOTTOM COPYRIGHT */}
-        <div className="border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-end items-center text-xs text-gray-600">
+        <div className="border-t border-gray-900 pt-3 md:pt-6 flex flex-col md:flex-row justify-end items-center text-xs text-gray-600">
           <div className="w-full md:w-auto text-center md:text-right space-y-1">
             <p className="break-all sm:break-normal">© 2026 TEDxUniversitasCiputraSurabaya. All rights reserved.</p>
             <p className="italic opacity-60 wrap-break-word">This independent TEDx event is operated under license from TED.</p>

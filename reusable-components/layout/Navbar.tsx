@@ -55,7 +55,7 @@ const Navbar = () => {
   return (
     <nav
       className={`
-        fixed left-0 right-0 z-50 flex justify-center
+        fixed left-0 right-0 z-80 flex justify-center
         transition-all duration-500 ease-in-out
         ${isScrolled ? 'top-3 px-3 md:top-6 md:px-6' : 'top-0 px-0'}
       `}

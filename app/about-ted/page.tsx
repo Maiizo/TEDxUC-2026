@@ -220,7 +220,7 @@ function AboutCard({
         <div className={`w-12 group-hover:w-20 h-px ${dividerColor} mx-auto mb-4 transition-all duration-500`} />
 
         {/* Description */}
-        <p className="text-sm text-gray-400 text-center leading-relaxed mb-6 whitespace-pre-line">
+        <p className="text-sm tracking-[0.03em] text-gray-400 text-center leading-relaxed mb-6 whitespace-pre-line">
           {card.description}
         </p>
 
@@ -237,21 +237,21 @@ const cards: CardData[] = [
     title: "TED",
     accent: "green",
     description:
-      "It all started with a simple yet powerful mission: ideas worth spreading. TED (Technology, Entertainment, Design) began as a conference in 1984, bringing togethervisionaries to share groundbreaking ideas. Over time, it evolved into a global platform, hosting talks that challenge, perspectives and ignite change in fields like science, business, education, and beyond..",
+      "It all started with a simple yet powerful mission: ideas worth spreading.\n\nTED (Technology, Entertainment, Design) began as a conference in 1984, bringing togethervisionaries to share groundbreaking ideas.\n\nOver time, it evolved into a global platform, hosting talks that challenge, perspectives and ignite change in fields like science, business, education, and beyond.",
   },
   {
     icon: <ConnectedIcon className="w-11 h-11 md:w-14 md:h-14" />,
     title: "TEDx",
     accent: "purple",
     description:
-      "TED's influence didn't stop there. To bring its spirit of innovation to local communities, TEDx was born—independently organized events that foster dialogue, curiosity, and action. Through TEDx, people worldwide can experience the power of ideas in a setting that sparks connection and inspiration.",
+      "TED's influence didn't stop there.\n\nTo bring its spirit of innovation to local communities, TEDx was born—independently organized events that foster dialogue, curiosity, and action.\n\nThrough TEDx, people worldwide can experience the power of ideas in a setting that sparks connection and inspiration.",
   },
   {
     icon: <SmallCrownIcon className="w-11 h-11 md:w-14 md:h-14" />,
     title: "TEDxUC",
     accent: "mixed",
     description:
-      "TEDxUniversitasCiputraSurabaya is our way of bringing this global movement closer to our community. Hosted by Universitas Ciputra Surabaya, we gather forward-thinkers, innovators, and changemakers in one space, to exchange ideas, spark conversations, and shape what’s ahead. \nWith “The Forsaken Crown” as this year’s theme, we invite you to rediscover what was once lost confidence, purpose, and the courage to rise again..",
+      "TEDxUniversitasCiputraSurabaya is our way of bringing this global movement closer to our community.\n\nHosted by Universitas Ciputra Surabaya, we gather forward-thinkers, innovators, and changemakers in one space, to exchange ideas, spark conversations, and shape what’s ahead.\n\nWith “The Forsaken Crown” as this year’s theme, we invite you to rediscover what was once lost confidence, purpose, and the courage to rise again.",
   },
 ];
 
@@ -363,28 +363,28 @@ export default function AboutTedPage() {
         <div className="w-full max-w-7xl mx-auto">
           {/*
             Phone  (default) : 1 column — stacked vertically
-            Tablet (md)      : 2-column grid — TED spans both cols (top), TEDx + TEDxUC side-by-side (bottom)
+            Tablet (md)      : 2-column grid — TEDx + TED (top), TEDxUC spans both cols (bottom)
             Desktop (lg)     : 3 equal columns
           */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10 items-start">
-            {/* Card 1 — TED: full-width on tablet, normal on desktop */}
+            {/* Card 1 — TEDx */}
             <AboutCard
-              card={cards[0]}
-              offsetClass="md:col-span-2 lg:col-span-1 lg:-rotate-1"
+              card={cards[1]}
+              offsetClass="md:col-span-2 lg:col-span-1 lg:mt-16 lg:rotate-1"
               delay="0ms"
             />
 
-            {/* Card 2 — TEDx */}
+            {/* Card 2 — TEDxUC */}
             <AboutCard
-              card={cards[1]}
-              offsetClass="lg:mt-16 lg:rotate-1"
+              card={cards[2]}
+              offsetClass="md:col-span-2 lg:col-span-1 lg:-rotate-0.5"
               delay="200ms"
             />
 
-            {/* Card 3 — TEDxUC */}
+            {/* Card 3 — TED */}
             <AboutCard
-              card={cards[2]}
-              offsetClass="lg:mt-6 lg:-rotate-0.5"
+              card={cards[0]}
+              offsetClass="lg:mt-16 lg:-rotate-1"
               delay="400ms"
             />
           </div>

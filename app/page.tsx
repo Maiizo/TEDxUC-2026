@@ -200,7 +200,7 @@ function AnimatedHeroText() {
           revealed ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
         }`}
       >
-        Desc of the theme.
+        
       </p>
 
     
@@ -218,8 +218,8 @@ function TedxInfoSection() {
   const p2Ref = useScrollReveal(300);
 
   return (
-    <section className="relative py-20 md:py-32 px-6 md:px-12 lg:px-20">
-      <div className="max-w-3xl mx-auto text-center">
+    <section className="relative py-20 md:py-32 px-4 sm:px-6 md:px-8 lg:px-12">
+      <div className="max-w-7xl mx-auto text-center">
         {/* Title */}
         <div ref={titleRef} className="opacity-0 translate-y-8 transition-all duration-700 ease-out mb-8">
           <h2
@@ -234,18 +234,14 @@ function TedxInfoSection() {
 
         {/* Paragraphs */}
         <div ref={p1Ref} className="opacity-0 translate-y-6 transition-all duration-700 ease-out mb-5">
-          <p className="text-sm md:text-base text-gray-400 leading-relaxed">
-            In the spirit of{" "}
-            <span className="text-(--acid-green) font-medium not-italic">The Forsaken Crown</span>,
-            TEDx is a program of 
+          <p className="mx-auto max-w-5xl text-sm md:text-base text-gray-400 leading-relaxed">
+            The <span className="text-(--maleficent-green) font-semibold">Forsaken Crown</span> captures a generation overwhelmed by expectations, chasing definitions of success that no longer feel their own. The crown, once a symbol of achievement, becomes a weight, pushing us to question who we are and what truly matters.
           </p>
         </div>
 
         <div ref={p2Ref} className="opacity-0 translate-y-6 transition-all duration-700 ease-out">
-          <p className="text-sm md:text-base text-gray-400 leading-relaxed">
-            The
-            <span className="text-(--maleficent-purple) italic">TED</span>.
-            The TEDx 
+          <p className="mx-auto max-w-5xl text-sm md:text-base text-gray-400 leading-relaxed">
+            <span className="text-(--maleficent-purple) font-semibold">TEDx Universitas Ciputra Surabaya</span> invites you to step into a space where powerful ideas spark reflection, challenge perspectives, and inspire you to redefine <span className="text-(--acid-green) font-semibold">success</span> and rise with a crown you choose for yourself.
           </p>
         </div>
       </div>
@@ -270,7 +266,7 @@ function GallerySection() {
           fill
           className="object-cover opacity-35"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/10 to-black" />
+        <div className="absolute inset-0 bg-linear-to-b from-black via-black/10 to-black" />
       </div>
 
       <div className="relative z-10 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">

@@ -402,14 +402,14 @@ export default function PastEventPage() {
 
           {/* Subtitle + meta */}
           <div className="mt-4 md:mt-6 text-center">
-            <p className="text-sm md:text-lg text-gray-400 italic tracking-widest mb-4">
-              TEMA
+            <p className="text-sm md:text-lg text-white italic tracking-widest mb-4">
+              The Infinite Maze
             </p>
 
          
 
             {/* Meta row */}
-            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-xs md:text-sm text-gray-500">
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-xs md:text-sm text-white">
               <span className="flex items-center gap-1.5">
                 <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5">
                   <rect x="2" y="3" width="12" height="11" rx="1" stroke="currentColor" strokeWidth="1.2" />
@@ -417,14 +417,14 @@ export default function PastEventPage() {
                   <path d="M5 1V4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
                   <path d="M11 1V4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
                 </svg>
-                tgl, 2025
+                11 May 2025
               </span>
               <span className="flex items-center gap-1.5">
                 <svg viewBox="0 0 16 16" fill="none" className="w-3.5 h-3.5">
                   <path d="M8 1C4.686 1 2 3.686 2 7C2 11.5 8 15 8 15C8 15 14 11.5 14 7C14 3.686 11.314 1 8 1Z" stroke="currentColor" strokeWidth="1.2" />
                   <circle cx="8" cy="7" r="2" stroke="currentColor" strokeWidth="1.2" />
                 </svg>
-                Auditorium, UC Surabaya
+                7th Floor, Auditorium, UC Surabaya
               </span>
             </div>
           </div>
@@ -463,17 +463,14 @@ export default function PastEventPage() {
 
                 <div className="space-y-4 text-sm md:text-base text-gray-400 leading-relaxed">
                   <p>
-                    TEDxUC Surabaya 2025 was bbnjagejfkc.
+                    Looking back at The Infinite Maze, we reflect on an extraordinary journey through the winding corridors of ambition, creativity, and the human experience. .
                   </p>
                   <p>
-                    The event wwfrwfwele{" "}
-                    <span className="text-(--maleficent-purple) italic">
-                      chlekgnjwrkas
-                    </span>{" "}
-                    and fawlkfnkewgnew.
+                    Our <span className="text-(--maleficent-green) font-medium">seven </span>guest navigators led us through a transformative exploration: <span className="text-(--maleficent-green) font-medium">Wilson David Mulya</span> dismantled the myth that passion is everything, <span className="text-(--maleficent-purple) font-medium">Holly Natasha</span> inspired us with the raw reality of building a business amidst uncertainty, and <span className="text-(--acid-green) font-medium">Danyannisa</span> skillfully deconstructed the technical intricacies of song creation. We traveled through the rich cultural labyrinths of the world with <span className="text-(--maleficent-green) font-medium">Mario Oswin</span>’s culinary insights, decoded the complexities of the future in <span className="text-(--maleficent-purple) font-medium">R. Kukuh Rahardiansyah</span>’s AI wonderland, and shifted our views on the world around us through <span className="text-(--acid-green) font-medium">Maximilian John</span>’s urban kaleidoscope. The journey culminated in a powerful lesson from <span className="text-(--maleficent-purple) font-medium">Evelyn Saraswati Hutani</span>, who taught us that failing and falling are merely the precursors to the joy of standing back up.{" "}
+            
                   </p>
                   <p>
-                    TEDx ewgnewgee.
+                    Though the event has concluded, the paths we discovered and the perspectives we gained continue to resonate long after leaving the maze.
                   </p>
                 </div>
               </div>
@@ -485,7 +482,7 @@ export default function PastEventPage() {
       {/* ═══════════════════════════════════
           EVENT HIGHLIGHTS — with count-up
           ═══════════════════════════════════ */}
-      <section className="relative py-12 md:py-20 px-6 md:px-12 lg:px-20">
+      <section className="relative pt-12 pb-0 md:pt-20 md:pb-0 px-6 md:px-12 lg:px-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center md:text-left mb-10 md:mb-14">
             <h2
@@ -511,7 +508,7 @@ export default function PastEventPage() {
       {/* ═══════════════════════════════════
           THEME — dramatic centered card
           ═══════════════════════════════════ */}
-      <section className="relative py-12 md:py-20 px-6 md:px-12 lg:px-20">
+      <section className="relative pt-0 pb-12 md:pt-0 md:pb-20 px-6 md:px-12 lg:px-20">
         <div className="max-w-5xl mx-auto">
           <div
             ref={themeRef}
@@ -532,12 +529,12 @@ export default function PastEventPage() {
               >
                 <span className="text-(--maleficent-purple)">Theme:</span>
               </h2>
-              <p className="relative text-sm md:text-lg text-gray-300/80 leading-relaxed italic max-w-2xl mx-auto">
-                desc tema   {" "}
+              <p className="relative text-2xl md:text-4xl text-gray-300/80 leading-relaxed italic max-w-2xl mx-auto">
+                The   {" "}
                 <span className="text-(--maleficent-green) not-italic font-medium">
-                  egeaerg
+                  Infinite
                 </span>{" "}
-                awegawegus.
+                Maze
               </p>
             </div>
           </div>
@@ -548,7 +545,7 @@ export default function PastEventPage() {
           OUR SPEAKERS — staggered grid
           ═══════════════════════════════════ */}
       <section className="relative py-12 md:py-20 px-6 md:px-12 lg:px-20">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto md:pl-4 lg:pl-8">
           {/* Title — left aligned */}
           <div className="text-left mb-10 md:mb-14">
             <h2
@@ -561,14 +558,14 @@ export default function PastEventPage() {
             
           </div>
 
-          {/* Top 4 — shifted left on desktop */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-7 md:mr-12 lg:mr-20">
+          {/* Top 4 */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-7">
             {speakers.slice(0, 4).map((speaker, i) => (
               <SpeakerCard key={i} speaker={speaker} index={i} />
             ))}
           </div>
-          {/* Bottom speakers — shifted right on desktop */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-7 mt-6 md:mt-10 md:ml-12 lg:ml-20">
+          {/* Bottom speakers */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 md:gap-7 mt-6 md:mt-10">
             {speakers.slice(4).map((speaker, i) => (
               <SpeakerCard key={i + 4} speaker={speaker} index={i + 4} />
             ))}
@@ -580,7 +577,7 @@ export default function PastEventPage() {
           EVENT GALLERY — masonry-like
           ═══════════════════════════════════ */}
       <section className="relative py-12 md:py-20 px-6 md:px-12 lg:px-20">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto md:pl-4 lg:pl-8">
           <div
             ref={galleryTitleRef}
             className="text-left mb-10 md:mb-14 opacity-0 translate-y-6 transition-all duration-700"
