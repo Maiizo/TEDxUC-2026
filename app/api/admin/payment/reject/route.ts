@@ -1,23 +1,43 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
-import nodemailer from "nodemailer";
+import { sendEmail } from '@/src/lib/mailer/sendEmail';
+import { declinedTemplate } from '@/src/lib/mailer/templates';
+
+export const runtime = 'nodejs';
+
+function response(
+  status: number,
+  message: string,
+  data?: Record<string, unknown>,
+  error?: string
+) {
+  return NextResponse.json(
+    {
+      success: status < 400,
+      message,
+      ...(data ? { data } : {}),
+      ...(error ? { error } : {}),
+    },
+    { status }
+  );
+}
 
 export async function POST(request: NextRequest) {
   try {
     const token = request.cookies.get("admin-token")?.value;
     if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return response(401, 'Unauthorized', undefined, 'Unauthorized');
     }
 
     const payload = await verifyToken(token);
     if (!payload) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      return response(401, 'Invalid token', undefined, 'Invalid token');
     }
 
     const { paymentId, rejectionReason } = await request.json();
     if (!paymentId || typeof paymentId !== "string") {
-      return NextResponse.json({ error: "paymentId is required" }, { status: 400 });
+      return response(400, 'paymentId is required', undefined, 'paymentId is required');
     }
 
     const payment = await prisma.payment.findUnique({
@@ -25,12 +45,12 @@ export async function POST(request: NextRequest) {
       include: { registration: true }
     });
 
-    if (!payment) return NextResponse.json({ error: 'Payment not found' }, { status: 404 });
+    if (!payment) return response(404, 'Payment not found', undefined, 'Payment not found');
     if (payment.status === "rejected") {
-      return NextResponse.json({ success: true, message: "Payment already rejected" });
+      return response(200, 'Payment already rejected');
     }
     if (payment.status === "approved") {
-      return NextResponse.json({ error: "Approved payment cannot be rejected" }, { status: 409 });
+      return response(409, 'Approved payment cannot be rejected', undefined, 'Approved payment cannot be rejected');
     }
 
     const safeReason =
@@ -57,39 +77,41 @@ export async function POST(request: NextRequest) {
       });
     });
 
-    // Skip email in development or if email not configured
-    const isEmailConfigured = process.env.EMAIL_USER && process.env.EMAIL_PASS && process.env.EMAIL_PASS !== "password_app_gmail_kamu";
-    if (isEmailConfigured) {
-      const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: Number(process.env.EMAIL_PORT),
-        secure: process.env.EMAIL_SECURE === 'true',
-        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-      });
+    const retryUrl = new URL('/register', request.nextUrl.origin).toString();
+    const emailResult = await sendEmail(
+      {
+        to: updatedReg.email,
+        subject: 'Payment rejected - TEDxUC 2026',
+        html: declinedTemplate({
+          email: updatedReg.email,
+          name: updatedReg.fullName,
+          reason: safeReason,
+          retryUrl,
+        }),
+      },
+      { verifyBeforeSend: true }
+    );
 
-      try {
-        await transporter.sendMail({
-          from: `"TEDxUC 2026" <${process.env.EMAIL_USER}>`,
-          to: updatedReg.email,
-          subject: "Ticket Rejected - TEDxUC 2026",
-          html: `
-            <h2>Hi ${updatedReg.fullName}, your payment has been rejected.</h2>
-            <p>Reason: ${safeReason}</p>
-            <p>Please re-upload valid payment proof.</p>
-          `
-        });
-      } catch (emailError) {
-        console.error("Email send failed:", emailError);
-        // Continue anyway - payment rejection is already recorded in database
-      }
-    } else {
-      console.log(`[DEV] Email skipped for ${updatedReg.email} (email not configured)`);
-    }
+    const notification = {
+      success: emailResult.success,
+      accepted: emailResult.accepted,
+      rejected: emailResult.rejected,
+      messageId: emailResult.messageId,
+      ...(emailResult.error ? { error: emailResult.error } : {}),
+    };
 
-    return NextResponse.json({ success: true, message: "Payment rejected" });
+    const message = emailResult.success
+      ? 'Payment rejected'
+      : `Payment rejected, but rejection email failed and should be retried. Reason: ${emailResult.error ?? 'Unknown SMTP error'}`;
+
+    return response(200, message, {
+      registrationId: updatedReg.id,
+      paymentId,
+      notification,
+    });
   } catch (error) {
     console.error("Payment rejection error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-    return NextResponse.json({ error: `Failed to reject payment: ${errorMessage}` }, { status: 500 });
+    return response(500, 'Failed to reject payment', undefined, errorMessage);
   }
 }

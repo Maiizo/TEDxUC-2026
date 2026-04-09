@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { QRCodeCanvas } from "qrcode.react";
 
 interface Stats {
   totalRegistrations: number;
@@ -57,6 +56,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [actionLoadingPaymentId, setActionLoadingPaymentId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "events" | "registrations">("overview");
+  const [expandedQRCode, setExpandedQRCode] = useState<{ id: string; qrCode: string } | null>(null);
 
   const fetchData = useCallback(async () => {
     try {
@@ -241,7 +241,7 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <div className="flex gap-1 mb-6 border-b border-gray-800">
-          {(["overview", "events", "registrations"] as const).map((tab) => (
+          {(["overview", "registrations"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -259,80 +259,6 @@ export default function AdminDashboard() {
         {/* Tab Content */}
         {activeTab === "overview" && (
           <div className="space-y-6">
-            {/* Events Summary */}
-            <section>
-              <h2 className="text-lg font-semibold text-white mb-4">Events</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {events.map((event) => (
-                  <div
-                    key={event.id}
-                    className="bg-gray-950 border border-gray-800 rounded-xl p-5 hover:border-gray-700 transition-colors"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h3 className="font-semibold text-white">{event.name}</h3>
-                        <p className="text-sm text-purple-400">{event.type}</p>
-                      </div>
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full border ${
-                          event.isActive
-                            ? "text-green-400 bg-green-950 border-green-800"
-                            : "text-gray-500 bg-gray-900 border-gray-700"
-                        }`}
-                      >
-                        {event.isActive ? "Active" : "Inactive"}
-                      </span>
-                    </div>
-                    <div className="space-y-2 text-sm text-gray-400">
-                      <div className="flex justify-between">
-                        <span>Date</span>
-                        <span className="text-gray-300">
-                          {new Date(event.date).toLocaleDateString("id-ID", {
-                            day: "numeric",
-                            month: "short",
-                            year: "numeric",
-                          })}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Registered</span>
-                        <span className="text-gray-300">
-                          {event.registeredCount} / {event.quota}
-                        </span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Price</span>
-                        <span className="text-gray-300">
-                          {event.price === 0
-                            ? "Free"
-                            : `Rp ${event.price.toLocaleString("id-ID")}`}
-                        </span>
-                      </div>
-                      {/* Progress bar */}
-                      <div className="mt-2">
-                        <div className="w-full bg-gray-800 rounded-full h-1.5">
-                          <div
-                            className="bg-linear-to-r from-green-500 to-purple-500 h-1.5 rounded-full transition-all"
-                            style={{
-                              width: `${Math.min(
-                                (event.registeredCount / event.quota) * 100,
-                                100
-                              )}%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {events.length === 0 && (
-                  <p className="text-gray-600 col-span-full text-center py-8">
-                    No events found
-                  </p>
-                )}
-              </div>
-            </section>
-
             {/* Recent Registrations */}
             <section>
               <h2 className="text-lg font-semibold text-white mb-4">
@@ -345,62 +271,10 @@ export default function AdminDashboard() {
                 onReject={handleRejectPayment}
                 onDelete={handleDeleteRegistration}
                 actionLoadingPaymentId={actionLoadingPaymentId}
+                expandedQRCode={expandedQRCode}
+                onQRClick={setExpandedQRCode}
               />
             </section>
-          </div>
-        )}
-
-        {activeTab === "events" && (
-          <div>
-            <h2 className="text-lg font-semibold text-white mb-4">All Events</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-800 text-gray-500">
-                    <th className="text-left py-3 px-4 font-medium">Name</th>
-                    <th className="text-left py-3 px-4 font-medium">Type</th>
-                    <th className="text-left py-3 px-4 font-medium">Date</th>
-                    <th className="text-left py-3 px-4 font-medium">Quota</th>
-                    <th className="text-left py-3 px-4 font-medium">Registered</th>
-                    <th className="text-left py-3 px-4 font-medium">Price</th>
-                    <th className="text-left py-3 px-4 font-medium">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {events.map((event) => (
-                    <tr
-                      key={event.id}
-                      className="border-b border-gray-900 hover:bg-gray-950/50"
-                    >
-                      <td className="py-3 px-4 text-white font-medium">{event.name}</td>
-                      <td className="py-3 px-4 text-purple-400">{event.type}</td>
-                      <td className="py-3 px-4 text-gray-400">
-                        {new Date(event.date).toLocaleDateString("id-ID")}
-                      </td>
-                      <td className="py-3 px-4 text-gray-400">{event.quota}</td>
-                      <td className="py-3 px-4 text-gray-300">{event.registeredCount}</td>
-                      <td className="py-3 px-4 text-gray-400">
-                        {event.price === 0 ? "Free" : `Rp ${event.price.toLocaleString("id-ID")}`}
-                      </td>
-                      <td className="py-3 px-4">
-                        <span
-                          className={`text-xs px-2 py-1 rounded-full border ${
-                            event.isActive
-                              ? "text-green-400 bg-green-950 border-green-800"
-                              : "text-gray-500 bg-gray-900 border-gray-700"
-                          }`}
-                        >
-                          {event.isActive ? "Active" : "Inactive"}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              {events.length === 0 && (
-                <p className="text-gray-600 text-center py-8">No events found</p>
-              )}
-            </div>
           </div>
         )}
 
@@ -415,11 +289,52 @@ export default function AdminDashboard() {
               onApprove={handleApprovePayment}
               onReject={handleRejectPayment}
               onDelete={handleDeleteRegistration}
-              actionLoadingPaymentId={actionLoadingPaymentId}
-            />
+              actionLoadingPaymentId={actionLoadingPaymentId}              expandedQRCode={expandedQRCode}
+              onQRClick={setExpandedQRCode}            />
           </div>
         )}
       </main>
+
+      {/* QR Code Modal */}
+      {expandedQRCode && (
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+          onClick={() => setExpandedQRCode(null)}
+        >
+          <div
+            className="bg-gray-950 border border-gray-800 rounded-xl p-8 max-w-sm w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-white">QR Code</h3>
+              <button
+                onClick={() => setExpandedQRCode(null)}
+                className="text-gray-400 hover:text-white text-2xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+            <div className="flex justify-center bg-white p-4 rounded-lg mb-4">
+              <img
+                src={`/api/admin/qr/${expandedQRCode.id}`}
+                alt="QR code"
+                width={300}
+                height={300}
+                className="w-72 h-72"
+              />
+            </div>
+            <p className="text-center text-xs text-gray-500 font-mono break-all mb-4">
+              {expandedQRCode.qrCode}
+            </p>
+            <button
+              onClick={() => setExpandedQRCode(null)}
+              className="w-full px-4 py-2 text-sm text-gray-300 border border-gray-700 hover:border-gray-600 rounded-lg transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -463,6 +378,8 @@ function RegistrationTable({
   onReject,
   onDelete,
   actionLoadingPaymentId,
+  expandedQRCode,
+  onQRClick,
 }: {
   registrations: RegistrationData[];
   statusColor: (s: string) => string;
@@ -470,6 +387,8 @@ function RegistrationTable({
   onReject: (paymentId: string) => Promise<void>;
   onDelete: (registrationId: string) => Promise<void>;
   actionLoadingPaymentId: string | null;
+  expandedQRCode: { id: string; qrCode: string } | null;
+  onQRClick: (data: { id: string; qrCode: string }) => void;
 }) {
   return (
     <div className="overflow-x-auto">
@@ -479,8 +398,6 @@ function RegistrationTable({
             <th className="text-left py-3 px-4 font-medium">Reg #</th>
             <th className="text-left py-3 px-4 font-medium">Name</th>
             <th className="text-left py-3 px-4 font-medium">Email</th>
-            <th className="text-left py-3 px-4 font-medium">Event</th>
-            <th className="text-left py-3 px-4 font-medium">Status</th>
             <th className="text-left py-3 px-4 font-medium">Payment</th>
             <th className="text-left py-3 px-4 font-medium">Proof</th>
             <th className="text-left py-3 px-4 font-medium">QR</th>
@@ -504,16 +421,6 @@ function RegistrationTable({
                 </td>
                 <td className="py-3 px-4 text-white font-medium">{reg.fullName}</td>
                 <td className="py-3 px-4 text-gray-400">{reg.email}</td>
-                <td className="py-3 px-4 text-purple-400">{reg.event.type}</td>
-                <td className="py-3 px-4">
-                  <span
-                    className={`text-xs px-2 py-1 rounded-full border ${statusColor(
-                      reg.status
-                    )}`}
-                  >
-                    {reg.status}
-                  </span>
-                </td>
                 <td className="py-3 px-4">
                   {latestPayment ? (
                     <div className="space-y-1">
@@ -551,8 +458,18 @@ function RegistrationTable({
                 <td className="py-3 px-4">
                   {reg.qrCode ? (
                     <div className="space-y-2">
-                      <div className="inline-flex bg-white p-1.5 rounded">
-                        <QRCodeCanvas value={reg.qrCode} size={56} level="M" includeMargin={false} />
+                      <div
+                        className="inline-flex bg-white p-1.5 rounded cursor-pointer hover:shadow-lg hover:shadow-blue-500/50 transition-shadow"
+                        onClick={() => onQRClick({ id: reg.id, qrCode: reg.qrCode || '' })}
+                        title="Click to expand"
+                      >
+                        <img
+                          src={`/api/admin/qr/${reg.id}`}
+                          alt="QR code"
+                          width={56}
+                          height={56}
+                          className="w-14 h-14"
+                        />
                       </div>
                       <p className="text-[10px] text-gray-500 font-mono max-w-28 truncate" title={reg.qrCode}>
                         {reg.qrCode}

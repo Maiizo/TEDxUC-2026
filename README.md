@@ -32,6 +32,128 @@ How to get the token:
 3. Storage -> Blob -> Connect/Create store.
 4. Copy the Read/Write token and set it as `BLOB_READ_WRITE_TOKEN`.
 
+## Email Notifications
+
+This project includes a production-ready SMTP mailer for submission, confirmation, and rejection emails.
+
+### Environment Variables
+
+Set these values in `.env.local` for local development and in your deployment environment:
+
+```bash
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_SECURE=false
+EMAIL_USER=notifications@example.com
+EMAIL_PASS=replace-with-your-smtp-password
+```
+
+Use `EMAIL_SECURE=true` for SMTPS ports like `465`.
+
+### Email Flows
+
+- Submission received email after a successful registration.
+- Approved/confirmed email after payment approval.
+- Declined/rejected email after payment rejection.
+
+The approved flow supports inline CID images for QR-style attachments.
+
+### API Endpoints
+
+Submission notification:
+
+```bash
+POST /api/notify
+```
+
+Sample JSON:
+
+```json
+{
+	"email": "attendee@example.com",
+	"name": "Alya Putri",
+	"referenceId": "TEDX-REG-2026-001"
+}
+```
+
+Confirmed notification:
+
+```bash
+POST /api/notify/confirmed
+```
+
+Sample JSON:
+
+```json
+{
+	"email": "attendee@example.com",
+	"name": "Alya Putri",
+	"accessCode": "TEDX-ACCESS-2026",
+	"loginUrl": "https://example.com/event",
+	"qrImageBuffers": [
+		{
+			"filename": "ticket-qr.png",
+			"contentBase64": "iVBORw0KGgoAAAANSUhEUgAA...",
+			"contentType": "image/png",
+			"cid": "ticket-qr"
+		}
+	]
+}
+```
+
+Declined notification:
+
+```bash
+POST /api/notify/declined
+```
+
+Sample JSON:
+
+```json
+{
+	"email": "attendee@example.com",
+	"name": "Alya Putri",
+	"reason": "Uploaded proof is blurred and the amount is not readable.",
+	"retryUrl": "https://example.com/register"
+}
+```
+
+### Business Flow Integration
+
+- `POST /api/register` sends the submission email after the registration transaction commits.
+- `POST /api/admin/payment/approve` sends the confirmed email with an inline QR attachment.
+- `POST /api/admin/payment/reject` sends the declined email with a retry link.
+
+If the database action succeeds but email delivery fails, the API still returns success for the business action and includes a notification object in the response data so the email can be retried later.
+
+### Expected Responses
+
+Success responses follow this shape:
+
+```json
+{
+	"success": true,
+	"message": "...",
+	"data": {
+		"accepted": ["attendee@example.com"],
+		"rejected": [],
+		"messageId": "..."
+	}
+}
+```
+
+Validation or SMTP failures follow this shape:
+
+```json
+{
+	"success": false,
+	"message": "...",
+	"error": "..."
+}
+```
+
+For registration, approval, and rejection flows, the database action stays successful even if the email fails, and the response includes a `notification` object with the mailer result.
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More

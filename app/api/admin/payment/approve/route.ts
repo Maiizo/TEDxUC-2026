@@ -1,24 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
-import QRCode from "qrcode";
-import nodemailer from "nodemailer";
+import QRCode from 'qrcode';
+import { sendEmail } from '@/src/lib/mailer/sendEmail';
+import { confirmedTemplate } from '@/src/lib/mailer/templates';
+
+export const runtime = 'nodejs';
+
+function response(
+  status: number,
+  message: string,
+  data?: Record<string, unknown>,
+  error?: string
+) {
+  return NextResponse.json(
+    {
+      success: status < 400,
+      message,
+      ...(data ? { data } : {}),
+      ...(error ? { error } : {}),
+    },
+    { status }
+  );
+}
 
 export async function POST(request: NextRequest) {
   try {
     const token = request.cookies.get("admin-token")?.value;
     if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return response(401, 'Unauthorized', undefined, 'Unauthorized');
     }
 
     const payload = await verifyToken(token);
     if (!payload) {
-      return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+      return response(401, 'Invalid token', undefined, 'Invalid token');
     }
 
     const { paymentId } = await request.json();
     if (!paymentId || typeof paymentId !== "string") {
-      return NextResponse.json({ error: "paymentId is required" }, { status: 400 });
+      return response(400, 'paymentId is required', undefined, 'paymentId is required');
     }
 
     const payment = await prisma.payment.findUnique({
@@ -26,12 +46,12 @@ export async function POST(request: NextRequest) {
       include: { registration: true }
     });
 
-    if (!payment) return NextResponse.json({ error: 'Payment not found' }, { status: 404 });
+    if (!payment) return response(404, 'Payment not found', undefined, 'Payment not found');
     if (payment.status === "approved") {
-      return NextResponse.json({ success: true, message: "Payment already approved" });
+      return response(200, 'Payment already approved');
     }
     if (payment.status === "rejected") {
-      return NextResponse.json({ error: "Rejected payment cannot be approved" }, { status: 409 });
+      return response(409, 'Rejected payment cannot be approved', undefined, 'Rejected payment cannot be approved');
     }
 
     const qrToken =
@@ -57,45 +77,59 @@ export async function POST(request: NextRequest) {
     });
 
     const pngBuffer = await QRCode.toBuffer(qrToken, { type: "png", width: 400 });
-
-    // Skip email in development or if email not configured
-    const isEmailConfigured = process.env.EMAIL_USER && process.env.EMAIL_PASS && process.env.EMAIL_PASS !== "password_app_gmail_kamu";
-    if (isEmailConfigured) {
-      const transporter = nodemailer.createTransport({
-        host: process.env.EMAIL_HOST,
-        port: Number(process.env.EMAIL_PORT),
-        secure: process.env.EMAIL_SECURE === 'true',
-        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-      });
-
-      try {
-        await transporter.sendMail({
-          from: `"TEDxUC 2026" <${process.env.EMAIL_USER}>`,
-          to: updatedReg.email,
-          subject: "Ticket Confirmed! - TEDxUC 2026",
-          html: `
-            <h2>Hi ${updatedReg.fullName}, your payment is approved!</h2>
-            <p>Attached is your QR Code ticket. Please present it on D-Day.</p>
-            <img src="cid:ticket-qr" alt="QR Ticket" />
-          `,
-          attachments: [{
+    const confirmUrl = new URL('/event', request.nextUrl.origin).toString();
+    const emailResult = await sendEmail(
+      {
+        to: updatedReg.email,
+        subject: 'Ticket confirmed - TEDxUC 2026',
+        html: confirmedTemplate({
+          email: updatedReg.email,
+          name: updatedReg.fullName,
+          registrationNumber: updatedReg.registrationNumber,
+          accessCode: updatedReg.registrationNumber,
+          loginUrl: confirmUrl,
+          qrImageBuffers: [{
             filename: 'ticket-qr.png',
-            content: pngBuffer,
-            cid: 'ticket-qr'
-          }]
-        });
-      } catch (emailError) {
-        console.error("Email send failed:", emailError);
-        // Continue anyway - payment approval is already recorded in database
-      }
-    } else {
-      console.log(`[DEV] Email skipped for ${updatedReg.email} (email not configured)`);
-    }
+            contentBase64: pngBuffer.toString('base64'),
+            contentType: 'image/png',
+            cid: 'ticket-qr',
+          }],
+          inlineImageCids: ['ticket-qr'],
+        }),
+        attachments: [{
+          filename: 'ticket-qr.png',
+          content: pngBuffer,
+          contentType: 'image/png',
+          cid: 'ticket-qr',
+        }, {
+          filename: 'ticket-qr-download.png',
+          content: pngBuffer,
+          contentType: 'image/png',
+        }],
+      },
+      { verifyBeforeSend: true }
+    );
 
-    return NextResponse.json({ success: true, message: "Payment approved" });
+    const notification = {
+      success: emailResult.success,
+      accepted: emailResult.accepted,
+      rejected: emailResult.rejected,
+      messageId: emailResult.messageId,
+      ...(emailResult.error ? { error: emailResult.error } : {}),
+    };
+
+    const message = emailResult.success
+      ? 'Payment approved'
+      : `Payment approved, but confirmation email failed and should be retried. Reason: ${emailResult.error ?? 'Unknown SMTP error'}`;
+
+    return response(200, message, {
+      registrationId: updatedReg.id,
+      paymentId,
+      notification,
+    });
   } catch (error) {
     console.error("Payment approval error:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-    return NextResponse.json({ error: `Failed to approve payment: ${errorMessage}` }, { status: 500 });
+    return response(500, 'Failed to approve payment', undefined, errorMessage);
   }
 }

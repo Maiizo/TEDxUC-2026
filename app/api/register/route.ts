@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { generateRegNumber } from '@/utils/generateRegNumber';
 
+export const runtime = 'nodejs';
+
 type RegisterBody = {
 	fullName?: string;
 	email?: string;
@@ -13,7 +15,7 @@ type RegisterBody = {
 };
 
 function badRequest(message: string) {
-	return NextResponse.json({ status: 'error', message }, { status: 400 });
+	return NextResponse.json({ success: false, message, error: message }, { status: 400 });
 }
 
 async function resolveEventId(eventKey: string) {
@@ -83,14 +85,14 @@ export async function POST(request: NextRequest) {
 		const event = await resolveEventId(eventKey);
 		if (!event) {
 			return NextResponse.json(
-				{ status: 'error', message: 'Selected event is not available' },
+				{ success: false, message: 'Selected event is not available', error: 'Selected event is not available' },
 				{ status: 404 }
 			);
 		}
 
 		if (event.registeredCount >= event.quota) {
 			return NextResponse.json(
-				{ status: 'error', message: 'Event quota is full' },
+				{ success: false, message: 'Event quota is full', error: 'Event quota is full' },
 				{ status: 409 }
 			);
 		}
@@ -132,21 +134,21 @@ export async function POST(request: NextRequest) {
 			return created;
 		});
 
-		return NextResponse.json(
-			{
-				status: 'success',
-				message: 'Registration created successfully',
-				data: {
-					...registration,
-					paymentAmount: Number(event.price ?? 0),
-				},
+	return NextResponse.json(
+		{
+			success: true,
+			message: 'Registration created successfully',
+			data: {
+				...registration,
+				paymentAmount: Number(event.price ?? 0),
 			},
-			{ status: 201 }
-		);
-	} catch (error) {
-		console.error('Registration create error:', error);
+		},
+		{ status: 201 }
+	);
+} catch (error) {
+	console.error('Registration create error:', error);
 		return NextResponse.json(
-			{ status: 'error', message: 'Failed to create registration' },
+			{ success: false, message: 'Failed to create registration', error: 'Failed to create registration' },
 			{ status: 500 }
 		);
 	}

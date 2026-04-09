@@ -192,9 +192,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
       const result = await response.json().catch(() => null);
 
-      if (!response.ok || !result || result.status !== 'success') {
+      if (!response.ok || !result || result.success !== true) {
         setSubmitStatus('error');
         setSubmitMessage(result?.message || 'Failed to save registration. Please try again.');
+        return;
+      }
+
+      if (!result.data?.id || !result.data?.registrationNumber) {
+        setSubmitStatus('error');
+        setSubmitMessage('Registration succeeded but payment reference is missing. Please contact admin.');
         return;
       }
 
