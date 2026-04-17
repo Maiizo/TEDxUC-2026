@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { head } from '@vercel/blob';
+import { get } from '@vercel/blob';
 import { prisma } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 
@@ -46,8 +46,23 @@ export async function GET(
   }
 
   try {
-    const blob = await head(toBlobLookupRef(payment.proofUrl));
-    return NextResponse.redirect(blob.downloadUrl, { status: 302 });
+    const blobResult = await get(toBlobLookupRef(payment.proofUrl), {
+      access: 'private',
+    });
+
+    if (!blobResult) {
+      return NextResponse.json({ error: 'Proof not found' }, { status: 404 });
+    }
+
+    const headers = new Headers(Array.from(blobResult.headers.entries()));
+    if (blobResult.blob.contentType) {
+      headers.set('Content-Type', blobResult.blob.contentType);
+    }
+
+    return new NextResponse(blobResult.stream, {
+      status: blobResult.statusCode,
+      headers,
+    });
   } catch (error) {
     console.error('Admin proof view error:', error);
     return NextResponse.json({ error: 'Failed to open proof' }, { status: 500 });
