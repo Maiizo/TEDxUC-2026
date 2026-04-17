@@ -125,7 +125,7 @@ export default function Event2Page() {
         </h1>
 
         <p className="text-gray-300 italic text-lg md:text-xl tracking-[0.3em] mb-12 text-center uppercase drop-shadow-[0_0_15px_rgba(84,110,64,0.8)]">
-          tema
+             
         </p>
 
         {/* Main Info Card */}
@@ -158,7 +158,7 @@ export default function Event2Page() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Time</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">13:00 – 16:00 WIB</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">16:30 – 18:00 WIB</p>
                 </div>
               </div>
 
@@ -167,18 +167,8 @@ export default function Event2Page() {
                   <MapPinIcon />
                 </div>
                 <div>
-                  <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Venue</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">Theater, 7th Floor,UC Surabaya</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#546e40]/20 border border-[#546e40]/30 flex items-center justify-center text-[#6d8a58]">
-                  <UsersIcon />
-                </div>
-                <div>
-                  <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Capacity</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">50 orang</p>
+                  <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Location</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">Jalan Tunjungan</p>
                 </div>
               </div>
             </div>

@@ -58,7 +58,7 @@ model Registration {
 model Payment {
   id             String       @id @default(uuid())
   registrationId String
-  registration   Registration @relation(fields: [registrationId], references: [id])
+  registration   Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
   
   amount         Float
   paymentMethod  String       // e.g., "BCA", "QRIS"

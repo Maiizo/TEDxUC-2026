@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import RegistrationForm from "@/reusable-components/ui/RegistrationForm";
+import { useEffect, useRef } from "react";
 
 /* ══════════════════════════════════════════
    HOOKS
@@ -97,7 +96,6 @@ function UsersIcon() {
 export default function Event1Page() {
   const cardRef = useScrollReveal(100);
   const btnRef = useScrollReveal(500);
-  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
@@ -225,7 +223,7 @@ export default function Event1Page() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Capacity</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">50 orang</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">50 People</p>
                 </div>
               </div>
             </div>
@@ -244,29 +242,14 @@ export default function Event1Page() {
           ref={btnRef}
           className="mt-12 opacity-0 translate-y-6 transition-all duration-700 ease-out"
         >
-          <button
-            type="button"
-            onClick={() => setIsRegisterOpen(true)}
-            className="relative inline-block group"
-          >
-            <div className="absolute -inset-2 rounded-full bg-[#546e40]/0 group-hover:bg-[#546e40]/30 blur-[20px] transition-all duration-700" />
-            <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-[#7ea66a] bg-linear-to-r from-[#4d6a3d] via-[#5d7e4b] to-[#6d8f59] text-white text-sm md:text-base font-semibold tracking-[0.2em] uppercase rounded-full transition-all duration-500 shadow-[0_8px_30px_rgba(84,110,64,0.35)] group-hover:from-[#5a7c48] group-hover:via-[#6a9056] group-hover:to-[#7ca866] group-hover:border-[#9ec489] group-hover:shadow-[0_0_50px_rgba(132,179,112,0.6)] group-hover:-translate-y-0.5">
-              Reserve Your Place
+          <div className="relative inline-block cursor-not-allowed">
+            <div className="absolute -inset-2 rounded-full bg-gray-500/0 blur-[20px]" />
+            <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-gray-700/60 bg-gray-800/20 text-gray-500 text-sm md:text-base font-medium tracking-[0.2em] uppercase rounded-full select-none">
+              Registration Unavailable
             </span>
-          </button>
+          </div>
         </div>
       </div>
-
-      {isRegisterOpen && (
-        <div
-          className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setIsRegisterOpen(false);
-          }}
-        >
-          <RegistrationForm eventKey="pre-event-1" onClose={() => setIsRegisterOpen(false)} />
-        </div>
-      )}
     </div>
   );
 }

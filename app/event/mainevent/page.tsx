@@ -167,8 +167,9 @@ export default function MainEventPage() {
         </h1>
 
         {/* Subtitle / theme */}
-        <p className="text-gray-300 italic text-lg md:text-xl tracking-[0.3em] mb-12 text-center uppercase drop-shadow-[0_0_15px_rgba(93,29,105,0.8)]">
-          Personal Growth, Social Media, Art/Entertaiment, Finance, Public Speaking, Comedy, AI, Mental Health
+        <p className="text-gray-300 italic text-lg md:text-xl tracking-[0.2em] leading-relaxed mb-12 text-center uppercase drop-shadow-[0_0_15px_rgba(93,29,105,0.8)] max-w-4xl mx-auto">
+          <span className="block">Personal Growth, Social Media, Art/Entertaiment, </span>
+          <span className="block">Finance, Public Speaking, Comedy, AI, Mental Health</span>
         </p>
 
         {/* Main Info Card */}
@@ -233,7 +234,7 @@ export default function MainEventPage() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Capacity</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">70 orang</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">100 People</p>
                 </div>
               </div>
             </div>

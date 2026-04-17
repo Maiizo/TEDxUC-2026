@@ -178,7 +178,7 @@ export default function Event3Page() {
                 </div>
                 <div>
                   <p className="text-[11px] text-gray-500 uppercase tracking-widest mb-1">Capacity</p>
-                  <p className="text-base text-gray-100 font-medium tracking-wide">70 orang</p>
+                  <p className="text-base text-gray-100 font-medium tracking-wide">50 People</p>
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaInstagram, FaTwitter, FaFacebookF, FaLinkedinIn, FaYoutube } from "react-icons/fa";
-import { FiMapPin, FiMail } from "react-icons/fi"; 
+import { FaWhatsapp } from "react-icons/fa";
 import Link from 'next/link';
 import { Cinzel } from 'next/font/google';
 import { SHOW_GALLERY } from '@/lib/features';
@@ -47,26 +47,38 @@ const Footer = () => {
           {/* KOLOM 3: CONTACT (UPDATED ICONS) */}
           <div className="md:col-span-3">
             <h3 className={`${cinzel.className} text-white text-lg mb-6 uppercase tracking-wider`}>
-              Contact
+              Contact Person
             </h3>
-            <div className="space-y-6 text-sm text-gray-400">
-              
+            <div className="space-y-4 text-sm text-gray-400">
               <div className="flex items-start gap-4">
-                <FiMapPin className="text-red-600 mt-1 shrink-0" size={20} />
-                <p className="leading-relaxed">
-                  Universitas Ciputra Surabaya<br />
-                  Citraland<br />
-                  Surabaya, Indonesia
-                </p>
+                <FaWhatsapp className="text-red-600 mt-0.5 shrink-0" size={20} />
+                <div className="leading-relaxed">
+                  <p className="text-white">Event: Shira</p>
+                  <a
+                    href="https://wa.me/62881038001038"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-red-500 transition-colors"
+                  >
+                    0881038001038
+                  </a>
+                </div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <FiMail className="text-red-600 shrink-0" size={20} />
-                <a href="mailto:info@tedxucs.com" className="hover:text-red-500 transition-colors">
-                  info@tedxucs.com
-                </a>
+              <div className="flex items-start gap-4">
+                <FaWhatsapp className="text-red-600 mt-0.5 shrink-0" size={20} />
+                <div className="leading-relaxed">
+                  <p className="text-white">Payment: Michelle</p>
+                  <a
+                    href="https://wa.me/6281336748006"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-red-500 transition-colors"
+                  >
+                    081336748006
+                  </a>
+                </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -74,7 +86,7 @@ const Footer = () => {
         {/* BOTTOM COPYRIGHT */}
         <div className="border-t border-gray-900 pt-3 md:pt-6 flex flex-col md:flex-row justify-end items-center text-xs text-gray-600">
           <div className="w-full md:w-auto text-center md:text-right space-y-1">
-            <p className="break-all sm:break-normal">© 2026 TEDxUniversitasCiputraSurabaya. All rights reserved.</p>
+            <p className="break-all sm:break-normal">© 2026 TEDxUniversitasCiputra Surabaya. All rights reserved.</p>
             <p className="italic opacity-60 wrap-break-word">This independent TEDx event is operated under license from TED.</p>
             </div>
         </div>

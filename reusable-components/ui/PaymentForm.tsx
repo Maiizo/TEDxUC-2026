@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { QRCodeCanvas } from 'qrcode.react';
 
 interface PaymentFormProps {
   registrationId: string;
@@ -12,9 +11,9 @@ interface PaymentFormProps {
 }
 
 const BANK_DETAILS = {
-  name: "PT TEDxUC",
-  account: "1234567890",
-  bank: "BCA"
+  name: "MICHELLE OEILIVIA PRIBADI",
+  account: "2631186434",
+  bank: "BCA",
 };
 
 export default function PaymentForm({ 
@@ -31,8 +30,7 @@ export default function PaymentForm({
   const [previewUrl, setPreviewUrl] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const displayAmount = amount > 0 ? amount : 50000;
-  const bankQRData = `${BANK_DETAILS.bank}|${BANK_DETAILS.account}|${displayAmount}`;
+  const displayAmount = amount > 0 ? amount : 65000;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -83,10 +81,6 @@ export default function PaymentForm({
       }
 
       setSuccess(true);
-      setTimeout(() => {
-        if (onSuccess) onSuccess();
-        if (onClose) onClose();
-      }, 2000);
     } catch (err) {
       setError('Failed to submit payment. Please try again.');
       console.error(err);
@@ -98,10 +92,21 @@ export default function PaymentForm({
   if (success) {
     return (
       <div className="bg-[#1a1a1a] rounded-lg p-5 sm:p-8 text-center max-w-md w-full">
+        <div className="flex justify-end">
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-white text-2xl leading-none"
+              aria-label="Close payment notification"
+            >
+              ×
+            </button>
+          )}
+        </div>
         <div className="text-4xl mb-4">✓</div>
         <h2 className="text-xl font-bold text-green-500 mb-2">Payment Submitted!</h2>
-        <p className="text-gray-400 text-sm">
-          Your payment proof has been submitted for verification. 
+        <p className="text-gray-400 text-sm mb-6">
+          Your payment proof has been submitted for verification.
           Please check your email for updates.
         </p>
       </div>
@@ -125,9 +130,6 @@ export default function PaymentForm({
       {/* Bank Details Section */}
       <div className="bg-[#0a0a0a] rounded-lg p-4 sm:p-6 mb-6">
         <h3 className="text-lg font-semibold text-white mb-4">Bank Details</h3>
-        <p className="text-xs text-gray-400 mb-4">
-          Scan this transfer QR to pay to TEDxUC&apos;s BCA account, then upload your payment proof below.
-        </p>
         <div className="space-y-3 text-gray-300 mb-6">
           <div className="flex justify-between gap-4">
             <span>Bank:</span>
@@ -144,16 +146,6 @@ export default function PaymentForm({
               <div className="font-mono text-green-400 text-lg font-bold mt-1">Amount: Rp {displayAmount.toLocaleString('id-ID')}</div>
             </div>
           </div>
-        </div>
-
-        {/* QR Code */}
-        <div className="flex justify-center bg-white p-4 rounded-lg">
-          <QRCodeCanvas
-            value={bankQRData}
-            size={200}
-            level="H"
-            includeMargin={true}
-          />
         </div>
       </div>
 
@@ -228,8 +220,8 @@ export default function PaymentForm({
           </div>
         )}
 
-        <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
-          <p className="text-xs text-blue-200 leading-relaxed">
+        <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+          <p className="text-xs text-red-200 leading-relaxed">
             Note: Our team will verify your payment proof. You will receive an email once your payment is approved or rejected.
             If approved, the email includes your unique QR ticket for entry on event day.
           </p>
