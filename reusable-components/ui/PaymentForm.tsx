@@ -73,16 +73,25 @@ export default function PaymentForm({
         body: formData,
       });
 
-      const data = await res.json();
+      const responseText = await res.text();
+      let data: { error?: string; message?: string } = {};
+
+      if (responseText) {
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          data = { error: responseText };
+        }
+      }
 
       if (!res.ok) {
-        setError(data.error || 'Failed to submit payment');
+        setError(data.error || data.message || `Failed to submit payment (${res.status})`);
         return;
       }
 
       setSuccess(true);
     } catch (err) {
-      setError('Failed to submit payment. Please try again.');
+      setError(err instanceof Error ? err.message : 'Failed to submit payment. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);

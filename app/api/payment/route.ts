@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
 import { prisma } from '@/lib/db';
 
+export const runtime = 'nodejs';
+
 const MAX_PROOF_SIZE_BYTES = 10 * 1024 * 1024;
 const ALLOWED_PROOF_TYPES = new Set([
   'image/jpeg',
