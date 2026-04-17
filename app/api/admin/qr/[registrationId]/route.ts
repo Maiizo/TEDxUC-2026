@@ -7,9 +7,10 @@ export const runtime = 'nodejs';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { registrationId: string } }
+  { params }: { params: Promise<{ registrationId: string }> }
 ) {
   try {
+    const { registrationId } = await params;
     const token = request.cookies.get('admin-token')?.value;
     if (!token) {
       return Response.json(
@@ -27,7 +28,7 @@ export async function GET(
     }
 
     const registration = await prisma.registration.findUnique({
-      where: { id: params.registrationId },
+      where: { id: registrationId },
       select: { qrCode: true },
     });
 
