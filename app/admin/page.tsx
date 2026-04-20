@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Stats {
   totalRegistrations: number;
@@ -241,7 +242,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-6 border-b border-gray-800">
+        <div className="flex flex-wrap items-center gap-2 mb-6 border-b border-gray-800">
           {(["overview", "registrations"] as const).map((tab) => (
             <button
               key={tab}
@@ -255,6 +256,12 @@ export default function AdminDashboard() {
               {tab}
             </button>
           ))}
+          <Link
+            href="/admin/attendance"
+            className="ml-auto -mb-px px-4 py-2.5 text-sm font-medium text-green-300 border-b-2 border-transparent hover:text-green-200 hover:border-green-500 transition-colors"
+          >
+            Attendance Scanner
+          </Link>
         </div>
 
         {/* Tab Content */}
