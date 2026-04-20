@@ -6,6 +6,7 @@ export const runtime = 'nodejs';
 
 type RegisterBody = {
 	fullName?: string;
+	invitedByCommittee?: string;
 	email?: string;
 	phoneNumber?: string;
 	gender?: string;
@@ -68,6 +69,7 @@ export async function POST(request: NextRequest) {
 		}
 
 		const fullName = body.fullName?.trim();
+		const invitedByCommittee = body.invitedByCommittee?.trim() || '-';
 		const email = body.email?.trim();
 		const phoneNumber = body.phoneNumber?.trim();
 		const gender = body.gender?.trim();
@@ -108,6 +110,7 @@ export async function POST(request: NextRequest) {
 			const created = await tx.registration.create({
 				data: {
 					fullName,
+					invitedByCommittee,
 					email,
 					phoneNumber,
 					gender,

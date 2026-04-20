@@ -36,6 +36,7 @@ model Registration {
   gender             String       // Enum: 'Laki-laki', 'Perempuan'
   age                Int
   foodAllergy        String       @default("-")
+  invitedByCommittee String       @default("-")
   
   // Relasi ke Event
   eventId            String

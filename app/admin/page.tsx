@@ -25,6 +25,7 @@ interface EventData {
 interface RegistrationData {
   id: string;
   fullName: string;
+  invitedByCommittee: string;
   email: string;
   phoneNumber: string;
   gender: string;
@@ -397,6 +398,7 @@ function RegistrationTable({
           <tr className="border-b border-gray-800 text-gray-500">
             <th className="text-left py-3 px-4 font-medium">Reg #</th>
             <th className="text-left py-3 px-4 font-medium">Name</th>
+            <th className="text-left py-3 px-4 font-medium">Invited By Committee</th>
             <th className="text-left py-3 px-4 font-medium">Email</th>
             <th className="text-left py-3 px-4 font-medium">Payment</th>
             <th className="text-left py-3 px-4 font-medium">Proof</th>
@@ -420,6 +422,13 @@ function RegistrationTable({
                   {reg.registrationNumber}
                 </td>
                 <td className="py-3 px-4 text-white font-medium">{reg.fullName}</td>
+                <td className="py-3 px-4 text-gray-400">
+                  {reg.invitedByCommittee && reg.invitedByCommittee !== "-" ? (
+                    reg.invitedByCommittee
+                  ) : (
+                    <span className="text-gray-600 text-xs">—</span>
+                  )}
+                </td>
                 <td className="py-3 px-4 text-gray-400">{reg.email}</td>
                 <td className="py-3 px-4">
                   {latestPayment ? (

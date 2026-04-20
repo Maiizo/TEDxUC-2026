@@ -39,6 +39,7 @@ function getActiveEvent(): EventConfig | null {
 
 interface FormData {
   fullName: string;
+  invitedByCommittee: string;
   email: string;
   phone: string;
   age: string;
@@ -74,6 +75,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
+    invitedByCommittee: '',
     email: '',
     phone: '',
     age: '',
@@ -181,6 +183,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         },
         body: JSON.stringify({
           fullName: formData.fullName.trim(),
+          invitedByCommittee: formData.invitedByCommittee.trim() || '-',
           email: formData.email.trim(),
           phoneNumber: formData.phone.trim(),
           gender: formData.gender,
@@ -254,7 +257,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         <button
           onClick={() => {
             setSubmitStatus('idle');
-            setFormData({ fullName: '', email: '', phone: '', age: '', gender: '', allergies: '' });
+            setFormData({
+              fullName: '',
+              invitedByCommittee: '',
+              email: '',
+              phone: '',
+              age: '',
+              gender: '',
+              allergies: '',
+            });
           }}
           className="mt-4 text-[#6a8f65] hover:text-[#8ab385] text-sm font-semibold transition-colors"
         >
@@ -306,6 +317,18 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             className={inputClass('fullName')}
           />
           {errors.fullName && <p className="text-red-500 text-xs">{errors.fullName}</p>}
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-sm text-gray-300 font-medium">Invited by Committee (optional)</label>
+          <input
+            type="text"
+            name="invitedByCommittee"
+            placeholder="Committee member name"
+            value={formData.invitedByCommittee}
+            onChange={handleChange}
+            className={inputClass('invitedByCommittee')}
+          />
         </div>
 
         {/* Email + Phone */}
