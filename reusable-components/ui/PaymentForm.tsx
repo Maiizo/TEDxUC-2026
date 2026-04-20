@@ -16,6 +16,8 @@ const BANK_DETAILS = {
   bank: "BCA",
 };
 
+const WHATSAPP_GROUP_LINK = 'https://chat.whatsapp.com/GHBYpxvSxTr6ueH6RhAVYg?mode=gi_t';
+
 export default function PaymentForm({ 
   registrationId, 
   registrationNumber, 
@@ -29,6 +31,7 @@ export default function PaymentForm({
   const [proofFile, setProofFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState('');
   const [success, setSuccess] = useState(false);
+  const [whatsappConfirmed, setWhatsappConfirmed] = useState(false);
 
   const displayAmount = amount > 0 ? amount : 65000;
 
@@ -90,6 +93,7 @@ export default function PaymentForm({
       }
 
       setSuccess(true);
+      setWhatsappConfirmed(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit payment. Please try again.');
       console.error(err);
@@ -105,7 +109,8 @@ export default function PaymentForm({
           {onClose && (
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-white text-2xl leading-none"
+              disabled={!whatsappConfirmed}
+              className="text-gray-400 hover:text-white disabled:opacity-40 disabled:cursor-not-allowed text-2xl leading-none"
               aria-label="Close payment notification"
             >
               ×
@@ -118,6 +123,31 @@ export default function PaymentForm({
           Your payment proof has been submitted for verification.
           Please check your email for updates.
         </p>
+
+        <a
+          href={WHATSAPP_GROUP_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center rounded-lg bg-green-600 px-5 py-3 text-base sm:text-lg font-extrabold text-white shadow-lg shadow-green-900/30 hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-300 focus:ring-offset-2 focus:ring-offset-[#1a1a1a] mb-5"
+        >
+          Join WhatsApp Group
+        </a>
+
+        <label className="flex items-start gap-3 text-left text-sm font-semibold text-gray-300">
+          <input
+            type="checkbox"
+            checked={whatsappConfirmed}
+            onChange={(e) => setWhatsappConfirmed(e.target.checked)}
+            className="mt-1 h-5 w-5 accent-green-400"
+          />
+          <span>I have opened and joined the WhatsApp group link.</span>
+        </label>
+
+        {!whatsappConfirmed && (
+          <p className="text-sm sm:text-gray-500  font-medium mt-3">
+            Please check the WhatsApp link before closing this dialog.
+          </p>
+        )}
       </div>
     );
   }

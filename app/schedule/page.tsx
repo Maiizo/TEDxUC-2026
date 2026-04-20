@@ -78,7 +78,7 @@ export default function SchedulePage() {
         {/* Event date hint */}
         <div className="mt-4 px-8 py-4 border border-white/5 rounded-2xl bg-white/[0.02] backdrop-blur-sm">
           <p className="text-gray-600 text-xs tracking-[0.3em] uppercase mb-1">Main Event</p>
-          <p className="text-gray-300 text-sm font-medium tracking-wide">April 1, 2026</p>
+          <p className="text-gray-300 text-sm font-medium tracking-wide">May 10, 2026</p>
         </div>
       </div>
     </div>
