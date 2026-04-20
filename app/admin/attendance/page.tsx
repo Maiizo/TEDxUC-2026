@@ -58,8 +58,7 @@ export default function AdminAttendanceScannerPage() {
       .stop()
       .catch(() => null)
       .finally(() => {
-        scanner
-          .clear()
+        Promise.resolve(scanner.clear())
           .catch(() => null)
           .finally(() => {
             scannerRef.current = null;
@@ -158,7 +157,7 @@ export default function AdminAttendanceScannerPage() {
 
         if (!mounted) {
           await scanner.stop().catch(() => null);
-          await scanner.clear().catch(() => null);
+          await Promise.resolve(scanner.clear()).catch(() => null);
           return;
         }
 
