@@ -57,8 +57,28 @@ export default function AdminDashboard() {
   const [registrations, setRegistrations] = useState<RegistrationData[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoadingPaymentId, setActionLoadingPaymentId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"overview" | "events" | "registrations">("overview");
+  const [activeTab, setActiveTab] = useState<"registrations" | "accepted" | "verifying">("registrations");
   const [expandedQRCode, setExpandedQRCode] = useState<{ id: string; qrCode: string } | null>(null);
+
+  const acceptedRegistrations = registrations.filter((reg) => {
+    const latestPayment = reg.payments[0];
+    return reg.status === "paid" || latestPayment?.status === "approved";
+  });
+
+  const verifyingRegistrations = registrations.filter((reg) => {
+    const latestPayment = reg.payments[0];
+    return latestPayment?.status === "verifying";
+  });
+
+  const tabItems: Array<{
+    key: "registrations" | "accepted" | "verifying";
+    label: string;
+    count: number;
+  }> = [
+    { key: "registrations", label: "registrations", count: registrations.length },
+    { key: "accepted", label: "accepted", count: acceptedRegistrations.length },
+    { key: "verifying", label: "waiting verify", count: verifyingRegistrations.length },
+  ];
 
   const fetchData = useCallback(async () => {
     try {
@@ -243,17 +263,20 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <div className="flex flex-wrap items-center gap-2 mb-6 border-b border-gray-800">
-          {(["overview", "registrations"] as const).map((tab) => (
+          {tabItems.map((tab) => (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
               className={`px-4 py-2.5 text-sm font-medium capitalize transition-colors cursor-pointer ${
-                activeTab === tab
+                activeTab === tab.key
                   ? "text-green-400 border-b-2 border-green-400"
                   : "text-gray-500 hover:text-gray-300"
               }`}
             >
-              {tab}
+              <span>{tab.label}</span>
+              <span className="ml-2 inline-flex items-center justify-center min-w-5 h-5 px-1 text-[10px] font-semibold rounded-full border border-gray-700 text-gray-300 bg-gray-900">
+                {tab.count}
+              </span>
             </button>
           ))}
           <Link
@@ -265,26 +288,6 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tab Content */}
-        {activeTab === "overview" && (
-          <div className="space-y-6">
-            {/* Recent Registrations */}
-            <section>
-              <h2 className="text-lg font-semibold text-white mb-4">
-                Recent Registrations
-              </h2>
-              <RegistrationTable
-                registrations={registrations.slice(0, 10)}
-                statusColor={statusColor}
-                onApprove={handleApprovePayment}
-                onReject={handleRejectPayment}
-                onDelete={handleDeleteRegistration}
-                actionLoadingPaymentId={actionLoadingPaymentId}
-                expandedQRCode={expandedQRCode}
-                onQRClick={setExpandedQRCode}
-              />
-            </section>
-          </div>
-        )}
 
         {activeTab === "registrations" && (
           <div>
@@ -297,8 +300,46 @@ export default function AdminDashboard() {
               onApprove={handleApprovePayment}
               onReject={handleRejectPayment}
               onDelete={handleDeleteRegistration}
-              actionLoadingPaymentId={actionLoadingPaymentId}              expandedQRCode={expandedQRCode}
-              onQRClick={setExpandedQRCode}            />
+              actionLoadingPaymentId={actionLoadingPaymentId}
+              expandedQRCode={expandedQRCode}
+              onQRClick={setExpandedQRCode}
+            />
+          </div>
+        )}
+
+        {activeTab === "accepted" && (
+          <div>
+            <h2 className="text-lg font-semibold text-white mb-4">
+              Accepted Registrations
+            </h2>
+            <RegistrationTable
+              registrations={acceptedRegistrations}
+              statusColor={statusColor}
+              onApprove={handleApprovePayment}
+              onReject={handleRejectPayment}
+              onDelete={handleDeleteRegistration}
+              actionLoadingPaymentId={actionLoadingPaymentId}
+              expandedQRCode={expandedQRCode}
+              onQRClick={setExpandedQRCode}
+            />
+          </div>
+        )}
+
+        {activeTab === "verifying" && (
+          <div>
+            <h2 className="text-lg font-semibold text-white mb-4">
+              Paid Proofs Waiting Verification
+            </h2>
+            <RegistrationTable
+              registrations={verifyingRegistrations}
+              statusColor={statusColor}
+              onApprove={handleApprovePayment}
+              onReject={handleRejectPayment}
+              onDelete={handleDeleteRegistration}
+              actionLoadingPaymentId={actionLoadingPaymentId}
+              expandedQRCode={expandedQRCode}
+              onQRClick={setExpandedQRCode}
+            />
           </div>
         )}
       </main>
