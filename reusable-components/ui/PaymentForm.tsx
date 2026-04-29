@@ -33,7 +33,7 @@ export default function PaymentForm({
   const [success, setSuccess] = useState(false);
   const [whatsappConfirmed, setWhatsappConfirmed] = useState(false);
 
-  const displayAmount = amount > 0 ? amount : 85000;
+  const displayAmount = amount > 0 ? amount : 65000;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
