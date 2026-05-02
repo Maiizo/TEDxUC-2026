@@ -497,7 +497,7 @@ export default function Home() {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/bg-castle.webp"
+            src="/images/bg-hero.webp"
             alt="The Forsaken Crown - Dark castle background"
             fill
             sizes="(max-width: 1024px) 100vw, 1920px"
