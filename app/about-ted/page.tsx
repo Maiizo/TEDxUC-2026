@@ -326,7 +326,7 @@ export default function AboutTedPage() {
           {/* Crown — floating */}
           <div className="flex justify-center mb-6 animate-float">
             <Image
-              src="/images/crown.png"
+              src="/images/crown.webp"
               alt="Crown"
               width={96}
               height={96}
@@ -399,7 +399,7 @@ export default function AboutTedPage() {
           <div className="flex items-center justify-center gap-4 mb-8">
             <div className="flex-1 max-w-40 h-px bg-linear-to-r from-transparent to-(--maleficent-green)/30" />
             <Image
-              src="/images/crown.png"
+              src="/images/crown.webp"
               alt="Crown"
               width={40}
               height={40}

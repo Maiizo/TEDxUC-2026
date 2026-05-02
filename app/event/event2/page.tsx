@@ -98,7 +98,7 @@ export default function Event2Page() {
       {/* Background image */}
       <div className="fixed inset-0 z-0">
         <Image
-          src="/images/palace.jpg"
+          src="/images/palace.webp"
           alt="Background"
           fill
           className="object-cover object-center opacity-20"

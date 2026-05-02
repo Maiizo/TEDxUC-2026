@@ -191,13 +191,13 @@ interface Speaker {
 }
 
 const speakers: Speaker[] = [
-  { name: "Wilson David Mulya H.", title: "Self Development", description: "Passion is Overrated.", image: "/images/gallery/wilson.JPG" },
-  { name: "Holly Natasha", title: "Entrepreneur", description: "How To Build a Business Without Knowing What You're Doing.", image: "/images/gallery/holly.jpg" },
-  { name: "Evelyn Hutani", title: "Comedy", description: "I Failed, I Fell, and Then I Laughed", image: "/images/gallery/evelyn.jpg" },
+  { name: "Wilson David Mulya H.", title: "Self Development", description: "Passion is Overrated.", image: "/images/gallery/wilson.webp" },
+  { name: "Holly Natasha", title: "Entrepreneur", description: "How To Build a Business Without Knowing What You're Doing.", image: "/images/gallery/holly.webp" },
+  { name: "Evelyn Hutani", title: "Comedy", description: "I Failed, I Fell, and Then I Laughed", image: "/images/gallery/evelyn.webp" },
   { name: "R. Kukuh Rahadiansyah", title: "Technology", description: "Survival Guide to AI Wonderland.", image: "/images/gallery/kukuh.webp" },
-  { name: "Maximilian John", title: "Photography", description: "Urban Kaleidoscope: Patterns & Perspective.", image: "/images/gallery/max.JPG" },
-  { name: "Mario Oswin", title: "Culinary", description: "Culinary Journeys Food as a Map Through Cultural Labyrinths.", image: "/images/gallery/mario.JPG" },
-  { name: "Danyannisa", title: "Music", description: "The Art of Song Construction: Navigating the Technical Maze of Music Creation.", image: "/images/gallery/Danyannisa.JPG" },
+  { name: "Maximilian John", title: "Photography", description: "Urban Kaleidoscope: Patterns & Perspective.", image: "/images/gallery/max.webp" },
+  { name: "Mario Oswin", title: "Culinary", description: "Culinary Journeys Food as a Map Through Cultural Labyrinths.", image: "/images/gallery/mario.webp" },
+  { name: "Danyannisa", title: "Music", description: "The Art of Song Construction: Navigating the Technical Maze of Music Creation.", image: "/images/gallery/Danyannisa.webp" },
 ];
 
 const highlightData = [
@@ -599,11 +599,11 @@ export default function PastEventPage() {
             {[
               { src: '/images/gallery/pe1_4.webp', alt: 'Pre-Event 1' },
               { src: '/images/gallery/pe2_4.webp', alt: 'Pre-Event 2' },
-              { src: '/images/gallery/DSC05505 (1).jpg', alt: 'Event moment' },
+              { src: '/images/gallery/DSC05505.webp', alt: 'Event moment' },
               { src: '/images/gallery/pe3_1.webp', alt: 'Pre-Event 3' },
-              { src: '/images/gallery/DSC05596.JPG', alt: 'Event moment' },
+              { src: '/images/gallery/DSC05596.webp', alt: 'Event moment' },
               { src: '/images/gallery/UCD05067.JPG', alt: 'Main Event' },
-              { src: '/images/gallery/IMG_3140.JPG', alt: 'Event moment' },
+              { src: '/images/gallery/IMG_3140.webp', alt: 'Event moment' },
               { src: '/images/gallery/IMG_3243 (1).jpg', alt: 'Event moment' },
             ].map((img, i) => {
               const accent = i % 3 === 0 ? "maleficent-green" : i % 3 === 1 ? "maleficent-purple" : "acid-green";

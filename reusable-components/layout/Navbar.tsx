@@ -75,7 +75,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link href="/" className="flex items-center" aria-label="TEDxUC Home">
           <Image
-            src="/images/logo_white.png"
+            src="/images/logo-white.png"
             alt="TEDxUC"
             width={180}
             height={48}

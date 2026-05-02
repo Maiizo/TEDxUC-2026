@@ -30,17 +30,17 @@ const GALLERY_ITEMS: GalleryItem[] = [
     span: 'normal',
   },
   {
-    src: '/images/gallery/DSC05505 (1).jpg',
+    src: '/images/gallery/DSC05505.webp',
     title: 'Main Event ',
     span: 'normal',
   },
   {
-    src: '/images/gallery/DSC05596.JPG',
+    src: '/images/gallery/DSC05596.webp',
     title: 'Main Event ',
     span: 'normal',
   },
   {
-    src: '/images/gallery/IMG_3140.JPG',
+    src: '/images/gallery/IMG_3140.webp',
     title: 'Main Event ',
     span: 'normal',
   },
