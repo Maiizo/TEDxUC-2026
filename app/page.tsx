@@ -500,6 +500,7 @@ export default function Home() {
             src="/images/bg-castle.webp"
             alt="The Forsaken Crown - Dark castle background"
             fill
+            sizes="(max-width: 1024px) 100vw, 1920px"
             className="object-cover object-center"
             priority
           />
