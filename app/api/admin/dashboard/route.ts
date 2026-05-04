@@ -59,16 +59,25 @@ export async function GET(request: NextRequest) {
     });
 
     // Summary stats
-    const totalRegistrations = await prisma.registration.count();
-    const paidRegistrations = await prisma.registration.count({
-      where: { status: "paid" },
+    const acceptedRegistrations = registrations.filter((reg) => {
+      const latestPayment = reg.payments[0];
+      return reg.status === "paid" || latestPayment?.status === "approved";
     });
-    const pendingRegistrations = await prisma.registration.count({
-      where: { status: "pending" },
+
+    const verifyingRegistrations = registrations.filter((reg) => {
+      const latestPayment = reg.payments[0];
+      return latestPayment?.status === "verifying";
     });
-    const rejectedPayments = await prisma.payment.count({
-      where: { status: "rejected" },
+
+    const rejectedRegistrations = registrations.filter((reg) => {
+      const latestPayment = reg.payments[0];
+      return latestPayment?.status === "rejected";
     });
+
+    const totalRegistrations = registrations.length;
+    const paidRegistrations = acceptedRegistrations.length;
+    const pendingRegistrations = verifyingRegistrations.length;
+    const rejectedPayments = rejectedRegistrations.length;
 
     return NextResponse.json({
       status: "success",
