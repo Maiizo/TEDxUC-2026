@@ -12,6 +12,7 @@ const speakers = [
     description: 'Unlocking the crown within — a journey of self-discovery and transformation.',
     accent: 'green' as const,
     initial: 'A',
+    image: '/images/speakers/1.png',
   },
   {
     name: 'Bernadette Cyan Gainara',
@@ -19,6 +20,7 @@ const speakers = [
     description: 'How the digital realm reshapes kingdoms and the voices that rule them.',
     accent: 'purple' as const,
     initial: 'B',
+    image: '/images/speakers/2.png',
   },
   {
     name: 'Robert Ronny',
@@ -26,6 +28,7 @@ const speakers = [
     description: 'The forsaken arts — reclaiming creativity in a world that forgot its soul.',
     accent: 'green' as const,
     initial: 'R',
+    image: '/images/speakers/3.png',
   },
   {
     name: 'Daniel Budianto',
@@ -33,6 +36,7 @@ const speakers = [
     description: 'The treasury of the forsaken — building wealth where none dared to look.',
     accent: 'purple' as const,
     initial: 'D',
+    image: '/images/speakers/4.png',
   },
   {
     name: 'Trisha Maylira',
@@ -40,6 +44,7 @@ const speakers = [
     description: "Your voice is your crown — wielding words to command any chamber.",
     accent: 'green' as const,
     initial: 'T',
+    image: '/images/speakers/5.png',
   },
   {
     name: 'Robby Maulid',
@@ -47,6 +52,7 @@ const speakers = [
     description: 'The court jester who revealed the truths that kings dared not speak.',
     accent: 'purple' as const,
     initial: 'R',
+    image: '/images/speakers/6.png',
   },
   {
     name: 'Reza Erfit',
@@ -54,6 +60,7 @@ const speakers = [
     description: 'Machines that think, kingdoms that adapt — the AI revolution is here.',
     accent: 'green' as const,
     initial: 'R',
+    image: '/images/speakers/7.png',
   },
   {
     name: 'Stefani Gabriela',
@@ -61,9 +68,11 @@ const speakers = [
     description: 'The invisible crown — healing the mind to reclaim your sovereign power.',
     accent: 'purple' as const,
     initial: 'S',
+    image: '/images/speakers/8.png',
   },
 ];
 
+// ─── Scroll-reveal hook ──────────────────────────────────────────────────────
 
 function useScrollReveal(delay = 0) {
   const ref = useRef<HTMLDivElement>(null);
@@ -124,6 +133,81 @@ function OrnateCorner({ className = '' }: { className?: string }) {
   );
 }
 
+function CopyPathBadge({
+  path,
+  accentColor,
+  accentLight,
+}: {
+  path: string;
+  accentColor: string;
+  accentLight: string;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(path).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <button
+      onClick={handleCopy}
+      title="Click to copy image path"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        background: copied ? `${accentColor}30` : 'rgba(8,8,8,0.82)',
+        border: `1px solid ${copied ? accentColor + '80' : accentColor + '45'}`,
+        borderRadius: 6,
+        padding: '5px 10px',
+        cursor: 'pointer',
+        transition: 'all 0.25s ease',
+        backdropFilter: 'blur(10px)',
+        width: '100%',
+      }}
+    >
+      <svg
+        viewBox="0 0 16 16"
+        fill="none"
+        style={{ width: 11, height: 11, flexShrink: 0, color: copied ? accentLight : accentColor }}
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        {copied ? (
+          <path d="M2 8l4 4 8-8" />
+        ) : (
+          <>
+            <rect x="5" y="5" width="9" height="9" rx="1.5" />
+            <path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5" />
+          </>
+        )}
+      </svg>
+
+      <span
+        style={{
+          fontFamily: 'monospace',
+          fontSize: 9,
+          color: copied ? accentLight : `${accentLight}aa`,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          flex: 1,
+          textAlign: 'left',
+          letterSpacing: '0.02em',
+        }}
+      >
+        {copied ? 'Copied!' : path}
+      </span>
+    </button>
+  );
+}
+
 
 function SpeakerCard({
   speaker,
@@ -134,16 +218,13 @@ function SpeakerCard({
 }) {
   const ref = useScrollReveal(index * 80);
   const [hovered, setHovered] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const isGreen = speaker.accent === 'green';
   const accentColor = isGreen ? '#546e40' : '#5d1d69';
   const accentLight = isGreen ? '#6d8a58' : '#8b35a0';
-  const accentBg = isGreen
-    ? 'rgba(84, 110, 64, 0.06)'
-    : 'rgba(93, 29, 105, 0.06)';
-  const glowColor = isGreen
-    ? 'rgba(84, 110, 64, 0.25)'
-    : 'rgba(93, 29, 105, 0.25)';
+  const accentBg = isGreen ? 'rgba(84, 110, 64, 0.06)' : 'rgba(93, 29, 105, 0.06)';
+  const glowColor = isGreen ? 'rgba(84, 110, 64, 0.25)' : 'rgba(93, 29, 105, 0.25)';
 
   return (
     <div
@@ -187,20 +268,16 @@ function SpeakerCard({
             }}
           />
 
-          <div className="absolute top-3 left-3 transition-all duration-400"
-            style={{ color: accentColor, opacity: hovered ? 0.8 : 0.3 }}>
+          <div className="absolute top-3 left-3 z-20 transition-all duration-400" style={{ color: accentColor, opacity: hovered ? 0.8 : 0.3 }}>
             <OrnateCorner />
           </div>
-          <div className="absolute top-3 right-3 transition-all duration-400 rotate-90"
-            style={{ color: accentColor, opacity: hovered ? 0.8 : 0.3 }}>
+          <div className="absolute top-3 right-3 z-20 rotate-90 transition-all duration-400" style={{ color: accentColor, opacity: hovered ? 0.8 : 0.3 }}>
             <OrnateCorner />
           </div>
-          <div className="absolute bottom-3 left-3 transition-all duration-400 -rotate-90"
-            style={{ color: accentColor, opacity: hovered ? 0.8 : 0.3 }}>
+          <div className="absolute bottom-3 left-3 z-20 -rotate-90 transition-all duration-400" style={{ color: accentColor, opacity: hovered ? 0.8 : 0.3 }}>
             <OrnateCorner />
           </div>
-          <div className="absolute bottom-3 right-3 transition-all duration-400 rotate-180"
-            style={{ color: accentColor, opacity: hovered ? 0.8 : 0.3 }}>
+          <div className="absolute bottom-3 right-3 z-20 rotate-180 transition-all duration-400" style={{ color: accentColor, opacity: hovered ? 0.8 : 0.3 }}>
             <OrnateCorner />
           </div>
 
@@ -212,51 +289,85 @@ function SpeakerCard({
             }}
           />
 
-          <div className="relative z-10 flex flex-col items-center text-center p-6 md:p-8 flex-1">
-
-            <div className="relative mb-5">
+          <div
+            className="relative w-full overflow-hidden"
+            style={{ aspectRatio: '3 / 4', flexShrink: 0 }}
+          >
+            {speaker.image && !imgError ? (
+              <>
+                <img
+                  src={speaker.image}
+                  alt={speaker.name}
+                  onError={() => setImgError(true)}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: 'center top',
+                    display: 'block',
+                    transition: 'transform 0.6s ease',
+                    transform: hovered ? 'scale(1.04)' : 'scale(1)',
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to bottom, transparent 45%, #0a0a0a 100%)',
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: `linear-gradient(to bottom, ${accentColor}20, transparent 60%)`,
+                    opacity: hovered ? 1 : 0.5,
+                    transition: 'opacity 0.5s ease',
+                  }}
+                />
+              </>
+            ) : (
               <div
-                className="absolute inset-0 rounded-full transition-all duration-500"
                 style={{
-                  border: `1px solid ${accentColor}`,
-                  opacity: hovered ? 0.6 : 0.2,
-                  transform: hovered ? 'scale(1.15)' : 'scale(1)',
-                }}
-              />
-              <div
-                className="absolute inset-1 rounded-full transition-all duration-500"
-                style={{
-                  border: `1px dashed ${accentColor}`,
-                  opacity: hovered ? 0.3 : 0.1,
-                  transform: hovered ? 'rotate(30deg)' : 'rotate(0deg)',
-                  transition: 'transform 3s linear, opacity 0.5s ease',
-                  animation: hovered ? 'none' : undefined,
-                }}
-              />
-
-              <div
-                className="relative w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center"
-                style={{
-                  background: `radial-gradient(circle at 30% 30%, ${accentLight}15, ${accentColor}08)`,
-                  border: `1px solid ${accentColor}30`,
+                  width: '100%',
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: `radial-gradient(circle at 40% 30%, ${accentLight}12, ${accentColor}06)`,
+                  borderBottom: `1px solid ${accentColor}20`,
                 }}
               >
                 <span
-                  className={`${cinzel.className} text-3xl md:text-4xl font-bold`}
-                  style={{ color: accentLight }}
+                  className={cinzel.className}
+                  style={{
+                    fontSize: 'clamp(4rem, 8vw, 6rem)',
+                    fontWeight: 900,
+                    color: accentLight,
+                    opacity: 0.25,
+                    letterSpacing: '-0.02em',
+                    userSelect: 'none',
+                  }}
                 >
                   {speaker.initial}
                 </span>
-
-                <div
-                  className="absolute inset-0 rounded-full transition-opacity duration-700"
-                  style={{
-                    background: `radial-gradient(circle at 30% 30%, ${accentLight}20, transparent 60%)`,
-                    opacity: hovered ? 1 : 0,
-                  }}
-                />
               </div>
+            )}
+
+            <div
+              style={{
+                position: 'absolute',
+                bottom: 8,
+                left: 8,
+                right: 8,
+                zIndex: 10,
+              }}
+            >
+              <CopyPathBadge path={speaker.image} accentColor={accentColor} accentLight={accentLight} />
             </div>
+          </div>
+
+          <div className="relative z-10 flex flex-col items-center text-center px-5 py-5 flex-1">
 
             <div
               className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full mb-3 transition-all duration-300"
@@ -289,19 +400,12 @@ function SpeakerCard({
             <div className="flex items-center gap-2 mb-3 w-full justify-center">
               <div
                 className="h-px flex-1 max-w-[40px] transition-all duration-500"
-                style={{
-                  background: `linear-gradient(to right, transparent, ${accentColor}${hovered ? '60' : '30'})`,
-                }}
+                style={{ background: `linear-gradient(to right, transparent, ${accentColor}${hovered ? '60' : '30'})` }}
               />
-              <Diamond
-                className="w-1.5 h-1.5"
-                style={{ color: `${accentColor}${hovered ? 'aa' : '50'}` }}
-              />
+              <Diamond className="w-1.5 h-1.5" style={{ color: `${accentColor}${hovered ? 'aa' : '50'}` }} />
               <div
                 className="h-px flex-1 max-w-[40px] transition-all duration-500"
-                style={{
-                  background: `linear-gradient(to left, transparent, ${accentColor}${hovered ? '60' : '30'})`,
-                }}
+                style={{ background: `linear-gradient(to left, transparent, ${accentColor}${hovered ? '60' : '30'})` }}
               />
             </div>
 
@@ -330,6 +434,7 @@ function SpeakerCard({
   );
 }
 
+
 export default function SchedulePage() {
   const titleRef = useScrollReveal(0);
   const subtitleRef = useScrollReveal(150);
@@ -352,14 +457,6 @@ export default function SchedulePage() {
           to { transform: rotate(360deg); }
         }
         .animate-spin-slow { animation: spin-slow 20s linear infinite; }
-        @keyframes pulse-glow-green {
-          0%, 100% { opacity: 0.3; }
-          50% { opacity: 0.6; }
-        }
-        @keyframes pulse-glow-purple {
-          0%, 100% { opacity: 0.2; }
-          50% { opacity: 0.5; }
-        }
       `}</style>
 
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
@@ -381,11 +478,7 @@ export default function SchedulePage() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 md:py-40">
 
         <div className="text-center mb-16 md:mb-24">
-
-          <div
-            ref={titleRef}
-            className="opacity-0 translate-y-8 transition-all duration-700 ease-out"
-          >
+          <div ref={titleRef} className="opacity-0 translate-y-8 transition-all duration-700 ease-out">
             <div className="flex items-center justify-center gap-4 mb-8">
               <div className="h-px w-20 bg-gradient-to-r from-transparent to-[#546e40]/60" />
               <div className="flex items-center gap-2">
@@ -418,14 +511,10 @@ export default function SchedulePage() {
             </h1>
           </div>
 
-          <div
-            ref={subtitleRef}
-            className="opacity-0 translate-y-6 transition-all duration-700 ease-out"
-          >
+          <div ref={subtitleRef} className="opacity-0 translate-y-6 transition-all duration-700 ease-out">
             <p className="text-gray-500 italic tracking-[0.3em] text-sm md:text-base uppercase mt-4">
               Voices that challenge, inspire, and ignite
             </p>
-
             <div className="flex items-center justify-center gap-4 mt-8">
               <div className="h-px w-28 bg-gradient-to-r from-transparent via-[#546e40]/40 to-transparent" />
               <Diamond className="w-2 h-2 text-[#5d1d69]/50" />
@@ -434,10 +523,7 @@ export default function SchedulePage() {
           </div>
         </div>
 
-        <div
-          ref={gridRef}
-          className="opacity-0 translate-y-8 transition-all duration-700 ease-out"
-        >
+        <div ref={gridRef} className="opacity-0 translate-y-8 transition-all duration-700 ease-out">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
             {speakers.map((speaker, index) => (
               <SpeakerCard key={speaker.name} speaker={speaker} index={index} />
