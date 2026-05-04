@@ -12,7 +12,7 @@ const speakers = [
     description: 'Unlocking the crown within — a journey of self-discovery and transformation.',
     accent: 'green' as const,
     initial: 'A',
-    image: '/images/speakers/1.png',
+    image: '/images/speakers/anindya.png',
   },
   {
     name: 'Bernadette Cyan Gainara',
@@ -20,7 +20,7 @@ const speakers = [
     description: 'How the digital realm reshapes kingdoms and the voices that rule them.',
     accent: 'purple' as const,
     initial: 'B',
-    image: '/images/speakers/2.png',
+    image: '/images/speakers/bernadette.png',
   },
   {
     name: 'Robert Ronny',
@@ -28,7 +28,7 @@ const speakers = [
     description: 'The forsaken arts — reclaiming creativity in a world that forgot its soul.',
     accent: 'green' as const,
     initial: 'R',
-    image: '/images/speakers/3.png',
+    image: '/images/speakers/Robert.png',
   },
   {
     name: 'Daniel Budianto',
@@ -36,7 +36,7 @@ const speakers = [
     description: 'The treasury of the forsaken — building wealth where none dared to look.',
     accent: 'purple' as const,
     initial: 'D',
-    image: '/images/speakers/4.png',
+    image: '/images/speakers/daniel.png',
   },
   {
     name: 'Trisha Maylira',
@@ -44,7 +44,7 @@ const speakers = [
     description: "Your voice is your crown — wielding words to command any chamber.",
     accent: 'green' as const,
     initial: 'T',
-    image: '/images/speakers/5.png',
+    image: '/images/speakers/trisha.png',
   },
   {
     name: 'Robby Maulid',
@@ -52,7 +52,7 @@ const speakers = [
     description: 'The court jester who revealed the truths that kings dared not speak.',
     accent: 'purple' as const,
     initial: 'R',
-    image: '/images/speakers/6.png',
+    image: '/images/speakers/Robby.png',
   },
   {
     name: 'Reza Erfit',
@@ -60,7 +60,7 @@ const speakers = [
     description: 'Machines that think, kingdoms that adapt — the AI revolution is here.',
     accent: 'green' as const,
     initial: 'R',
-    image: '/images/speakers/7.png',
+    image: '/images/speakers/reza.png',
   },
   {
     name: 'Stefani Gabriela',
@@ -68,7 +68,7 @@ const speakers = [
     description: 'The invisible crown — healing the mind to reclaim your sovereign power.',
     accent: 'purple' as const,
     initial: 'S',
-    image: '/images/speakers/8.png',
+    image: '/images/speakers/stefani.png',
   },
 ];
 
