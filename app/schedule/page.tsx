@@ -133,80 +133,6 @@ function OrnateCorner({ className = '' }: { className?: string }) {
   );
 }
 
-function CopyPathBadge({
-  path,
-  accentColor,
-  accentLight,
-}: {
-  path: string;
-  accentColor: string;
-  accentLight: string;
-}) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    navigator.clipboard.writeText(path).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
-  };
-
-  return (
-    <button
-      onClick={handleCopy}
-      title="Click to copy image path"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 6,
-        background: copied ? `${accentColor}30` : 'rgba(8,8,8,0.82)',
-        border: `1px solid ${copied ? accentColor + '80' : accentColor + '45'}`,
-        borderRadius: 6,
-        padding: '5px 10px',
-        cursor: 'pointer',
-        transition: 'all 0.25s ease',
-        backdropFilter: 'blur(10px)',
-        width: '100%',
-      }}
-    >
-      <svg
-        viewBox="0 0 16 16"
-        fill="none"
-        style={{ width: 11, height: 11, flexShrink: 0, color: copied ? accentLight : accentColor }}
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        {copied ? (
-          <path d="M2 8l4 4 8-8" />
-        ) : (
-          <>
-            <rect x="5" y="5" width="9" height="9" rx="1.5" />
-            <path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5" />
-          </>
-        )}
-      </svg>
-
-      <span
-        style={{
-          fontFamily: 'monospace',
-          fontSize: 9,
-          color: copied ? accentLight : `${accentLight}aa`,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          flex: 1,
-          textAlign: 'left',
-          letterSpacing: '0.02em',
-        }}
-      >
-        {copied ? 'Copied!' : path}
-      </span>
-    </button>
-  );
-}
 
 
 function SpeakerCard({
@@ -354,17 +280,6 @@ function SpeakerCard({
               </div>
             )}
 
-            <div
-              style={{
-                position: 'absolute',
-                bottom: 8,
-                left: 8,
-                right: 8,
-                zIndex: 10,
-              }}
-            >
-              <CopyPathBadge path={speaker.image} accentColor={accentColor} accentLight={accentLight} />
-            </div>
           </div>
 
           <div className="relative z-10 flex flex-col items-center text-center px-5 py-5 flex-1">
