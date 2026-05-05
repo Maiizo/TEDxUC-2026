@@ -9,6 +9,8 @@ const speakers = [
   {
     name: 'Anindya Dhea',
     topic: 'Personal Growth',
+    start: '10:43',
+    end: '11:03',
     accent: 'green' as const,
     initial: 'A',
     image: '/images/speakers/Anindya.webp',
@@ -16,6 +18,8 @@ const speakers = [
   {
     name: 'Bernadette Cyan Gainara',
     topic: 'Social Media',
+    start: '11:03',
+    end: '11:23',
     accent: 'purple' as const,
     initial: 'B',
     image: '/images/speakers/Bernadette.webp',
@@ -23,6 +27,8 @@ const speakers = [
   {
     name: 'Robert Ronny',
     topic: 'Art & Entertainment',
+    start: '11:23',
+    end: '11:43',
     accent: 'green' as const,
     initial: 'R',
     image: '/images/speakers/robert.webp',
@@ -30,6 +36,8 @@ const speakers = [
   {
     name: 'Daniel Budianto',
     topic: 'Finance',
+    start: '12:45',
+    end: '13:05',
     accent: 'purple' as const,
     initial: 'D',
     image: '/images/speakers/Daniel.webp',
@@ -37,6 +45,8 @@ const speakers = [
   {
     name: 'Trisha Maylira',
     topic: 'Public Speaking',
+    start: '13:05',
+    end: '13:25',
     accent: 'green' as const,
     initial: 'T',
     image: '/images/speakers/trisha.webp',
@@ -44,6 +54,8 @@ const speakers = [
   {
     name: 'Robby Maulid',
     topic: 'Comedy',
+    start: '13:25',
+    end: '13:45',
     accent: 'purple' as const,
     initial: 'R',
     image: '/images/speakers/Robby.webp',
@@ -51,6 +63,8 @@ const speakers = [
   {
     name: 'Reza Erfit',
     topic: 'Artificial Intelligence',
+    start: '14:08',
+    end: '14:28',
     accent: 'green' as const,
     initial: 'R',
     image: '/images/speakers/reza.webp',
@@ -58,6 +72,8 @@ const speakers = [
   {
     name: 'Stefani Gabriela',
     topic: 'Mental Health',
+    start: '14:28',
+    end: '14:48',
     accent: 'purple' as const,
     initial: 'S',
     image: '/images/speakers/stefani.webp',
@@ -304,6 +320,13 @@ function SpeakerCard({
               {speaker.name}
             </h3>
 
+            {/** show start/end time if present */}
+            {('start' in speaker) && ('end' in speaker) ? (
+              <div className="text-sm md:text-base font-semibold text-gray-200/90 mb-3">
+                {speaker.start} - {speaker.end}
+              </div>
+            ) : null}
+
             <div className="flex items-center gap-2 mb-3 w-full justify-center">
               <div
                 className="h-px flex-1 max-w-[40px] transition-all duration-500"
@@ -430,20 +453,7 @@ export default function SchedulePage() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center mt-20 md:mt-28 gap-4">
-          <div className="flex items-center gap-4">
-            <div className="h-px w-20 bg-gradient-to-r from-transparent to-[#546e40]/40" />
-            <div className="flex items-center gap-2">
-              <Diamond className="w-1.5 h-1.5 text-[#546e40]/40 animate-pulse" />
-              <Diamond className="w-2.5 h-2.5 text-[#5d1d69]/50 animate-pulse [animation-delay:0.5s]" />
-              <Diamond className="w-1.5 h-1.5 text-[#546e40]/40 animate-pulse [animation-delay:1s]" />
-            </div>
-            <div className="h-px w-20 bg-gradient-to-l from-transparent to-[#5d1d69]/40" />
-          </div>
-          <p className="text-[10px] tracking-[0.4em] uppercase text-[#333] text-center">
-            Main Event · May 10, 2026 · Universitas Ciputra Surabaya
-          </p>
-        </div>
+        
       </div>
     </div>
   );
