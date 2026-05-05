@@ -9,66 +9,58 @@ const speakers = [
   {
     name: 'Anindya Dhea',
     topic: 'Personal Growth',
-    description: 'Unlocking the crown within — a journey of self-discovery and transformation.',
     accent: 'green' as const,
     initial: 'A',
-    image: '/images/speakers/anindya.png',
+    image: '/images/speakers/Anindya.webp',
   },
   {
     name: 'Bernadette Cyan Gainara',
     topic: 'Social Media',
-    description: 'How the digital realm reshapes kingdoms and the voices that rule them.',
     accent: 'purple' as const,
     initial: 'B',
-    image: '/images/speakers/bernadette.png',
+    image: '/images/speakers/Bernadette.webp',
   },
   {
     name: 'Robert Ronny',
     topic: 'Art & Entertainment',
-    description: 'The forsaken arts — reclaiming creativity in a world that forgot its soul.',
     accent: 'green' as const,
     initial: 'R',
-    image: '/images/speakers/Robert.png',
+    image: '/images/speakers/robert.webp',
   },
   {
     name: 'Daniel Budianto',
     topic: 'Finance',
-    description: 'The treasury of the forsaken — building wealth where none dared to look.',
     accent: 'purple' as const,
     initial: 'D',
-    image: '/images/speakers/daniel.png',
+    image: '/images/speakers/Daniel.webp',
   },
   {
     name: 'Trisha Maylira',
     topic: 'Public Speaking',
-    description: "Your voice is your crown — wielding words to command any chamber.",
     accent: 'green' as const,
     initial: 'T',
-    image: '/images/speakers/trisha.png',
+    image: '/images/speakers/trisha.webp',
   },
   {
     name: 'Robby Maulid',
     topic: 'Comedy',
-    description: 'The court jester who revealed the truths that kings dared not speak.',
     accent: 'purple' as const,
     initial: 'R',
-    image: '/images/speakers/Robby.png',
+    image: '/images/speakers/Robby.webp',
   },
   {
     name: 'Reza Erfit',
     topic: 'Artificial Intelligence',
-    description: 'Machines that think, kingdoms that adapt — the AI revolution is here.',
     accent: 'green' as const,
     initial: 'R',
-    image: '/images/speakers/reza.png',
+    image: '/images/speakers/reza.webp',
   },
   {
     name: 'Stefani Gabriela',
     topic: 'Mental Health',
-    description: 'The invisible crown — healing the mind to reclaim your sovereign power.',
     accent: 'purple' as const,
     initial: 'S',
-    image: '/images/speakers/stefani.png',
+    image: '/images/speakers/stefani.webp',
   },
 ];
 
@@ -324,15 +316,7 @@ function SpeakerCard({
               />
             </div>
 
-            <p
-              className="text-xs md:text-sm leading-relaxed transition-colors duration-300"
-              style={{
-                color: hovered ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.3)',
-                fontStyle: 'italic',
-              }}
-            >
-              {speaker.description}
-            </p>
+            
           </div>
 
           <div
