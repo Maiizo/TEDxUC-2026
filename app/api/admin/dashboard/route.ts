@@ -33,10 +33,9 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    // Fetch recent registrations
+    // Fetch all registrations so the admin dashboard reflects the full payment set
     const registrations = await prisma.registration.findMany({
       orderBy: { createdAt: "desc" },
-      take: 50,
       include: {
         event: {
           select: { name: true, type: true },
