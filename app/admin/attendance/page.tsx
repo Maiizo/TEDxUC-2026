@@ -33,15 +33,22 @@ export default function AdminAttendanceScannerPage() {
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const lastScannedRef = useRef("");
   const isVerifyingRef = useRef(false);
+  const scannerBufferRef = useRef("");
+  const scannerBufferTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [scannerReady, setScannerReady] = useState(false);
   const [scannerError, setScannerError] = useState("");
   const [decodedQr, setDecodedQr] = useState("");
   const [manualQr, setManualQr] = useState("");
+  const [scannerInput, setScannerInput] = useState("");
   const [statusMessage, setStatusMessage] = useState("Initializing scanner...");
   const [isVerifying, setIsVerifying] = useState(false);
   const [recentAttendees, setRecentAttendees] = useState<Attendee[]>([]);
+
+  const sanitizeScannerText = useCallback((value: string) => {
+    return value.replace(/[\u0000-\u001F\u007F]/g, "").trim();
+  }, []);
 
   useEffect(() => {
     isVerifyingRef.current = isVerifying;
@@ -85,7 +92,7 @@ export default function AdminAttendanceScannerPage() {
 
   const verifyAndMarkAttendance = useCallback(
     async (qrDataInput?: string) => {
-      const qrData = (qrDataInput ?? decodedQr ?? manualQr).trim();
+      const qrData = sanitizeScannerText(qrDataInput ?? scannerInput ?? decodedQr ?? manualQr);
       if (!qrData) {
         setStatusMessage("No QR data found. Scan or paste a QR token first.");
         return;
@@ -120,8 +127,55 @@ export default function AdminAttendanceScannerPage() {
         setIsVerifying(false);
       }
     },
-    [decodedQr, manualQr, fetchRecentAttendees]
+    [decodedQr, manualQr, scannerInput, fetchRecentAttendees, sanitizeScannerText]
   );
+
+  useEffect(() => {
+    const onScannerKeyDown = (event: KeyboardEvent) => {
+      if (isVerifyingRef.current) return;
+
+      const target = event.target as HTMLElement | null;
+      const inTextField =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target?.isContentEditable;
+
+      if (inTextField) return;
+
+      if (event.key === "Enter") {
+        const payload = sanitizeScannerText(scannerBufferRef.current);
+        if (!payload) return;
+
+        scannerBufferRef.current = "";
+        setScannerInput(payload);
+        setStatusMessage("Scanner input detected. Verifying...");
+        void verifyAndMarkAttendance(payload);
+        return;
+      }
+
+      if (event.key.length !== 1 || event.ctrlKey || event.altKey || event.metaKey) {
+        return;
+      }
+
+      scannerBufferRef.current += event.key;
+      if (scannerBufferTimerRef.current) {
+        clearTimeout(scannerBufferTimerRef.current);
+      }
+
+      scannerBufferTimerRef.current = setTimeout(() => {
+        scannerBufferRef.current = "";
+      }, 250);
+    };
+
+    window.addEventListener("keydown", onScannerKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", onScannerKeyDown);
+      if (scannerBufferTimerRef.current) {
+        clearTimeout(scannerBufferTimerRef.current);
+      }
+    };
+  }, [sanitizeScannerText, verifyAndMarkAttendance]);
 
   useEffect(() => {
     let mounted = true;
@@ -184,7 +238,7 @@ export default function AdminAttendanceScannerPage() {
     };
   }, [fetchRecentAttendees, stopScanner, verifyAndMarkAttendance]);
 
-  const activeQr = decodedQr || manualQr;
+  const activeQr = scannerInput || decodedQr || manualQr;
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -227,6 +281,24 @@ export default function AdminAttendanceScannerPage() {
           )}
 
           <div className="space-y-3">
+            <div>
+              <label className="text-sm text-gray-300 block mb-1.5">Hardware scanner input (USB/Bluetooth)</label>
+              <input
+                type="text"
+                value={scannerInput}
+                onChange={(e) => setScannerInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    void verifyAndMarkAttendance(scannerInput);
+                  }
+                }}
+                placeholder="Click here, then scan QR with handheld scanner"
+                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green-600"
+              />
+              <p className="mt-1 text-xs text-gray-500">Press Enter after scan if your scanner does not auto-submit.</p>
+            </div>
+
             <div className="p-3 rounded-lg border border-gray-800 bg-gray-900/60">
               <p className="text-xs text-gray-400 mb-1">Scanned QR</p>
               <p className="font-mono text-sm break-all text-gray-200">{decodedQr || "No QR detected yet"}</p>
@@ -238,6 +310,12 @@ export default function AdminAttendanceScannerPage() {
                 type="text"
                 value={manualQr}
                 onChange={(e) => setManualQr(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    void verifyAndMarkAttendance(manualQr);
+                  }
+                }}
                 placeholder="Paste QR token here if scanner is unavailable"
                 className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2.5 text-sm outline-none focus:border-green-600"
               />

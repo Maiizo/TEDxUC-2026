@@ -6,6 +6,120 @@ function isMainEvent(name: string, type: string) {
   return /main\s*event/i.test(name) || /main\s*event/i.test(type);
 }
 
+type ParsedQrPayload = {
+  qrTokens: string[];
+  registrationNumbers: string[];
+  registrationIds: string[];
+};
+
+function uniqueNonEmpty(values: string[]) {
+  return Array.from(new Set(values.map((value) => value.trim()).filter(Boolean)));
+}
+
+function stripControlChars(value: string) {
+  return value.replace(/[\u0000-\u001F\u007F]/g, "").trim();
+}
+
+function safelyDecodeURIComponent(value: string) {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function parseQrPayload(rawQrData: string): ParsedQrPayload {
+  const normalizedRaw = stripControlChars(rawQrData);
+  const decodedRaw = stripControlChars(safelyDecodeURIComponent(normalizedRaw));
+
+  const qrTokens = uniqueNonEmpty([normalizedRaw, decodedRaw]);
+  const registrationNumbers: string[] = [];
+  const registrationIds: string[] = [];
+
+  const parseJsonCandidate = (value: string) => {
+    if (!value.startsWith("{") || !value.endsWith("}")) return;
+
+    try {
+      const parsed = JSON.parse(value) as {
+        id?: unknown;
+        regNum?: unknown;
+        registrationNumber?: unknown;
+        qrData?: unknown;
+        token?: unknown;
+      };
+
+      if (typeof parsed.id === "string") {
+        registrationIds.push(stripControlChars(parsed.id));
+      }
+      if (typeof parsed.regNum === "string") {
+        registrationNumbers.push(stripControlChars(parsed.regNum));
+      }
+      if (typeof parsed.registrationNumber === "string") {
+        registrationNumbers.push(stripControlChars(parsed.registrationNumber));
+      }
+      if (typeof parsed.qrData === "string") {
+        qrTokens.push(stripControlChars(parsed.qrData));
+      }
+      if (typeof parsed.token === "string") {
+        qrTokens.push(stripControlChars(parsed.token));
+      }
+    } catch {
+      // Ignore invalid JSON payloads from scanner input
+    }
+  };
+
+  parseJsonCandidate(normalizedRaw);
+  parseJsonCandidate(decodedRaw);
+
+  const parseUrlCandidate = (value: string) => {
+    if (!/^https?:\/\//i.test(value)) return;
+
+    try {
+      const url = new URL(value);
+      const tokenKeys = ["qrData", "token", "code", "qr", "data"];
+      const regNumberKeys = ["registrationNumber", "regNum", "reg"];
+      const regIdKeys = ["registrationId", "id"];
+
+      for (const key of tokenKeys) {
+        const v = url.searchParams.get(key);
+        if (v) qrTokens.push(stripControlChars(v));
+      }
+      for (const key of regNumberKeys) {
+        const v = url.searchParams.get(key);
+        if (v) registrationNumbers.push(stripControlChars(v));
+      }
+      for (const key of regIdKeys) {
+        const v = url.searchParams.get(key);
+        if (v) registrationIds.push(stripControlChars(v));
+      }
+    } catch {
+      // Ignore invalid URL payloads
+    }
+  };
+
+  parseUrlCandidate(normalizedRaw);
+  parseUrlCandidate(decodedRaw);
+
+  const tedxTokenMatch = decodedRaw.match(/^TEDx26-(TDX-[A-Z0-9]{8}-[A-Z0-9]{4})-\d{10,}$/i);
+  if (tedxTokenMatch?.[1]) {
+    registrationNumbers.push(tedxTokenMatch[1].toUpperCase());
+  }
+
+  if (/^TDX-\d{8}-[A-Z0-9]{8}-[A-Z0-9]{4}$/i.test(decodedRaw)) {
+    registrationNumbers.push(decodedRaw.toUpperCase());
+  }
+
+  if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(decodedRaw)) {
+    registrationIds.push(decodedRaw);
+  }
+
+  return {
+    qrTokens: uniqueNonEmpty(qrTokens),
+    registrationNumbers: uniqueNonEmpty(registrationNumbers),
+    registrationIds: uniqueNonEmpty(registrationIds),
+  };
+}
+
 function response(
   status: number,
   message: string,
@@ -72,14 +186,36 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json().catch(() => null);
-    const qrData = typeof body?.qrData === "string" ? body.qrData.trim() : "";
+    const qrData = typeof body?.qrData === "string" ? stripControlChars(body.qrData) : "";
 
     if (!qrData) {
       return response(400, "qrData is required", undefined, "qrData is required");
     }
 
+    const parsed = parseQrPayload(qrData);
+
+    const whereClauses: Array<Record<string, unknown>> = [];
+    for (const token of parsed.qrTokens) {
+      whereClauses.push({ qrCode: token });
+    }
+    for (const registrationNumber of parsed.registrationNumbers) {
+      whereClauses.push({
+        registrationNumber: {
+          equals: registrationNumber,
+          mode: "insensitive",
+        },
+      });
+    }
+    for (const registrationId of parsed.registrationIds) {
+      whereClauses.push({ id: registrationId });
+    }
+
+    if (whereClauses.length === 0) {
+      return response(400, "Invalid QR payload", undefined, "Unable to parse scanner payload");
+    }
+
     const registration = await prisma.registration.findFirst({
-      where: { qrCode: qrData },
+      where: { OR: whereClauses },
       include: {
         event: {
           select: {
