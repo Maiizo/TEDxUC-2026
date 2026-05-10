@@ -301,3 +301,57 @@ export async function POST(request: NextRequest) {
     return response(500, "Failed to verify QR code", undefined, errorMessage);
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const payload = await authorize(request);
+    if (!payload) {
+      return response(401, "Unauthorized", undefined, "Unauthorized");
+    }
+
+    const body = await request.json().catch(() => null);
+    const id = typeof body?.id === "string" ? body.id : String(request.nextUrl.searchParams.get("id") ?? "");
+
+    if (!id) {
+      return response(400, "registration id is required", undefined, "id is required");
+    }
+
+    const registration = await prisma.registration.findUnique({
+      where: { id },
+      include: {
+        event: { select: { id: true, name: true, type: true } },
+      },
+    });
+
+    if (!registration) {
+      return response(404, "Registration not found", undefined, "Registration not found");
+    }
+
+    if (!isMainEvent(registration.event.name, registration.event.type)) {
+      return response(422, "Cannot modify attendance for non-main-event registration", undefined, "Non-main-event");
+    }
+
+    if (registration.attendanceStatus !== "attended") {
+      return response(409, "Participant is not marked as attended", undefined, "Not attended");
+    }
+
+    const updated = await prisma.registration.update({
+      where: { id },
+      data: { attendanceStatus: "not_attended" },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        registrationNumber: true,
+        status: true,
+        attendanceStatus: true,
+        updatedAt: true,
+      },
+    });
+
+    return response(200, `${updated.fullName} attendance removed`, { registration: updated });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    return response(500, "Failed to remove attendance", undefined, errorMessage);
+  }
+}

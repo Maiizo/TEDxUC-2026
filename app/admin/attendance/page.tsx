@@ -45,6 +45,7 @@ export default function AdminAttendanceScannerPage() {
   const [statusMessage, setStatusMessage] = useState("Initializing scanner...");
   const [isVerifying, setIsVerifying] = useState(false);
   const [recentAttendees, setRecentAttendees] = useState<Attendee[]>([]);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const sanitizeScannerText = useCallback((value: string) => {
     return value.replace(/[\u0000-\u001F\u007F]/g, "").trim();
@@ -129,6 +130,41 @@ export default function AdminAttendanceScannerPage() {
     },
     [decodedQr, manualQr, scannerInput, fetchRecentAttendees, sanitizeScannerText]
   );
+
+    const removeAttendance = useCallback(
+      async (id: string) => {
+        if (!id) return;
+        const ok = window.confirm("Remove this attendance record? This will un-check the participant.");
+        if (!ok) return;
+
+        try {
+          setDeletingId(id);
+          const res = await fetch('/api/admin/attendance', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id }),
+          });
+
+          const data = await res.json().catch(() => null);
+          if (res.status === 401) {
+            window.location.href = '/admin/login';
+            return;
+          }
+
+          if (!res.ok) {
+            setStatusMessage(data?.message || 'Failed to remove attendance');
+          } else {
+            setStatusMessage(data?.message || 'Attendance removed');
+            await fetchRecentAttendees();
+          }
+        } catch {
+          setStatusMessage('Failed to remove attendance. Please try again.');
+        } finally {
+          setDeletingId(null);
+        }
+      },
+      [fetchRecentAttendees]
+    );
 
   useEffect(() => {
     const onScannerKeyDown = (event: KeyboardEvent) => {
@@ -359,6 +395,15 @@ export default function AdminAttendanceScannerPage() {
                   <p className="text-xs text-green-400 mt-1">
                     Checked in {new Date(attendee.updatedAt).toLocaleString("id-ID")}
                   </p>
+                  <div className="mt-3 flex items-center gap-2">
+                    <button
+                      onClick={() => removeAttendance(attendee.id)}
+                      disabled={deletingId === attendee.id}
+                      className="text-xs px-3 py-1 rounded-md bg-red-700 hover:bg-red-600 disabled:opacity-50"
+                    >
+                      {deletingId === attendee.id ? "Removing..." : "Remove"}
+                    </button>
+                  </div>
                 </div>
               ))
             )}
