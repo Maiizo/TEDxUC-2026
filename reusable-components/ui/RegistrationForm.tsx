@@ -34,7 +34,7 @@ const EVENTS: EventConfig[] = [
 // Returns the active registrable event, or null if none is currently open
 function getActiveEvent(): EventConfig | null {
   const now = new Date();
-  return EVENTS.find((ev) => ev.date >= now) ?? null;
+  return EVENTS.find((ev) => ev.date > now) ?? null;
 }
 
 interface FormData {
@@ -104,8 +104,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         </div>
         <h3 className={`${cinzel.className} text-2xl text-white`}>Registration Closed</h3>
         <p className="text-gray-400 text-sm leading-relaxed">
-          Registration is currently not available. Only <span className="text-white">Pre-Event 1</span> and the{' '}
-          <span className="text-white">Main Event</span> have open registration periods.
+          Registration is currently not available. No events currently have open registration periods.
         </p>
       </div>
     );
