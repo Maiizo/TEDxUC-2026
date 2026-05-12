@@ -106,6 +106,25 @@ export default function MainEventPage() {
   const btnRef = useScrollReveal(500);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [paymentTarget, setPaymentTarget] = useState<PaymentTarget | null>(null);
+  const [isEventClosed, setIsEventClosed] = useState(false);
+
+  useEffect(() => {
+    const checkEventStatus = async () => {
+      try {
+        const response = await fetch('/api/registrations');
+        const data = await response.json();
+        
+        if (data.events) {
+          const mainEvent = data.events.find((e: any) => e.type.toLowerCase().includes('main event'));
+          setIsEventClosed(mainEvent && !mainEvent.isActive);
+        }
+      } catch (error) {
+        console.error('Error checking event status:', error);
+      }
+    };
+
+    checkEventStatus();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#050505] text-white overflow-x-hidden">
@@ -249,21 +268,23 @@ export default function MainEventPage() {
         </div>
 
         {/* CTA Button */}
-        <div
-          ref={btnRef}
-          className="mt-12 opacity-0 translate-y-6 transition-all duration-700 ease-out"
-        >
-          <button
-            type="button"
-            onClick={() => setIsRegisterOpen(true)}
-            className="relative inline-block group"
+        {!isEventClosed && (
+          <div
+            ref={btnRef}
+            className="mt-12 opacity-0 translate-y-6 transition-all duration-700 ease-out"
           >
-            <div className="absolute -inset-2 rounded-full bg-[#5d1d69]/0 group-hover:bg-[#5d1d69]/30 blur-[20px] transition-all duration-700" />
-            <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-[#8f4ca0] bg-linear-to-r from-[#5d1d69] via-[#7a2e8a] to-[#9d46b1] text-white text-sm md:text-base font-semibold tracking-[0.2em] uppercase rounded-full transition-all duration-500 shadow-[0_8px_30px_rgba(93,29,105,0.35)] group-hover:from-[#6c2579] group-hover:via-[#8a3aa0] group-hover:to-[#b259c4] group-hover:border-[#b978cb] group-hover:shadow-[0_0_50px_rgba(176,89,196,0.55)] group-hover:-translate-y-0.5">
-              Secure Your Throne
-            </span>
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setIsRegisterOpen(true)}
+              className="relative inline-block group"
+            >
+              <div className="absolute -inset-2 rounded-full bg-[#5d1d69]/0 group-hover:bg-[#5d1d69]/30 blur-[20px] transition-all duration-700" />
+              <span className="relative inline-flex items-center gap-3 px-12 py-5 border border-[#8f4ca0] bg-linear-to-r from-[#5d1d69] via-[#7a2e8a] to-[#9d46b1] text-white text-sm md:text-base font-semibold tracking-[0.2em] uppercase rounded-full transition-all duration-500 shadow-[0_8px_30px_rgba(93,29,105,0.35)] group-hover:from-[#6c2579] group-hover:via-[#8a3aa0] group-hover:to-[#b259c4] group-hover:border-[#b978cb] group-hover:shadow-[0_0_50px_rgba(176,89,196,0.55)] group-hover:-translate-y-0.5">
+                Secure Your Throne
+              </span>
+            </button>
+          </div>
+        )}
       </div>
 
       {isRegisterOpen && (
