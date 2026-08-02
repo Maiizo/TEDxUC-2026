@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 interface Stats {
   totalRegistrations: number;
@@ -59,6 +61,7 @@ export default function AdminDashboard() {
   const [actionLoadingPaymentId, setActionLoadingPaymentId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"registrations" | "accepted" | "verifying">("registrations");
   const [expandedQRCode, setExpandedQRCode] = useState<{ id: string; qrCode: string } | null>(null);
+const [isDownloading, setIsDownloading] = useState(false);
 
   const acceptedRegistrations = registrations.filter((reg) => {
     const latestPayment = reg.payments[0];
@@ -204,7 +207,45 @@ export default function AdminDashboard() {
       alert("Failed to delete registration");
     }
   };
+const handleDownloadAllPaid = async () => {
+    setIsDownloading(true);
+    const zip = new JSZip();
 
+    // Mengambil data dari variabel acceptedRegistrations milikmu yang sudah difilter
+    const validUsers = acceptedRegistrations.filter(reg => reg.payments[0]?.proofUrl);
+
+    if (validUsers.length === 0) {
+      alert("Tidak ada data Accepted yang memiliki gambar bukti transfer!");
+      setIsDownloading(false);
+      return;
+    }
+
+    for (const user of validUsers) {
+      try {
+        const proofUrl = user.payments[0].proofUrl;
+        if (!proofUrl) continue;
+        
+        const response = await fetch(proofUrl);
+        const blob = await response.blob();
+        
+        const urlParts = proofUrl.split('.');
+        const ext = urlParts[urlParts.length - 1]; 
+        const safeName = user.fullName.replace(/[^a-zA-Z0-9]/g, '_'); 
+        const fileName = `${user.registrationNumber}_${safeName}.${ext}`;
+
+        zip.file(fileName, blob);
+      } catch (error) {
+        console.error(`Gagal mendownload bukti untuk ${user.fullName}`, error);
+      }
+    }
+
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    saveAs(zipBlob, 'Bukti_Transfer_TEDx_Paid.zip');
+    
+    setIsDownloading(false);
+    alert("done");
+  };
+  
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -307,11 +348,22 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {activeTab === "accepted" && (
+    {activeTab === "accepted" && (
           <div>
-            <h2 className="text-lg font-semibold text-white mb-4">
-              Accepted Registrations
-            </h2>
+            {/* 3. UBAH BAGIAN HEADER INI MENJADI FLEX DENGAN TOMBOL */}
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold text-white">
+                Accepted Registrations
+              </h2>
+              <button 
+                onClick={handleDownloadAllPaid} 
+                disabled={isDownloading}
+                className="bg-blue-600 text-white px-4 py-2 text-sm rounded-md hover:bg-blue-700 disabled:bg-gray-600 transition-colors cursor-pointer"
+              >
+                {isDownloading ? 'pls tunggu ...' : 'Download All Proofs (.zip)'}
+              </button>
+            </div>
+            {/* -------------------------------------------------- */}
             <RegistrationTable
               registrations={acceptedRegistrations}
               statusColor={statusColor}
